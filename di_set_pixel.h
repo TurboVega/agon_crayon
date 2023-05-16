@@ -8,5 +8,5 @@ class DiSetPixel: public DiDrawingInstrAtXY {
   DiSetPixel();
   DiSetPixel(int32_t x, int32_t y, uint8_t color);
 
-  virtual void IRAM_ATTR paint(uint32_t* line, int32_t scroll);
+  virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

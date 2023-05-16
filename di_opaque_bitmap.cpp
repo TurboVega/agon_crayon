@@ -48,24 +48,19 @@ void DiOpaqueBitmap::fill(uint8_t color) {
   }
 }
 
-void IRAM_ATTR DiOpaqueBitmap::paint(uint32_t* line, int32_t line_index, int32_t scroll) {
-  auto x = m_x;
-  int32_t offset = 0;
-  clamp_left(x, offset, scroll);
-  int32_t x2 = m_x + m_width - 1;
-  clamp_right(x2, scroll);
-  auto length = x2 - x + 1;
-  auto index = offset;
-  auto src = pixels(m_pixels + (line_index * m_words_per_line)) + index;
-  while (length > 0) {
-    /*if (line_index >= 0 && line_index < 8 && m_words_per_line == 2 && length>0 && length<=8 && index>=0 && index<8) {
-      pixels(line)[FIX_INDEX(x++)] = MASK_RGB(0,3,0)|SYNCS_OFF;
-    } else {
-      pixels(line)[FIX_INDEX(x++)] = MASK_RGB(3,0,0)|SYNCS_OFF;
+void IRAM_ATTR DiOpaqueBitmap::paint(const DiPaintParams *params) {
+  if (params->m_line_index >= m_y && params->m_line_index < m_y + m_length) {
+    auto x = m_x;
+    int32_t offset = 0;
+    clamp_left(x, offset, params->m_horiz_scroll);
+    int32_t x2 = m_x + m_width - 1;
+    clamp_right(x2, params->m_horiz_scroll);
+    auto length = x2 - x + 1;
+    auto pix_index = offset;
+    auto src = pixels(m_pixels + (params->m_line_index * m_words_per_line)) + pix_index;
+    while (length > 0) {
+      params->line8[FIX_INDEX(x++)] = *src++;
+      --length;
     }
-    index++;*/
-    pixels(line)[FIX_INDEX(x++)] = *src++;
-    //pixels(line)[FIX_INDEX(x++)] = pixels(m_pixels+14)[index++];
-    --length;
   }
 }

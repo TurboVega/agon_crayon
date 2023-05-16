@@ -1,6 +1,6 @@
 #include "di_drawing_instruction.h"
 
-void IRAM_ATTR DiDrawingInstruction::paint(uint32_t* line, int32_t scroll) {
+void IRAM_ATTR DiDrawingInstruction::paint(const DiPaintParams *params) {
 }
 
 DiDrawingInstrAtX::DiDrawingInstrAtX() {
@@ -9,6 +9,14 @@ DiDrawingInstrAtX::DiDrawingInstrAtX() {
 
 DiDrawingInstrAtX::DiDrawingInstrAtX(int32_t x) {
   m_x = x;
+}
+
+DiDrawingInstrAtY::DiDrawingInstrAtY() {
+  m_y = 0;
+}
+
+DiDrawingInstrAtY::DiDrawingInstrAtY(int32_t y) {
+  m_y = y;
 }
 
 DiDrawingInstrAtXY::DiDrawingInstrAtXY() {

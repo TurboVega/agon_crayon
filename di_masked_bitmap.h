@@ -17,6 +17,6 @@ class DiMaskedBitmap: public DiDrawingInstrAtXY {
   void clear();
   void fill(uint8_t color);
 
-  virtual void IRAM_ATTR paint(uint32_t* line, int32_t line_index, int32_t scroll);
+  virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };
 
