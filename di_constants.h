@@ -1,4 +1,4 @@
-#pragma(once)
+#pragma once
 
 #define GPIO_RED_0    GPIO_NUM_21
 #define GPIO_RED_1    GPIO_NUM_22

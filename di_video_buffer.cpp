@@ -1,8 +1,8 @@
-#include <stdint.h>
-#include <stddef.h>
 #include <string.h>
-#include "VideoBuffer.h"
-#include "DrawingInstruction.h"
+#include "di_video_buffer.h"
+#include "di_set_pixel.h"
+#include "di_horiz_line.h"
+#include "di_opaque_bitmap.h"
 
 // dummy data for testing only
 uint32_t sdx[10] = {150,199,225,287,333,378,425,506,583,601};
@@ -21,13 +21,13 @@ uint8_t sdcolor[10] = {
 };
 
 #define NUM_STARS 200
-SetPixel g_stars[NUM_STARS];
+DiSetPixel g_stars[NUM_STARS];
 
-DrawHorizontalLine g_vert_center(300, 200, MASK_RGB(3,0,0));
-SetPixel g_horiz_center(CENTER_X, 0, MASK_RGB(0,0,3));
+DiHorizontalLine g_vert_center(300, 200, MASK_RGB(3,0,0));
+DiSetPixel g_horiz_center(CENTER_X, 0, MASK_RGB(0,0,3));
 int32_t g_hscroll = 0;
 int32_t g_vscroll = 0;
-DrawBitmap* gp_bitmap = new(8,8) DrawBitmap(8,8); 
+DiOpaqueBitmap* gp_bitmap = new(8,8) DiOpaqueBitmap(8,8); 
 
 void init_stars() {
   srand(42);
@@ -59,21 +59,21 @@ void init_stars() {
   }
 }
 
-void VideoScanLine::init_to_black() {
+void DiVideoScanLine::init_to_black() {
   memset(m_act, SYNCS_OFF, ACT_PIXELS);
   memset(m_hfp, SYNCS_OFF, HFP_PIXELS);
   memset(m_hs, (HSYNC_ON|VSYNC_OFF), HS_PIXELS);
   memset(m_hbp, SYNCS_OFF, HBP_PIXELS);
 }
 
-void VideoScanLine::init_for_vsync() {
+void DiVideoScanLine::init_for_vsync() {
   memset(m_act, (HSYNC_OFF|VSYNC_ON), ACT_PIXELS);
   memset(m_hfp, (HSYNC_OFF|VSYNC_ON), HFP_PIXELS);
   memset(m_hs, SYNCS_ON, HS_PIXELS);
   memset(m_hbp, (HSYNC_OFF|VSYNC_ON), HBP_PIXELS);
 }
 
-void IRAM_ATTR VideoScanLine::paint(uint32_t line_index) {
+void IRAM_ATTR DiVideoScanLine::paint(uint32_t line_index) {
   uint8_t* line8 = (uint8_t*)m_act;
   memset(line8, SYNCS_OFF, ACT_PIXELS);
 
@@ -137,19 +137,19 @@ void IRAM_ATTR VideoScanLine::paint(uint32_t line_index) {
   }
 }
 
-void VideoBuffer::init_to_black() {
+void DiVideoBuffer::init_to_black() {
   for (int i = 0; i < NUM_LINES_PER_BUFFER; i++) {
     m_line[i].init_to_black();
   }
 }
 
-void VideoBuffer::init_for_vsync() {
+void DiVideoBuffer::init_for_vsync() {
   for (int i = 0; i < NUM_LINES_PER_BUFFER; i++) {
     m_line[i].init_for_vsync();
   }
 }
 
-void IRAM_ATTR VideoBuffer::paint(uint32_t line_index) {
+void IRAM_ATTR DiVideoBuffer::paint(uint32_t line_index) {
   for (int i = 0; i < NUM_LINES_PER_BUFFER; i++) {
     m_line[i].paint(line_index + i);
   }

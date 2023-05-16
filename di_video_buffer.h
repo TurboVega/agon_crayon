@@ -1,8 +1,8 @@
-#pragma(once)
-#include "constants.h"
+#pragma once
+#include "di_constants.h"
 #include "driver/gpio.h"
 
-class VideoScanLine {
+class DiVideoScanLine {
   protected:
 
   uint32_t m_act[ACT_PIXELS/4];
@@ -27,10 +27,10 @@ class VideoScanLine {
   void IRAM_ATTR paint(uint32_t line_index);
 };
 
-class VideoBuffer {
+class DiVideoBuffer {
   protected:
 
-  VideoScanLine m_line[NUM_LINES_PER_BUFFER];
+  DiVideoScanLine m_line[NUM_LINES_PER_BUFFER];
 
   public:
 

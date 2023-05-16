@@ -14,15 +14,15 @@
 #include "driver/gpio.h"
 #include "soc/io_mux_reg.h"
 #include "rom/lldesc.h"
-#include "VideoBuffer.h"
+#include "di_video_buffer.h"
 #include "fabgl_pieces.h"
 
 DMA_ATTR lldesc_t volatile dma_descriptor[DMA_TOTAL_DESCR];
 
-DMA_ATTR VideoBuffer g_video_buffer[NUM_ACTIVE_BUFFERS];
-DMA_ATTR VideoScanLine g_front_porch;
-DMA_ATTR VideoBuffer g_vertical_sync;
-DMA_ATTR VideoScanLine g_back_porch;
+DMA_ATTR DiVideoBuffer g_video_buffer[NUM_ACTIVE_BUFFERS];
+DMA_ATTR DiVideoScanLine g_front_porch;
+DMA_ATTR DiVideoBuffer g_vertical_sync;
+DMA_ATTR DiVideoScanLine g_back_porch;
 
 intr_handle_t isr_handle;
 
@@ -62,7 +62,7 @@ extern int32_t g_vscroll;
   I2S1.int_clr.val = I2S1.int_st.val;
 }*/
 
-void init_dma_descriptor(VideoScanLine* vbuf, uint32_t descr_index) {
+void init_dma_descriptor(DiVideoScanLine* vbuf, uint32_t descr_index) {
   lldesc_t volatile * dd = &dma_descriptor[descr_index];
 
   if (descr_index == 0) {
@@ -78,7 +78,7 @@ void init_dma_descriptor(VideoScanLine* vbuf, uint32_t descr_index) {
   dd->buf = (uint8_t volatile *)vbuf->get_buffer_ptr();
 }
 
-void init_dma_descriptor(VideoBuffer* vbuf, uint32_t descr_index) {
+void init_dma_descriptor(DiVideoBuffer* vbuf, uint32_t descr_index) {
   lldesc_t volatile * dd = &dma_descriptor[descr_index];
 
   if (descr_index == 0) {
