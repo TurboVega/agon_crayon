@@ -20,10 +20,10 @@ uint8_t sdcolor[10] = {
   SYNCS_OFF | MASK_RGB(1,2,3)
 };
 
-#define NUM_STARS 200
+#define NUM_STARS 100
 DiSetPixel g_stars[NUM_STARS];
 
-DiHorizontalLine g_vert_center(300, 200, 400, MASK_RGB(3,0,0));
+DiHorizontalLine g_vert_center(300, 300, 200, MASK_RGB(3,0,0));
 DiSetPixel g_horiz_center(CENTER_X, CENTER_Y, MASK_RGB(0,0,3));
 DiOpaqueBitmap* gp_bitmap = new(8,8) DiOpaqueBitmap(8,8);
 
@@ -64,8 +64,12 @@ void DiVideoScanLine::init_for_vsync() {
   memset(m_hbp, (HSYNC_OFF|VSYNC_ON), HBP_PIXELS);
 }
 
-void IRAM_ATTR DiVideoScanLine::paint(const DiPaintParams *params) {
-  memset((uint8_t*)(params->m_line8), SYNCS_OFF, ACT_PIXELS);
+void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
+  params->m_line32 = (uint32_t*)(m_act);
+  params->m_line8 = (uint8_t*)(m_act);
+  params->m_scrolled_index = params->m_line_index + params->m_vert_scroll;
+
+  memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
 
   for (int i = 0; i < NUM_STARS; i++) {
     g_stars[i].paint(params);
@@ -84,7 +88,7 @@ void IRAM_ATTR DiVideoScanLine::paint(const DiPaintParams *params) {
     params->m_line8[FIX_INDEX(CENTER_X+0+center_offset+params->m_horiz_scroll)] = diamond;
     params->m_line8[FIX_INDEX(CENTER_X+1+center_offset+params->m_horiz_scroll)] = diamond;
   }
-
+/*
   // Draw small diamond shapes somewhere.
   for (int d = 0; d<10; d++) {
     uint32_t sdtop = sdy[d] - HALF_SMALL_DIAMOND_SIZE;
@@ -112,9 +116,9 @@ void IRAM_ATTR DiVideoScanLine::paint(const DiPaintParams *params) {
       params->m_line8[FIX_INDEX(sdx[d]+1+sd_offset)] = diamond;
     }
   }
-
+*/
   // Draw a bitmap
-  gp_bitmap->paint(params);
+  //gp_bitmap->paint(params);
 }
 
 void DiVideoBuffer::init_to_black() {
@@ -133,6 +137,5 @@ void IRAM_ATTR DiVideoBuffer::paint(DiPaintParams *params) {
   for (int i = 0; i < NUM_LINES_PER_BUFFER; i++) {
     m_line[i].paint(params);
     ++(params->m_line_index);
-    ++(params->m_scrolled_index);
   }
 }

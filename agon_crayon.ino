@@ -78,8 +78,6 @@ void setup() {
     dma_descriptor[descr_index++].eof = 1;
   }
 
-  g_video_buffer[0].paint(0); // just to prevent black screen during debugging
-
   // DMA buffer chain: VFP
   g_front_porch.init_to_black();
   for (uint i = 0; i < VFP_LINES; i++) {
@@ -186,20 +184,15 @@ int32_t scroll_dy[5] = {0,1,0,-1,0};
 uint8_t scroll_count = 0;
 
 IRAM_ATTR void loop() {
-  uint32_t prev_descr = (uint32_t) dma_descriptor;
   bool eof = false;
   while (true) {
-    uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;//out_eof_des_addr;
+    uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;;
     uint32_t descr_index = (descr_addr - (uint32_t) dma_descriptor) / sizeof(lldesc_t);
     if (descr_index < ACT_LINES/NUM_LINES_PER_BUFFER) {
       // Active scan line (not end of frame)
       eof = false;
-      auto buffer = &g_video_buffer[descr_index & (NUM_ACTIVE_BUFFERS-1)];
-      g_params.m_line32 = buffer->get_buffer_ptr();
-      g_params.m_line8 = (uint8_t*)(g_params.m_line32);
       g_params.m_line_index = descr_index * NUM_LINES_PER_BUFFER;
-      g_params.m_scrolled_index = g_params.m_line_index + g_params.m_vert_scroll;
-      buffer->paint(&g_params);
+      g_video_buffer[descr_index & (NUM_ACTIVE_BUFFERS-1)].paint(&g_params);
     } else if (!eof) {
       // End of frame (vertical blanking area)
       eof = true;

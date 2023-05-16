@@ -5,12 +5,12 @@
 #include "di_constants.h"
 
 typedef struct {
-  uint32_t volatile * m_line32;
-  uint8_t volatile *  m_line8;
-  int32_t             m_line_index;
-  int32_t             m_scrolled_index;
-  int32_t             m_horiz_scroll;
-  int32_t             m_vert_scroll;
+  uint32_t* m_line32;
+  uint8_t*  m_line8;
+  int32_t   m_line_index;
+  int32_t   m_scrolled_index;
+  int32_t   m_horiz_scroll;
+  int32_t   m_vert_scroll;
 } DiPaintParams;
 
 class DiDrawingInstruction {
@@ -38,8 +38,8 @@ class DiDrawingInstruction {
     }
   }
 
-  inline void clamp_left(int32_t &x, int32_t &offset, int32_t scroll) {
-    x += scroll;
+  inline void clamp_left(int32_t &x, int32_t &offset, int32_t hscroll) {
+    x += hscroll;
     if (x >= 0) {
       offset = 0;
     } else {
@@ -48,8 +48,8 @@ class DiDrawingInstruction {
     }
   }
 
-  inline void clamp_right(int32_t &x, int32_t scroll) {
-    x += scroll;
+  inline void clamp_right(int32_t &x, int32_t hscroll) {
+    x += hscroll;
     if (x >= ACT_PIXELS) {
       x = ACT_PIXELS - 1;
     }

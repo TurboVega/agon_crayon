@@ -23,7 +23,7 @@ class DiVideoScanLine {
 
   void init_for_vsync();
 
-  void IRAM_ATTR paint(const DiPaintParams *params);
+  void IRAM_ATTR paint(DiPaintParams *params);
 };
 
 class DiVideoBuffer {
