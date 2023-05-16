@@ -26,41 +26,7 @@ DMA_ATTR DiVideoScanLine g_back_porch;
 
 intr_handle_t isr_handle;
 
-extern int32_t g_hscroll;
-extern int32_t g_vscroll; 
-
-
-/*
-  Buffer arrangement:
-
-  descr#0 -> buffer#0 (line#0, line#1)
-  descr#1 -> buffer#1 (line#2, line#3)
-  descr#2 -> buffer#2 (line#4, line#5)
-  descr#3 -> buffer#3 (line#6, line#7)
-
-  descr#4 -> buffer#0 (line#8, line#9)
-  descr#5 -> buffer#1 (line#10, line#11)
-  descr#6 -> buffer#2 (line#12, line#13)
-  descr#7 -> buffer#3 (line#14, line#15)
-  ...
-  descr#296 -> buffer#0 (line#592, line#593)
-  descr#297 -> buffer#1 (line#594, line#595)
-  descr#298 -> buffer#2 (line#596, line#597)
-  descr#299 -> buffer#3 (line#598, line#599)
-  ...
-  vertical blanking descriptors here
-*/
-
-/*void IRAM_ATTR vsync_irq_handler(void* param) {
-  lldesc_t volatile * descr_addr = (lldesc_t volatile *)I2S1.out_eof_des_addr;
-  uint32_t descr_index = descr_addr - dma_descriptor;
-  uint32_t buffer_index = descr_index + NUM_ACTIVE_BUFFERS;
-  if (buffer_index >= ACT_LINES/NUM_LINES_PER_BUFFER) {
-    buffer_index -= ACT_LINES/NUM_LINES_PER_BUFFER;
-  }
-  g_video_buffer[buffer_index & (NUM_ACTIVE_BUFFERS - 1)].paint(buffer_index * NUM_LINES_PER_BUFFER);
-  I2S1.int_clr.val = I2S1.int_st.val;
-}*/
+DiPaintParams g_params;
 
 void init_dma_descriptor(DiVideoScanLine* vbuf, uint32_t descr_index) {
   lldesc_t volatile * dd = &dma_descriptor[descr_index];
@@ -226,20 +192,16 @@ IRAM_ATTR void loop() {
     uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;//out_eof_des_addr;
     uint32_t descr_index = (descr_addr - (uint32_t) dma_descriptor) / sizeof(lldesc_t);
     if (descr_index < ACT_LINES/NUM_LINES_PER_BUFFER) {
+      // Active scan line (not end of frame)
       eof = false;
-      /*g_video_buffer[0].paint(100);
-      g_video_buffer[1].paint(205);
-      g_video_buffer[2].paint(311);
-      g_video_buffer[3].paint(467);
-      g_video_buffer[4].paint(111);
-      g_video_buffer[5].paint(213);
-      g_video_buffer[6].paint(317);
-      g_video_buffer[7].paint(443);*/
-      //g_video_buffer[descr_index & (NUM_ACTIVE_BUFFERS-1)].paint(5);
-      g_video_buffer[descr_index & (NUM_ACTIVE_BUFFERS-1)].paint(descr_index*NUM_LINES_PER_BUFFER);
-      //g_video_buffer[descr_index].paint(descr_index * NUM_LINES_PER_BUFFER);
+      auto buffer = &g_video_buffer[descr_index & (NUM_ACTIVE_BUFFERS-1)];
+      g_params.m_line32 = buffer->get_buffer_ptr();
+      g_params.m_line8 = (uint8_t*)(g_params.m_line32);
+      g_params.m_line_index = descr_index * NUM_LINES_PER_BUFFER;
+      g_params.m_scrolled_index = g_params.m_line_index + g_params.m_vert_scroll;
+      buffer->paint(&g_params);
     } else if (!eof) {
-      // End of frame
+      // End of frame (vertical blanking area)
       eof = true;
 
       // move diamonds
@@ -272,21 +234,8 @@ IRAM_ATTR void loop() {
           scroll_mode = 0;
         }
       }
-      g_hscroll += scroll_dx[scroll_mode];
-      g_vscroll += scroll_dy[scroll_mode];
+      g_params.m_horiz_scroll += scroll_dx[scroll_mode];
+      g_params.m_vert_scroll += scroll_dy[scroll_mode];
    }
-    /*
-    g_video_buffer[descr_index & (NUM_ACTIVE_BUFFERS - 1)].paint(descr_index * NUM_LINES_PER_BUFFER);
-    if (descr_addr != prev_descr) {
-      prev_descr = descr_addr;
-      if (descr_index <= ACT_LINES/NUM_LINES_PER_BUFFER) {
-        uint32_t buffer_index = descr_index + NUM_ACTIVE_BUFFERS;
-        if (buffer_index >= ACT_LINES/NUM_LINES_PER_BUFFER) {
-          buffer_index -= ACT_LINES/NUM_LINES_PER_BUFFER;
-        }
-        g_video_buffer[buffer_index & (NUM_ACTIVE_BUFFERS - 1)].paint(buffer_index * NUM_LINES_PER_BUFFER);
-      }
-    }
-    */
   }
 }

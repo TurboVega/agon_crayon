@@ -49,7 +49,7 @@ void DiOpaqueBitmap::fill(uint8_t color) {
 }
 
 void IRAM_ATTR DiOpaqueBitmap::paint(const DiPaintParams *params) {
-  if (params->m_line_index >= m_y && params->m_line_index < m_y + m_length) {
+  if (params->m_line_index >= m_y && params->m_line_index < m_y + m_height) {
     auto x = m_x;
     int32_t offset = 0;
     clamp_left(x, offset, params->m_horiz_scroll);
@@ -59,7 +59,7 @@ void IRAM_ATTR DiOpaqueBitmap::paint(const DiPaintParams *params) {
     auto pix_index = offset;
     auto src = pixels(m_pixels + (params->m_line_index * m_words_per_line)) + pix_index;
     while (length > 0) {
-      params->line8[FIX_INDEX(x++)] = *src++;
+      params->m_line8[FIX_INDEX(x++)] = *src++;
       --length;
     }
   }

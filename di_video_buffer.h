@@ -1,6 +1,5 @@
 #pragma once
-#include "di_constants.h"
-#include "driver/gpio.h"
+#include "di_drawing_instruction.h"
 
 class DiVideoScanLine {
   protected:
@@ -24,7 +23,7 @@ class DiVideoScanLine {
 
   void init_for_vsync();
 
-  void IRAM_ATTR paint(uint32_t line_index);
+  void IRAM_ATTR paint(const DiPaintParams *params);
 };
 
 class DiVideoBuffer {
@@ -46,5 +45,5 @@ class DiVideoBuffer {
 
   void init_for_vsync();
 
-  void IRAM_ATTR paint(uint32_t line_index);
+  void IRAM_ATTR paint(DiPaintParams *params);
 };

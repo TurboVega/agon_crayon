@@ -5,12 +5,12 @@
 #include "di_constants.h"
 
 typedef struct {
-  uint32_t*   m_line32;
-  uint8_t*    m_line8;
-  int32_t     m_line_index;
-  int32_t     m_scrolled_index;
-  int32_t     m_horiz_scroll;
-  int32_t     m_vert_scroll;
+  uint32_t volatile * m_line32;
+  uint8_t volatile *  m_line8;
+  int32_t             m_line_index;
+  int32_t             m_scrolled_index;
+  int32_t             m_horiz_scroll;
+  int32_t             m_vert_scroll;
 } DiPaintParams;
 
 class DiDrawingInstruction {
