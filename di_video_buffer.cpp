@@ -3,6 +3,7 @@
 #include "di_set_pixel.h"
 #include "di_horiz_line.h"
 #include "di_opaque_bitmap.h"
+#include "di_masked_bitmap.h"
 
 #define _COMPILE_HEX_DATA_
 #include "TEST_BITMAP.h"
@@ -28,7 +29,8 @@ DiSetPixel g_stars[NUM_STARS];
 
 DiHorizontalLine g_vert_center(300, 300, 200, MASK_RGB(3,0,0));
 DiSetPixel g_horiz_center(CENTER_X, CENTER_Y, MASK_RGB(0,0,3));
-DiOpaqueBitmap* gp_bitmap = new(64,64) DiOpaqueBitmap(64,64);
+DiOpaqueBitmap* gp_opaque_bitmap = new(64,64) DiOpaqueBitmap(64,64);
+DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
 
 void init_stars() {
   srand(42);
@@ -40,11 +42,16 @@ void init_stars() {
     g_stars[i].m_color = MASK_RGB(3,3,3) | SYNCS_OFF;
   }
 
-  gp_bitmap->set_position(500,200);
-  gp_bitmap->clear();
+  gp_opaque_bitmap->set_position(270,200);
+  gp_opaque_bitmap->clear();
+
+  gp_masked_bitmap->set_position(500,200);
+  gp_masked_bitmap->clear();
+
   for (int32_t y=0;y<64;y++) {
     for (int32_t x=0;x<64;x++) {
-      gp_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_opaque_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_masked_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
   }
 }
@@ -117,7 +124,8 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   }
 */
   // Draw a bitmap
-  gp_bitmap->paint(params);
+  gp_opaque_bitmap->paint(params);
+  gp_masked_bitmap->paint(params);
 }
 
 void DiVideoBuffer::init_to_black() {
