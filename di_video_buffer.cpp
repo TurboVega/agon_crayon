@@ -124,8 +124,8 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   }
 */
   // Draw a bitmap
-  gp_opaque_bitmap->paint(params);
-  gp_masked_bitmap->paint(params);
+  //gp_opaque_bitmap->paint(params);
+ // gp_masked_bitmap->paint(params);
 }
 
 void DiVideoBuffer::init_to_black() {
