@@ -1,7 +1,7 @@
 #include "di_set_pixel.h"
 
 extern "C" {
-void IRAM_ATTR DiSetPixel_paint(const DiPaintParams *params);
+IRAM_ATTR void DiSetPixel_paint(void* this_ptr, const DiPaintParams *params);
 }
 
 DiSetPixel::DiSetPixel() {
@@ -14,7 +14,18 @@ DiSetPixel::DiSetPixel(int32_t x, int32_t y, uint8_t color)
 }
 
 void IRAM_ATTR DiSetPixel::paint(const DiPaintParams *params) {
-  DiSetPixel_paint(params);
+  DiSetPixel_paint((void*)this, params);
+  /*uint32_t result = DiSetPixel_paint(params, (uint32_t)(void*)this,
+  (uint32_t)(void*)(&m_x), (uint32_t)(void*)(&m_y), (uint32_t)(void*)(&m_color));
+  if (result == (uint32_t)(void*)this) {
+    m_color = MASK_RGB(0,0,2) | SYNCS_OFF;
+  }
+  if (result+4 == (uint32_t)(void*)this) {
+    m_color = MASK_RGB(0,2,0) | SYNCS_OFF;
+  }
+  if (result-4 == (uint32_t)(void*)this) {
+    m_color = MASK_RGB(2,0,0) | SYNCS_OFF;
+  }*/
   if (m_y == params->m_scrolled_index) {
     auto x = m_x;
     limit_x(x, params->m_horiz_scroll);

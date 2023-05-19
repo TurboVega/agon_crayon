@@ -2,7 +2,7 @@
 // in a C source that calls it, using this declaration:
 //
 // extern "C" {
-// void IRAM_ATTR DiSetPixel_paint(const DiPaintParams *params);
+// IRAM_ATTR void DiSetPixel_paint(void* this_ptr, const DiPaintParams *params);
 // }
 //
 // Upon entry to the function, registers are set as follows:
@@ -24,4 +24,7 @@
 
 DiSetPixel_paint:
   entry     sp,16
+  movi.n    a4,2
+  s8i       a4,a2,12
+  memw
   retw.n
