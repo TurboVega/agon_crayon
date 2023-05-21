@@ -16,6 +16,13 @@
 //     [a2+12] m_color
 //
 // a3: const DiPaintParams *params
+//     [a3] m_line32
+//     [a3+4] m_line8
+//     [a3+8] m_line_index
+//     [a3+12] m_scrolled_index
+//     [a3+16] m_horiz_scroll
+//     [a3+20] m_vert_scroll
+//
 
   .section .iram1.text
   .align
@@ -24,7 +31,14 @@
 
 DiSetPixel_paint:
   entry     sp,16
-  movi.n    a4,2
-  s8i       a4,a2,12
+  l32i      a4,a3,12      // a4 <= m_scrolled_index
+  l32i      a5,a2,8       // a5 <= m_y
+  bne       a4,a5,skip    // skip if this is not line for pixel
+  l32i      a4,a3,4       // a4 <= m_line8
+  l32i      a5,a2,4       // a5 <= m_x
+  add       a4,a4,a5      // a4 <= m_line8 + m_x
+  l8ui      a5,a2,12      // a5 <= m_color
+  s8i       a5,a4,0       // m_line8[index] <= m_color
   memw
+skip:
   retw.n
