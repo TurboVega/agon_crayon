@@ -11,6 +11,8 @@ typedef struct {
   int32_t   m_scrolled_index;
   int32_t   m_horiz_scroll;
   int32_t   m_vert_scroll;
+  int32_t   m_screen_width;
+  int32_t   m_screen_height;
 } DiPaintParams;
 
 class DiDrawingInstruction {

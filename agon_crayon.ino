@@ -185,6 +185,8 @@ uint8_t scroll_count = 0;
 
 IRAM_ATTR void loop() {
   bool eof = false;
+  g_params.m_screen_width = ACT_PIXELS;
+  g_params.m_screen_height = ACT_LINES;
   while (true) {
     uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;;
     uint32_t descr_index = (descr_addr - (uint32_t) dma_descriptor) / sizeof(lldesc_t);

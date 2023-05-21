@@ -9,7 +9,7 @@ DiSetPixel::DiSetPixel() {
 }
 
 DiSetPixel::DiSetPixel(int32_t x, int32_t y, uint8_t color)
-  : DiDrawingInstrAtXY(FIX_INDEX(x), y) {
+  : DiDrawingInstrAtXY(x, y) {
   m_color = color | SYNCS_OFF;
 }
 
