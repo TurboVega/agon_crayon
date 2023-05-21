@@ -1,10 +1,6 @@
-// di_tile_map.cpp - Function definitions for drawing tile maps
+// di_diagonal_line.cpp - Function definitions for drawing diagonal lines
 //
-// A tile map is a set of rectangular tiles, where each tile is a bitmap of
-// the same size (width and height). Tiles are arranged in a rectangular
-// grid, where the entire portion of the grid that fits within the visible
-// area of the screen may be displayed at any given moment. In other words
-// multiple tiles show at the same time.
+// A diagonal line is 1 pixel thick, and connects the diagonal points of a square.
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -27,5 +23,14 @@
 // SOFTWARE.
 // 
 
-#include "di_tile_map.h"
+#include "di_diag_line.h"
 
+DiDiagonalLine::DiDiagonalLine(int32_t x, int32_t y, int32_t x2, int32_t y2, uint8_t color)
+  : DiDrawingInstrAtXY(x, y) {
+  m_x2 = x2;
+  m_y2 = y2;
+  m_color = color | SYNCS_OFF;
+}
+
+void IRAM_ATTR DiDiagonalLine::paint(const DiPaintParams *params) {
+}

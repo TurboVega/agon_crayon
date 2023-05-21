@@ -1,10 +1,7 @@
-// di_tile_map.cpp - Function definitions for drawing tile maps
+// di_transparent_bitmap.h - Function declarations for drawing transparent bitmaps 
 //
-// A tile map is a set of rectangular tiles, where each tile is a bitmap of
-// the same size (width and height). Tiles are arranged in a rectangular
-// grid, where the entire portion of the grid that fits within the visible
-// area of the screen may be displayed at any given moment. In other words
-// multiple tiles show at the same time.
+// An transparent bitmap is a rectangle that is a combination of fully transparent pixels,
+// partially transparent pixels, and fully opaque pixels, of various colors. 
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -27,5 +24,25 @@
 // SOFTWARE.
 // 
 
-#include "di_tile_map.h"
+#pragma once
+#include "di_drawing_instruction.h"
+
+class DiTransparentBitmap: public DiDrawingInstrAtXY {
+  public:
+  uint32_t m_width;
+  uint32_t m_height;
+  uint32_t m_words_per_line;
+  uint32_t m_pixels[1];
+
+  DiTransparentBitmap(uint32_t width, uint32_t height);
+  void* operator new(size_t size, uint32_t width, uint32_t height);
+  //void operator delete(void*);
+  void set_position(int32_t x, int32_t y);
+  void set_pixel(int32_t x, int32_t y, uint8_t color);
+  void set_pixels(int32_t index, int32_t y, uint32_t colors);
+  void clear();
+  void fill(uint8_t color);
+
+  virtual void IRAM_ATTR paint(const DiPaintParams *params);
+};
 

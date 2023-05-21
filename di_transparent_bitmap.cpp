@@ -1,6 +1,7 @@
-// di_opaque_bitmap.cpp - Function definitions for drawing opaque bitmaps 
+// di_transparent_bitmap.cpp - Function definitions for drawing transparent bitmaps 
 //
-// An opaque bitmap is a rectangle of fully opaque pixels of various colors.
+// An transparent bitmap is a rectangle that is a combination of fully transparent pixels,
+// partially transparent pixels, and fully opaque pixels, of various colors. 
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -23,43 +24,43 @@
 // SOFTWARE.
 // 
 
-#include "di_opaque_bitmap.h"
+#include "di_transparent_bitmap.h"
 
-DiOpaqueBitmap::DiOpaqueBitmap(uint32_t width, uint32_t height) {
+DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height) {
   m_width = width;
   m_height = height;
   m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
 }
 
-void* DiOpaqueBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
+void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
   uint32_t wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
-  size_t new_size = (size_t)(sizeof(DiOpaqueBitmap) - sizeof(uint32_t) + (wpl * height * sizeof(uint32_t)));
+  size_t new_size = (size_t)(sizeof(DiTransparentBitmap) - sizeof(uint32_t) + (wpl * height * sizeof(uint32_t)));
   void* p = malloc(new_size);
   return p;
 }
 
-//void DiOpaqueBitmap::operator delete(void*) {
+//void DiTransparentBitmap::operator delete(void*) {
 //
 //}
 
-void DiOpaqueBitmap::set_position(int32_t x, int32_t y) {
+void DiTransparentBitmap::set_position(int32_t x, int32_t y) {
   m_x = x;
   m_y = y;
 }
 
-void DiOpaqueBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) { 
+void DiTransparentBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) { 
   pixels(m_pixels + y * m_words_per_line)[x] = (color & 0x3F) | SYNCS_OFF;
 }
 
-void DiOpaqueBitmap::set_pixels(int32_t index, int32_t y, uint32_t colors) {
+void DiTransparentBitmap::set_pixels(int32_t index, int32_t y, uint32_t colors) {
   m_pixels[y * m_words_per_line + index] = (colors & 0x3F3F3F3F) | SYNCS_OFF_X4;
 }
 
-void DiOpaqueBitmap::clear() {
+void DiTransparentBitmap::clear() {
   fill(MASK_RGB(0,0,0));
 }
 
-void DiOpaqueBitmap::fill(uint8_t color) {
+void DiTransparentBitmap::fill(uint8_t color) {
   uint32_t color4 = (((uint32_t)color) << 24) |
       (((uint32_t)color) << 16) |
       (((uint32_t)color) << 8) |
@@ -73,7 +74,7 @@ void DiOpaqueBitmap::fill(uint8_t color) {
   }
 }
 
-void IRAM_ATTR DiOpaqueBitmap::paint(const DiPaintParams *params) {
+void IRAM_ATTR DiTransparentBitmap::paint(const DiPaintParams *params) {
   if (params->m_scrolled_index >= m_y && params->m_scrolled_index < m_y + m_height) {
     auto x = m_x;
     int32_t offset = 0;

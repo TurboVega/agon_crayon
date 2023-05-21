@@ -1,13 +1,36 @@
-// di_tile_map.cpp - Function definitions for drawing tile maps
+// di_horiz_line.cpp - Function definitions for drawing horizontal lines
 //
-// A tile map is a set of rectangular tiles, where each tile is a bitmap of
-// the same size (width and height). Tiles are arranged in a rectangular
-// grid, where the entire portion of the grid that fits within the visible
-// area of the screen may be displayed at any given moment. In other words
-// multiple tiles show at the same time.
+// A horizontal line is N pixels wide and 1 pixel high.
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
+// The function defined in this source may be specified
+// in a C source that calls it, using this declaration:
+//
+// extern "C" {
+// IRAM_ATTR void DiHorizontalLine(void* this_ptr, const DiPaintParams *params);
+// }
+//
+// Upon entry to the function, registers are set as follows:
+//
+// a0: return address
+// a1: stack pointer
+// a2: DiHorizontalLine* pointer (i.e., 'this')
+//     [a2] vtable pointer
+//     [a2+4] m_x
+//     [a2+8] m_y
+//     [a2+12] m_color
+//
+// a3: const DiPaintParams *params
+//     [a3] m_line32
+//     [a3+4] m_line8
+//     [a3+8] m_line_index
+//     [a3+12] m_scrolled_index
+//     [a3+16] m_horiz_scroll
+//     [a3+20] m_vert_scroll
+//     [a3+24] m_screen_width
+//     [a3+28] m_screen_height
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -27,5 +50,12 @@
 // SOFTWARE.
 // 
 
-#include "di_tile_map.h"
+  .section .iram1.text
+  .align
+  .global   DiHorizontalLine_paint
+  .type     DiHorizontalLine_paint,@function
 
+DiHorizontalLine_paint:
+  entry     sp,16
+skip:
+  retw.n
