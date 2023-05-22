@@ -50,25 +50,25 @@ uint8_t sdcolor[10] = {
   SYNCS_OFF | MASK_RGB(1,2,3)
 };
 
-#define NUM_STARS 100
+#define STAR_PADDING 200
+#define NUM_STARS (ACT_LINES+STAR_PADDING)
 DiSetPixel g_stars[NUM_STARS];
 
-DiHorizontalLine g_vert_center(300, 300, 200, MASK_RGB(3,0,0));
-DiSetPixel g_horiz_center(CENTER_X, CENTER_Y, MASK_RGB(0,0,3));
-DiOpaqueBitmap* gp_opaque_bitmap = new(64,64) DiOpaqueBitmap(64,64);
-DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
+//DiHorizontalLine g_vert_center(300, 300, 200, MASK_RGB(3,0,0));
+//DiSetPixel g_horiz_center(CENTER_X, CENTER_Y, MASK_RGB(0,0,3));
+//DiOpaqueBitmap* gp_opaque_bitmap = new(64,64) DiOpaqueBitmap(64,64);
+//DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
 
 void init_stars() {
   srand(42);
   for (int i = 0; i < NUM_STARS; i++) {
-    int32_t x = rand() % ACT_PIXELS;
-    int32_t y = rand() % ACT_LINES;
+    int32_t x = rand() % (ACT_PIXELS * 3 / 2) - (ACT_PIXELS / 4);
     g_stars[i].m_x = x;
-    g_stars[i].m_y = y;
+    g_stars[i].m_y = i-(STAR_PADDING/2);
     g_stars[i].m_color = MASK_RGB(3,3,3) | SYNCS_OFF;
   }
 
-  gp_opaque_bitmap->set_position(270,200);
+  /*gp_opaque_bitmap->set_position(270,200);
   gp_opaque_bitmap->clear();
 
   gp_masked_bitmap->set_position(500,200);
@@ -79,7 +79,7 @@ void init_stars() {
       gp_opaque_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
-  }
+  }*/
 }
 
 void DiVideoScanLine::init_to_black() {
@@ -103,13 +103,14 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
   memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
 
-  for (int i = 0; i < NUM_STARS; i++) {
-    g_stars[i].paint(params);
+  int32_t i = params->m_scrolled_index;
+  if (i >= -(STAR_PADDING/2) && i < ACT_LINES) {
+    g_stars[i+(STAR_PADDING/2)].paint(params);
   }
 
-  g_vert_center.paint(params);
-  g_horiz_center.paint(params);
-
+  //g_vert_center.paint(params);
+  //g_horiz_center.paint(params);
+/*
   // Draw a large diamond shape in the center of the screen.
   auto y = params->m_scrolled_index;
   if (y >= DIAMOND_START_LINE && y <= DIAMOND_END_LINE) {
@@ -120,6 +121,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
     params->m_line8[FIX_INDEX(CENTER_X+0+center_offset+params->m_horiz_scroll)] = diamond;
     params->m_line8[FIX_INDEX(CENTER_X+1+center_offset+params->m_horiz_scroll)] = diamond;
   }
+*/
 /*
   // Draw small diamond shapes somewhere.
   for (int d = 0; d<10; d++) {
@@ -167,8 +169,8 @@ void DiVideoBuffer::init_for_vsync() {
 }
 
 void IRAM_ATTR DiVideoBuffer::paint(DiPaintParams *params) {
-  for (int i = 0; i < NUM_LINES_PER_BUFFER; i++) {
-    m_line[i].paint(params);
-    ++(params->m_line_index);
-  }
+  // Since there are only 2 lines per buffer, we unroll the loop here, for speed.
+  m_line[0].paint(params);
+  ++(params->m_line_index);
+  m_line[1].paint(params);
 }

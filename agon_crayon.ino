@@ -200,8 +200,8 @@ int8_t ydir[10] = {-1,1,-1,1,-1,1,-1,1,-1,1};
 uint8_t scroll_mode = 0;
 
 // Directions: static, down+left, up, up+right, right, down+right, down, left, up+left
-int32_t scroll_dx[9] = {0, -1, 0, 1, 1, 1, 0, -1, -1};
-int32_t scroll_dy[9] = {0, 1, -1, -1, 0, 1, 1, 0, -1};
+int32_t scroll_dx[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
+int32_t scroll_dy[9] = {0, -1, 1, 1, 0, -1, -1, 0, 1};
 
 uint8_t scroll_count = 0;
 
