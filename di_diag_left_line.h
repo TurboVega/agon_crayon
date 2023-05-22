@@ -1,6 +1,7 @@
-// di_diag_line.h - Function declarations for drawing diagonal lines
+// di_diag_left_line.h - Function declarations for drawing diagonal lines to the left
 //
 // A diagonal line is 1 pixel thick, and connects the diagonal points of a square.
+// A 'left' line decreases in X as it increases in Y (going down).
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -26,13 +27,9 @@
 #pragma once
 #include "di_drawing_instruction.h"
 
-class DiDiagonalLine: public DiDrawingInstrAtXY {
+class DiDiagonalLeftLine: public DiDrawingInstrXYWHC {
   public:
-  uint32_t m_x2;
-  uint32_t m_y2;
-  uint8_t m_color;
-
-  DiDiagonalLine(int32_t x, int32_t y, int32_t x2, int32_t y2, uint8_t color);
+  DiDiagonalLeftLine(int32_t x, int32_t y, int32_t width, int32_t height, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

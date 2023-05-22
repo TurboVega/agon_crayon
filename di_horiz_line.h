@@ -26,10 +26,8 @@
 #pragma once
 #include "di_drawing_instruction.h"
 
-class DiHorizontalLine: public DiDrawingInstrAtXY {
+class DiHorizontalLine: public DiDrawingInstrXYWC {
   public:
-  uint32_t m_width;
-  uint8_t m_color;
   uint32_t m_color4;
 
   DiHorizontalLine(int32_t x, int32_t y, uint32_t width, uint8_t color);

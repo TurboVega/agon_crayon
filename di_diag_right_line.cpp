@@ -1,6 +1,7 @@
-// di_diagonal_line.cpp - Function definitions for drawing diagonal lines
+// di_diag_right_line.cpp - Function definitions for drawing diagonal lines to the right
 //
 // A diagonal line is 1 pixel thick, and connects the diagonal points of a square.
+// A 'right' line increases in X as it increases in Y (going down).
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -23,14 +24,12 @@
 // SOFTWARE.
 // 
 
-#include "di_diag_line.h"
+#include "di_diag_right_line.h"
 
-DiDiagonalLine::DiDiagonalLine(int32_t x, int32_t y, int32_t x2, int32_t y2, uint8_t color)
-  : DiDrawingInstrAtXY(x, y) {
-  m_x2 = x2;
-  m_y2 = y2;
-  m_color = color | SYNCS_OFF;
+DiDiagonalRightLine::DiDiagonalRightLine(int32_t x, int32_t y, int32_t width, int32_t height, uint8_t color)
+  : DiDrawingInstrXYWHC(x, y, width, height, color) {
+  m_color |= SYNCS_OFF;
 }
 
-void IRAM_ATTR DiDiagonalLine::paint(const DiPaintParams *params) {
+void IRAM_ATTR DiDiagonalRightLine::paint(const DiPaintParams *params) {
 }

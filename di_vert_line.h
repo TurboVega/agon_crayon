@@ -26,11 +26,8 @@
 #pragma once
 #include "di_drawing_instruction.h"
 
-class DiVerticalLine: public DiDrawingInstrAtXY {
+class DiVerticalLine: public DiDrawingInstrXYHC {
   public:
-  uint32_t m_height;
-  uint8_t m_color;
-
   DiVerticalLine(int32_t x, int32_t y, uint32_t height, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);

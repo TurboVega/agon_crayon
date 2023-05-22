@@ -26,13 +26,12 @@
 #include "di_horiz_line.h"
 
 DiHorizontalLine::DiHorizontalLine(int32_t x, int32_t y, uint32_t width, uint8_t color)
-  : DiDrawingInstrAtXY(x, y) {
-  m_width = width;
-  m_color = color | SYNCS_OFF;
+  : DiDrawingInstrXYWC(x, y, width, color) {
+  m_color |= SYNCS_OFF;
   m_color4 = (((uint32_t)color) << 24) |
       (((uint32_t)color) << 16) |
       (((uint32_t)color) << 8) |
-      ((uint32_t)color);
+      ((uint32_t)color) | SYNCS_OFF_X4;
 }
 
 void IRAM_ATTR DiHorizontalLine::paint(const DiPaintParams *params) {

@@ -26,9 +26,8 @@
 
 #include "di_transparent_bitmap.h"
 
-DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height) {
-  m_width = width;
-  m_height = height;
+DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height):
+  DiDrawingInstrXYWH(0, 0, width, height) {
   m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
 }
 

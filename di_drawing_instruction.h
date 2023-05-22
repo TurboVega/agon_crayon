@@ -100,26 +100,98 @@ class DiDrawingInstruction {
   }
 };
 
-class DiDrawingInstrAtX: public DiDrawingInstruction {
+class DiDrawingInstrX: public DiDrawingInstruction {
   public:
   int32_t m_x;
 
-  DiDrawingInstrAtX();
-  DiDrawingInstrAtX(int32_t x);
+  DiDrawingInstrX();
+  DiDrawingInstrX(int32_t x);
 };
 
-class DiDrawingInstrAtY: public DiDrawingInstruction {
+class DiDrawingInstrXC: public DiDrawingInstrX {
+  public:
+  int8_t m_color;
+
+  DiDrawingInstrXC();
+  DiDrawingInstrXC(int32_t x, int8_t color);
+};
+
+class DiDrawingInstrY: public DiDrawingInstruction {
   public:
   int32_t m_y;
 
-  DiDrawingInstrAtY();
-  DiDrawingInstrAtY(int32_t y);
+  DiDrawingInstrY();
+  DiDrawingInstrY(int32_t y);
 };
 
-class DiDrawingInstrAtXY: public DiDrawingInstrAtX {
+class DiDrawingInstrYC: public DiDrawingInstrY {
+  public:
+  int8_t m_color;
+
+  DiDrawingInstrYC();
+  DiDrawingInstrYC(int32_t y, int8_t color);
+};
+
+class DiDrawingInstrXY: public DiDrawingInstrX {
   public:
   int32_t m_y;
 
-  DiDrawingInstrAtXY();
-  DiDrawingInstrAtXY(int32_t x, int32_t y);
+  DiDrawingInstrXY();
+  DiDrawingInstrXY(int32_t x, int32_t y);
+};
+
+class DiDrawingInstrXYC: public DiDrawingInstrXY {
+  public:
+  int8_t m_color;
+
+  DiDrawingInstrXYC();
+  DiDrawingInstrXYC(int32_t x, int32_t y, int8_t color);
+};
+
+class DiDrawingInstrXYW: public DiDrawingInstrXY {
+  public:
+  int32_t m_width;
+
+  DiDrawingInstrXYW();
+  DiDrawingInstrXYW(int32_t x, int32_t y, int32_t width);
+};
+
+class DiDrawingInstrXYWC: public DiDrawingInstrXYW {
+  public:
+  int8_t m_color;
+
+  DiDrawingInstrXYWC();
+  DiDrawingInstrXYWC(int32_t x, int32_t y, int32_t width, int8_t color);
+};
+
+class DiDrawingInstrXYH: public DiDrawingInstrXY {
+  public:
+  int32_t m_height;
+
+  DiDrawingInstrXYH();
+  DiDrawingInstrXYH(int32_t x, int32_t y, int32_t height);
+};
+
+class DiDrawingInstrXYHC: public DiDrawingInstrXYH {
+  public:
+  int8_t m_color;
+
+  DiDrawingInstrXYHC();
+  DiDrawingInstrXYHC(int32_t x, int32_t y, int32_t height, int8_t color);
+};
+
+class DiDrawingInstrXYWH: public DiDrawingInstrXYW {
+  public:
+  int32_t m_height;
+
+  DiDrawingInstrXYWH();
+  DiDrawingInstrXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
+};
+
+class DiDrawingInstrXYWHC: public DiDrawingInstrXYWH {
+  public:
+  int8_t m_color;
+
+  DiDrawingInstrXYWHC();
+  DiDrawingInstrXYWHC(int32_t x, int32_t y, int32_t width, int32_t height, int8_t color);
 };

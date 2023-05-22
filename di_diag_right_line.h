@@ -1,7 +1,7 @@
-// di_transparent_bitmap.h - Function declarations for drawing transparent bitmaps 
+// di_diag_right_line.h - Function declarations for drawing diagonal lines to the right
 //
-// An transparent bitmap is a rectangle that is a combination of fully transparent pixels,
-// partially transparent pixels, and fully opaque pixels, of various colors. 
+// A diagonal line is 1 pixel thick, and connects the diagonal points of a square.
+// A 'right' line increases in X as it increases in Y (going down).
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -27,20 +27,9 @@
 #pragma once
 #include "di_drawing_instruction.h"
 
-class DiTransparentBitmap: public DiDrawingInstrXYWH {
+class DiDiagonalRightLine: public DiDrawingInstrXYWHC {
   public:
-  uint32_t m_words_per_line;
-  uint32_t m_pixels[1];
-
-  DiTransparentBitmap(uint32_t width, uint32_t height);
-  void* operator new(size_t size, uint32_t width, uint32_t height);
-  //void operator delete(void*);
-  void set_position(int32_t x, int32_t y);
-  void set_pixel(int32_t x, int32_t y, uint8_t color);
-  void set_pixels(int32_t index, int32_t y, uint32_t colors);
-  void clear();
-  void fill(uint8_t color);
+  DiDiagonalRightLine(int32_t x, int32_t y, int32_t width, int32_t height, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };
-

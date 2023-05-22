@@ -65,8 +65,8 @@ DiSetPixel_paint:
   l32i      a6,a3,16      // a6 <-- m_horiz_scroll
   add       a5,a5,a6      // a5 <-- m_x + m_horiz_scroll
   bltz      a5,skip       // skip if final x < 0
-  l32i      a6,a3,24      // load screen width
-  bge       a5,a6,skip    // skip if final x >= screen width
+  l32i      a6,a3,24      // a6 <-- m_screen_width
+  bge       a5,a6,skip    // skip if final x >= m_screen_width
   movi      a6,2          // value for adjusting index
   xor       a5,a5,a6      // a5 <-- final x ^ 2
   add       a4,a4,a5      // a4 <-- m_line8 + m_x

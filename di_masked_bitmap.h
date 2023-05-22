@@ -26,10 +26,8 @@
 #pragma once
 #include "di_drawing_instruction.h"
 
-class DiMaskedBitmap: public DiDrawingInstrAtXY {
+class DiMaskedBitmap: public DiDrawingInstrXYWH {
   public:
-  uint32_t m_width;
-  uint32_t m_height;
   uint32_t m_words_per_line;
   uint32_t m_pixels[1];
 

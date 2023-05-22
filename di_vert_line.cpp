@@ -26,9 +26,8 @@
 #include "di_vert_line.h"
 
 DiVerticalLine::DiVerticalLine(int32_t x, int32_t y, uint32_t height, uint8_t color)
-  : DiDrawingInstrAtXY(x, y) {
-  m_height = height;
-  m_color = color | SYNCS_OFF;
+  : DiDrawingInstrXYHC(x, y, height, color) {
+  m_color |= SYNCS_OFF;
 }
 
 void IRAM_ATTR DiVerticalLine::paint(const DiPaintParams *params) {
