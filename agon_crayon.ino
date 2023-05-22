@@ -198,8 +198,11 @@ extern uint32_t sdy[10];
 int8_t xdir[10] = {1,-1,1,-1,1,-1,1,-1,1,-1};
 int8_t ydir[10] = {-1,1,-1,1,-1,1,-1,1,-1,1};
 uint8_t scroll_mode = 0;
-int32_t scroll_dx[5] = {0,1,-1,1,-1};
-int32_t scroll_dy[5] = {0,1,0,-1,0};
+
+// Directions: static, down+left, up, up+right, right, down+right, down, left, up+left
+int32_t scroll_dx[9] = {0, -1, 0, 1, 1, 1, 0, -1, -1};
+int32_t scroll_dy[9] = {0, 1, -1, -1, 0, 1, 1, 0, -1};
+
 uint8_t scroll_count = 0;
 
 IRAM_ATTR void loop() {
@@ -219,32 +222,32 @@ IRAM_ATTR void loop() {
       eof = true;
 
       // move diamonds
-      for (int d = 0; d < 10; d++) {
+      /*for (int d = 0; d < 10; d++) {
         if (xdir[d] > 0) {
-          if (++sdx[d] >= 710) {
+          if (++sdx[d] >= 750) {
             xdir[d] = -1;
           }
         } else {
-          if (--sdx[d] <= 90) {
+          if (--sdx[d] <= 40) {
             xdir[d] = 1;
           }
         }
 
         if (ydir[d] > 0) {
-          if (++sdy[d] >= 510) {
+          if (++sdy[d] >= 550) {
             ydir[d] = -1;
           }
         } else {
-          if (--sdy[d] <= 90) {
+          if (--sdy[d] <= 40) {
             ydir[d] = 1;
           }
         }
-      }
+      }*/
 
       // do scrolling
-      if (++scroll_count >= 30) {
+      if (++scroll_count >= 120) {
         scroll_count = 0;
-        if (++scroll_mode >= 5) {
+        if (++scroll_mode >= 9) {
           scroll_mode = 0;
         }
       }
