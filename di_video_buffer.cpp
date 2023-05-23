@@ -27,6 +27,7 @@
 #include <string.h>
 #include "di_video_buffer.h"
 #include "di_set_pixel.h"
+#include "di_vert_line.h"
 #include "di_horiz_line.h"
 #include "di_opaque_bitmap.h"
 #include "di_masked_bitmap.h"
@@ -54,8 +55,8 @@ uint8_t sdcolor[10] = {
 #define NUM_STARS (ACT_LINES+STAR_PADDING)
 DiSetPixel g_stars[NUM_STARS];
 
-//DiHorizontalLine g_vert_center(300, 300, 200, MASK_RGB(3,0,0));
-//DiSetPixel g_horiz_center(CENTER_X, CENTER_Y, MASK_RGB(0,0,3));
+DiHorizontalLine g_vert_center(300, 300, 200, MASK_RGB(3,0,0));
+DiVerticalLine g_horiz_center(CENTER_X, CENTER_Y-100, 200, MASK_RGB(0,0,3));
 //DiOpaqueBitmap* gp_opaque_bitmap = new(64,64) DiOpaqueBitmap(64,64);
 //DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
 
@@ -63,9 +64,10 @@ void init_stars() {
   srand(42);
   for (int i = 0; i < NUM_STARS; i++) {
     int32_t x = rand() % (ACT_PIXELS * 3 / 2) - (ACT_PIXELS / 4);
+    int8_t c = (int8_t)(rand() % 63 + 1);
     g_stars[i].m_x = x;
     g_stars[i].m_y = i-(STAR_PADDING/2);
-    g_stars[i].m_color = MASK_RGB(3,3,3) | SYNCS_OFF;
+    g_stars[i].m_color = c | SYNCS_OFF;
   }
 
   /*gp_opaque_bitmap->set_position(270,200);
@@ -108,8 +110,8 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
     g_stars[i+(STAR_PADDING/2)].paint(params);
   }
 
-  //g_vert_center.paint(params);
-  //g_horiz_center.paint(params);
+  g_vert_center.paint(params);
+  g_horiz_center.paint(params);
 /*
   // Draw a large diamond shape in the center of the screen.
   auto y = params->m_scrolled_index;

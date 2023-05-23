@@ -25,37 +25,18 @@
 
 #include "di_horiz_line.h"
 
+extern "C" {
+IRAM_ATTR void DiHorizontalLine_paint(void* this_ptr, const DiPaintParams *params);
+}
+
 DiHorizontalLine::DiHorizontalLine(int32_t x, int32_t y, uint32_t width, uint8_t color)
   : DiDrawingInstrXYWC(x, y, width, color) {
-  m_color |= SYNCS_OFF;
-  m_color4 = (((uint32_t)color) << 24) |
+  m_color |= (((uint32_t)color) << 24) |
       (((uint32_t)color) << 16) |
       (((uint32_t)color) << 8) |
-      ((uint32_t)color) | SYNCS_OFF_X4;
+      SYNCS_OFF_X4;
 }
 
 void IRAM_ATTR DiHorizontalLine::paint(const DiPaintParams *params) {
-  if (m_y == params->m_scrolled_index) {
-    auto x = m_x;
-    int32_t offset = 0;
-    clamp_left(x, offset, params->m_horiz_scroll);
-    int32_t x2 = m_x + m_width;
-    clamp_right(x2, params->m_horiz_scroll);
-    auto width = x2 - x + 1;
-    auto c = m_color;
-    while ((width > 0) && (x & 3)) {
-      params->m_line8[FIX_INDEX(x++)] = c;
-      --width;
-    }
-    auto index = x / 4;
-    while ((width >= 4) && (index < ACT_PIXELS/4)) {
-      params->m_line32[index++] = m_color4;
-      width -= 4;
-      x += 4;
-    }
-    while ((width > 0) && (x < ACT_PIXELS)) {
-      params->m_line8[FIX_INDEX(x++)] = c;
-      --width;
-    }
-  }
+  DiHorizontalLine_paint((void*)this, params);
 }

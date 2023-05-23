@@ -28,8 +28,6 @@
 
 class DiHorizontalLine: public DiDrawingInstrXYWC {
   public:
-  uint32_t m_color4;
-
   DiHorizontalLine(int32_t x, int32_t y, uint32_t width, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);

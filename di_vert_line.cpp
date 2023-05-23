@@ -25,10 +25,15 @@
 
 #include "di_vert_line.h"
 
+extern "C" {
+IRAM_ATTR void DiVerticalLine_paint(void* this_ptr, const DiPaintParams *params);
+}
+
 DiVerticalLine::DiVerticalLine(int32_t x, int32_t y, uint32_t height, uint8_t color)
   : DiDrawingInstrXYHC(x, y, height, color) {
   m_color |= SYNCS_OFF;
 }
 
 void IRAM_ATTR DiVerticalLine::paint(const DiPaintParams *params) {
+  DiVerticalLine_paint((void*)this, params);
 }

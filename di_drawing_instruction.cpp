@@ -55,30 +55,30 @@ DiDrawingInstrXYC::DiDrawingInstrXYC(): m_color(0) {}
 DiDrawingInstrXYC::DiDrawingInstrXYC(int32_t x, int32_t y, int8_t color):
   DiDrawingInstrXY(x, y), m_color(color) {}
 
-DiDrawingInstrXYW::DiDrawingInstrXYW(): m_width(0) {}
+DiDrawingInstrXYW::DiDrawingInstrXYW(): m_width(0), m_x_extent(0) {}
 
 DiDrawingInstrXYW::DiDrawingInstrXYW(int32_t x, int32_t y, int32_t width):
-  DiDrawingInstrXY(x, y), m_width(width) {}
+  DiDrawingInstrXY(x, y), m_width(width), m_x_extent(x+width) {}
 
 DiDrawingInstrXYWC::DiDrawingInstrXYWC(): m_color(0) {}
 
 DiDrawingInstrXYWC::DiDrawingInstrXYWC(int32_t x, int32_t y, int32_t width, int8_t color):
   DiDrawingInstrXYW(x, y, width), m_color(color) {}
 
-DiDrawingInstrXYH::DiDrawingInstrXYH(): m_height(0) {}
+DiDrawingInstrXYH::DiDrawingInstrXYH(): m_height(0), m_y_extent(0) {}
 
 DiDrawingInstrXYH::DiDrawingInstrXYH(int32_t x, int32_t y, int32_t height):
-  DiDrawingInstrXY(x, y), m_height(height) {}
+  DiDrawingInstrXY(x, y), m_height(height), m_y_extent(y+height) {}
 
 DiDrawingInstrXYHC::DiDrawingInstrXYHC(): m_color(0) {}
 
 DiDrawingInstrXYHC::DiDrawingInstrXYHC(int32_t x, int32_t y, int32_t height, int8_t color):
   DiDrawingInstrXYH(x, y, height), m_color(color) {}
 
-DiDrawingInstrXYWH::DiDrawingInstrXYWH(): m_height(0) {}
+DiDrawingInstrXYWH::DiDrawingInstrXYWH(): m_height(0), m_x_extent(0), m_y_extent(0) {}
 
 DiDrawingInstrXYWH::DiDrawingInstrXYWH(int32_t x, int32_t y, int32_t width, int32_t height):
-  DiDrawingInstrXYW(x, y, width), m_height(height) {}
+  DiDrawingInstrXYW(x, y, width), m_height(height), m_x_extent(x+width), m_y_extent(y+height) {}
 
 DiDrawingInstrXYWHC::DiDrawingInstrXYWHC(): m_color(0) {}
 

@@ -110,7 +110,7 @@ class DiDrawingInstrX: public DiDrawingInstruction {
 
 class DiDrawingInstrXC: public DiDrawingInstrX {
   public:
-  int8_t m_color;
+  int32_t m_color;
 
   DiDrawingInstrXC();
   DiDrawingInstrXC(int32_t x, int8_t color);
@@ -126,7 +126,7 @@ class DiDrawingInstrY: public DiDrawingInstruction {
 
 class DiDrawingInstrYC: public DiDrawingInstrY {
   public:
-  int8_t m_color;
+  int32_t m_color;
 
   DiDrawingInstrYC();
   DiDrawingInstrYC(int32_t y, int8_t color);
@@ -142,7 +142,7 @@ class DiDrawingInstrXY: public DiDrawingInstrX {
 
 class DiDrawingInstrXYC: public DiDrawingInstrXY {
   public:
-  int8_t m_color;
+  int32_t m_color;
 
   DiDrawingInstrXYC();
   DiDrawingInstrXYC(int32_t x, int32_t y, int8_t color);
@@ -151,6 +151,7 @@ class DiDrawingInstrXYC: public DiDrawingInstrXY {
 class DiDrawingInstrXYW: public DiDrawingInstrXY {
   public:
   int32_t m_width;
+  int32_t m_x_extent;
 
   DiDrawingInstrXYW();
   DiDrawingInstrXYW(int32_t x, int32_t y, int32_t width);
@@ -158,7 +159,7 @@ class DiDrawingInstrXYW: public DiDrawingInstrXY {
 
 class DiDrawingInstrXYWC: public DiDrawingInstrXYW {
   public:
-  int8_t m_color;
+  int32_t m_color;
 
   DiDrawingInstrXYWC();
   DiDrawingInstrXYWC(int32_t x, int32_t y, int32_t width, int8_t color);
@@ -167,6 +168,7 @@ class DiDrawingInstrXYWC: public DiDrawingInstrXYW {
 class DiDrawingInstrXYH: public DiDrawingInstrXY {
   public:
   int32_t m_height;
+  int32_t m_y_extent;
 
   DiDrawingInstrXYH();
   DiDrawingInstrXYH(int32_t x, int32_t y, int32_t height);
@@ -174,7 +176,7 @@ class DiDrawingInstrXYH: public DiDrawingInstrXY {
 
 class DiDrawingInstrXYHC: public DiDrawingInstrXYH {
   public:
-  int8_t m_color;
+  int32_t m_color;
 
   DiDrawingInstrXYHC();
   DiDrawingInstrXYHC(int32_t x, int32_t y, int32_t height, int8_t color);
@@ -183,6 +185,8 @@ class DiDrawingInstrXYHC: public DiDrawingInstrXYH {
 class DiDrawingInstrXYWH: public DiDrawingInstrXYW {
   public:
   int32_t m_height;
+  int32_t m_x_extent;
+  int32_t m_y_extent;
 
   DiDrawingInstrXYWH();
   DiDrawingInstrXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
@@ -190,7 +194,7 @@ class DiDrawingInstrXYWH: public DiDrawingInstrXYW {
 
 class DiDrawingInstrXYWHC: public DiDrawingInstrXYWH {
   public:
-  int8_t m_color;
+  int32_t m_color;
 
   DiDrawingInstrXYWHC();
   DiDrawingInstrXYWHC(int32_t x, int32_t y, int32_t width, int32_t height, int8_t color);
