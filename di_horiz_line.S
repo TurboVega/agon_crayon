@@ -89,7 +89,7 @@ right_ok:
   movi      a11,4         // used to decrement width by 4
 align_left_edge:
   beqz      a3,skip       // skip if no pixels left to draw
-  and       a7,a5,a3      // a7 <-- x & 3
+  and       a7,a5,a6      // a7 <-- x & 3
   beqz      a7,aligned    // don't align if already aligned
   xor       a9,a5,a8      // a9 <-- x ^ 2
   add       a9,a9,a4      // a9 <-- m_line8 + x
