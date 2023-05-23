@@ -90,14 +90,22 @@ right_ok:
 align_left_edge:
   beqz      a3,skip       // skip if no pixels left to draw
   and       a7,a5,a6      // a7 <-- x & 3
-  beqz      a7,aligned    // don't align if already aligned
+  beqz      a7,left_aligned // don't align if already aligned
   xor       a9,a5,a8      // a9 <-- x ^ 2
   add       a9,a9,a4      // a9 <-- m_line8 + x
   s8i       a2,a9,0       // m_line8[index] <-- m_color
   sub       a3,a3,a10     // a3 <-- remaining line width
   add       a5,a5,a10     // a5 <-- next x position
   bgez      a5,align_left_edge // go check alignment
+left_aligned:
 
-aligned:
+right_edge:
+  beqz      a3,skip       // skip if no pixels left to draw
+  xor       a9,a5,a8      // a9 <-- x ^ 2
+  add       a9,a9,a4      // a9 <-- m_line8 + x
+  s8i       a2,a9,0       // m_line8[index] <-- m_color
+  sub       a3,a3,a10     // a3 <-- remaining line width
+  add       a5,a5,a10     // a5 <-- next x position
+  bgez      a5,right_edge // go finish drawing
 skip:
   retw.n
