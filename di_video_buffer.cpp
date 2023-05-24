@@ -29,6 +29,7 @@
 #include "di_set_pixel.h"
 #include "di_vert_line.h"
 #include "di_horiz_line.h"
+#include "di_diag_right_line.h"
 #include "di_opaque_bitmap.h"
 #include "di_masked_bitmap.h"
 
@@ -57,6 +58,8 @@ DiSetPixel g_stars[NUM_STARS];
 
 DiHorizontalLine g_vert_center(300, 300, 200, MASK_RGB(3,0,0));
 DiVerticalLine g_horiz_center(CENTER_X, CENTER_Y-100, 200, MASK_RGB(0,0,3));
+DiDiagonalRightLine g_diamond_ne(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
+DiDiagonalRightLine g_diamond_sw(CENTER_X-HALF_DIAMOND_SIZE, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 //DiOpaqueBitmap* gp_opaque_bitmap = new(64,64) DiOpaqueBitmap(64,64);
 //DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
 
@@ -112,6 +115,8 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
   g_vert_center.paint(params);
   g_horiz_center.paint(params);
+  g_diamond_ne.paint(params);
+  g_diamond_sw.paint(params);
 /*
   // Draw a large diamond shape in the center of the screen.
   auto y = params->m_scrolled_index;

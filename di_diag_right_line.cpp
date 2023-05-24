@@ -26,10 +26,15 @@
 
 #include "di_diag_right_line.h"
 
-DiDiagonalRightLine::DiDiagonalRightLine(int32_t x, int32_t y, int32_t width, int32_t height, uint8_t color)
-  : DiDrawingInstrXYWHC(x, y, width, height, color) {
+extern "C" {
+IRAM_ATTR void DiDiagonalRightLine_paint(void* this_ptr, const DiPaintParams *params);
+}
+
+DiDiagonalRightLine::DiDiagonalRightLine(int32_t x, int32_t y, int32_t length, uint8_t color)
+  : DiDrawingInstrXYWHC(x, y, length, length, color) {
   m_color |= SYNCS_OFF;
 }
 
 void IRAM_ATTR DiDiagonalRightLine::paint(const DiPaintParams *params) {
+  DiDiagonalRightLine_paint((void*)this, params);
 }

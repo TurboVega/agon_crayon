@@ -29,7 +29,7 @@
 
 class DiDiagonalLeftLine: public DiDrawingInstrXYWHC {
   public:
-  DiDiagonalLeftLine(int32_t x, int32_t y, int32_t width, int32_t height, uint8_t color);
+  DiDiagonalLeftLine(int32_t x, int32_t y, int32_t length, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

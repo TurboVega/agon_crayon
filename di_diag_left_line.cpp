@@ -26,10 +26,15 @@
 
 #include "di_diag_left_line.h"
 
-DiDiagonalLeftLine::DiDiagonalLeftLine(int32_t x, int32_t y, int32_t width, int32_t height, uint8_t color)
-  : DiDrawingInstrXYWHC(x, y, width, height, color) {
+extern "C" {
+IRAM_ATTR void DiDiagonalLeftLine_paint(void* this_ptr, const DiPaintParams *params);
+}
+
+DiDiagonalLeftLine::DiDiagonalLeftLine(int32_t x, int32_t y, int32_t length, uint8_t color)
+  : DiDrawingInstrXYWHC(x, y, length, length, color) {
   m_color |= SYNCS_OFF;
 }
 
 void IRAM_ATTR DiDiagonalLeftLine::paint(const DiPaintParams *params) {
+  DiDiagonalLeftLine_paint((void*)this, params);
 }

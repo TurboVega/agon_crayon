@@ -185,7 +185,6 @@ class DiDrawingInstrXYHC: public DiDrawingInstrXYH {
 class DiDrawingInstrXYWH: public DiDrawingInstrXYW {
   public:
   int32_t m_height;
-  int32_t m_x_extent;
   int32_t m_y_extent;
 
   DiDrawingInstrXYWH();

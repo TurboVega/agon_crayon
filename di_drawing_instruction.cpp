@@ -75,10 +75,10 @@ DiDrawingInstrXYHC::DiDrawingInstrXYHC(): m_color(0) {}
 DiDrawingInstrXYHC::DiDrawingInstrXYHC(int32_t x, int32_t y, int32_t height, int8_t color):
   DiDrawingInstrXYH(x, y, height), m_color(color) {}
 
-DiDrawingInstrXYWH::DiDrawingInstrXYWH(): m_height(0), m_x_extent(0), m_y_extent(0) {}
+DiDrawingInstrXYWH::DiDrawingInstrXYWH(): m_height(0), m_y_extent(0) {}
 
 DiDrawingInstrXYWH::DiDrawingInstrXYWH(int32_t x, int32_t y, int32_t width, int32_t height):
-  DiDrawingInstrXYW(x, y, width), m_height(height), m_x_extent(x+width), m_y_extent(y+height) {}
+  DiDrawingInstrXYW(x, y, width), m_height(height), m_y_extent(y+height) {}
 
 DiDrawingInstrXYWHC::DiDrawingInstrXYWHC(): m_color(0) {}
 
