@@ -70,10 +70,10 @@ DiOpaqueBitmap* gp_opaque_bitmap3 = new(64,64) DiOpaqueBitmap(64,64);
 
 DiOpaqueBitmap* gp_opaque_bitmap4 = new(64,64) DiOpaqueBitmap(64,64);
 DiOpaqueBitmap* gp_opaque_bitmap5 = new(64,64) DiOpaqueBitmap(64,64);
-//DiOpaqueBitmap* gp_opaque_bitmap6 = new(64,64) DiOpaqueBitmap(64,64);
+DiOpaqueBitmap* gp_opaque_bitmap6 = new(64,64) DiOpaqueBitmap(64,64);
 /*DiOpaqueBitmap* gp_opaque_bitmap7 = new(64,64) DiOpaqueBitmap(64,64);*/
 
-DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
+//DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
 
 void init_stars() {
   srand(42);
@@ -98,13 +98,13 @@ void init_stars() {
   gp_opaque_bitmap4->clear();
   gp_opaque_bitmap5->set_position(467,398);
   gp_opaque_bitmap5->clear();
-  //gp_opaque_bitmap6->set_position(339,555);
-  //gp_opaque_bitmap6->clear();
+  gp_opaque_bitmap6->set_position(339,555);
+  gp_opaque_bitmap6->clear();
   /*gp_opaque_bitmap7->set_position(109,560);
   gp_opaque_bitmap7->clear();*/
 
-  gp_masked_bitmap->set_position(500,200);
-  gp_masked_bitmap->clear();
+  //gp_masked_bitmap->set_position(500,200);
+  //gp_masked_bitmap->clear();
 
   for (int32_t y=0;y<64;y++) {
     for (int32_t x=0;x<64;x++) {
@@ -115,10 +115,10 @@ void init_stars() {
 
       gp_opaque_bitmap4->set_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_opaque_bitmap5->set_pixel(x, y, gtest_bitmapData[y*64+x]);
-      //gp_opaque_bitmap6->set_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_opaque_bitmap6->set_pixel(x, y, gtest_bitmapData[y*64+x]);
       /*gp_opaque_bitmap7->set_pixel(x, y, gtest_bitmapData[y*64+x]);*/
 
-      gp_masked_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
+      //gp_masked_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
   }
 }
@@ -203,7 +203,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
   gp_opaque_bitmap4->paint(&p2);
   gp_opaque_bitmap5->paint(&p2);
-  //gp_opaque_bitmap6->paint(&p2);
+  gp_opaque_bitmap6->paint(&p2);
   //gp_opaque_bitmap7->paint(&p2);
 
   //gp_opaque_bitmap->paint(&p2);
