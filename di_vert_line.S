@@ -27,7 +27,7 @@
 //     [a3] m_line32
 //     [a3+4] m_line8
 //     [a3+8] m_line_index
-//     [a3+12] m_scrolled_index
+//     [a3+12] m_scrolled_y
 //     [a3+16] m_horiz_scroll
 //     [a3+20] m_vert_scroll
 //     [a3+24] m_screen_width
@@ -59,7 +59,7 @@
 
 DiVerticalLine_paint:
   entry     sp,16
-  l32i      a4,a3,12      // a4 <-- m_scrolled_index
+  l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
   blt       a4,a5,skip    // skip if scan line is above vertical line
   l32i      a6,a2,16      // a6 <-- m_y_extent

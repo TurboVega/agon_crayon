@@ -63,8 +63,8 @@ DiDiagonalRightLine g_diamond_ne(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAM
 DiDiagonalRightLine g_diamond_sw(CENTER_X-HALF_DIAMOND_SIZE, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
-//DiOpaqueBitmap* gp_opaque_bitmap = new(64,64) DiOpaqueBitmap(64,64);
-//DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
+DiOpaqueBitmap* gp_opaque_bitmap = new(64,64) DiOpaqueBitmap(64,64);
+DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
 
 void init_stars() {
   srand(42);
@@ -76,7 +76,7 @@ void init_stars() {
     g_stars[i].m_color = c | SYNCS_OFF;
   }
 
-  /*gp_opaque_bitmap->set_position(270,200);
+  gp_opaque_bitmap->set_position(270,200);
   gp_opaque_bitmap->clear();
 
   gp_masked_bitmap->set_position(500,200);
@@ -87,7 +87,7 @@ void init_stars() {
       gp_opaque_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
-  }*/
+  }
 }
 
 void DiVideoScanLine::init_to_black() {
@@ -107,11 +107,11 @@ void DiVideoScanLine::init_for_vsync() {
 void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
   params->m_line8 = (uint8_t*)(m_act);
-  params->m_scrolled_index = params->m_line_index + params->m_vert_scroll;
+  params->m_scrolled_y = params->m_line_index + params->m_vert_scroll;
 
   memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
 
-  int32_t i = params->m_scrolled_index;
+  int32_t i = params->m_scrolled_y;
   if (i >= -(STAR_PADDING/2) && i < ACT_LINES) {
     g_stars[i+(STAR_PADDING/2)].paint(params);
   }
@@ -122,18 +122,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   g_diamond_sw.paint(params);
   g_diamond_nw.paint(params);
   g_diamond_se.paint(params);
-/*
-  // Draw a large diamond shape in the center of the screen.
-  auto y = params->m_scrolled_index;
-  if (y >= DIAMOND_START_LINE && y <= DIAMOND_END_LINE) {
-    int center_offset = HALF_DIAMOND_SIZE - abs((int)(y - CENTER_Y));
-    uint8_t diamond = SYNCS_OFF | MASK_RGB(2,3,1);
-    params->m_line8[FIX_INDEX(CENTER_X-1-center_offset+params->m_horiz_scroll)] = diamond;
-    params->m_line8[FIX_INDEX(CENTER_X-0-center_offset+params->m_horiz_scroll)] = diamond;
-    params->m_line8[FIX_INDEX(CENTER_X+0+center_offset+params->m_horiz_scroll)] = diamond;
-    params->m_line8[FIX_INDEX(CENTER_X+1+center_offset+params->m_horiz_scroll)] = diamond;
-  }
-*/
+
 /*
   // Draw small diamond shapes somewhere.
   for (int d = 0; d<10; d++) {
@@ -164,7 +153,12 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   }
 */
   // Draw a bitmap
-  //gp_opaque_bitmap->paint(params);
+  DiPaintParams p2 = *params;
+  p2.m_horiz_scroll = 0;
+  p2.m_vert_scroll = 0;
+  p2.m_scrolled_y = p2.m_line_index;
+
+  gp_opaque_bitmap->paint(&p2);
  // gp_masked_bitmap->paint(params);
 }
 

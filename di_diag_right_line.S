@@ -16,7 +16,7 @@
 //
 // a0: return address
 // a1: stack pointer
-// a2: DiVerticalLine* pointer (i.e., 'this')
+// a2: DiDiagonalRightLine* pointer (i.e., 'this')
 //     [a2] vtable pointer
 //     [a2+4] m_x
 //     [a2+8] m_y
@@ -30,7 +30,7 @@
 //     [a3] m_line32
 //     [a3+4] m_line8
 //     [a3+8] m_line_index
-//     [a3+12] m_scrolled_index
+//     [a3+12] m_scrolled_y
 //     [a3+16] m_horiz_scroll
 //     [a3+20] m_vert_scroll
 //     [a3+24] m_screen_width
@@ -62,17 +62,17 @@
 
 DiDiagonalRightLine_paint:
   entry     sp,16
-  l32i      a4,a3,12      // a4 <-- m_scrolled_index
+  l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
   blt       a4,a5,skip    // skip if scan line is above vertical line
   l32i      a6,a2,24      // a6 <-- m_y_extent
   bge       a4,a6,skip    // skip if scan line is below vertical line
-  sub       a7,a4,a5      // a7 <-- m_scrolled_index - m_y
+  sub       a7,a4,a5      // a7 <-- m_scrolled_y - m_y
   l32i      a4,a3,4       // a4 <-- m_line8
   l32i      a5,a2,4       // a5 <-- m_x
   l32i      a6,a3,16      // a6 <-- m_horiz_scroll
   add       a5,a5,a6      // a5 <-- m_x + m_horiz_scroll
-  add       a5,a5,a7      // a5 <-- (m_x + m_horiz_scroll) + (m_scrolled_index - m_y)
+  add       a5,a5,a7      // a5 <-- (m_x + m_horiz_scroll) + (m_scrolled_y - m_y)
   bltz      a5,skip       // skip if final x < 0
   l32i      a6,a3,24      // a6 <-- m_screen_width
   bge       a5,a6,skip    // skip if final x >= m_screen_width

@@ -30,6 +30,7 @@
 class DiTransparentBitmap: public DiDrawingInstrXYWH {
   public:
   uint32_t m_words_per_line;
+  uint32_t m_bytes_per_line;
   uint32_t m_pixels[1];
 
   DiTransparentBitmap(uint32_t width, uint32_t height);
