@@ -99,4 +99,4 @@
 #define DMA_TOTAL_DESCR       (ACT_LINES/NUM_LINES_PER_BUFFER+VFP_LINES+VS_LINES/NUM_LINES_PER_BUFFER+VBP_LINES)
 
 #define NUM_LINES_PER_BUFFER  2
-#define NUM_ACTIVE_BUFFERS    16 // must be a power of 2 and multiple of NUM_LINES_PER_BUFFER
+#define NUM_ACTIVE_BUFFERS    32 // must be a power of 2 and multiple of NUM_LINES_PER_BUFFER

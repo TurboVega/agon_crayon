@@ -24,6 +24,7 @@
 // 
 
 #include "di_opaque_bitmap.h"
+#include "esp_heap_caps.h"
 
 extern "C" {
 IRAM_ATTR void DiOpaqueBitmap_paint(void* this_ptr, const DiPaintParams *params);
@@ -38,7 +39,7 @@ DiOpaqueBitmap::DiOpaqueBitmap(uint32_t width, uint32_t height):
 void* DiOpaqueBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
   uint32_t wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
   size_t new_size = (size_t)(sizeof(DiOpaqueBitmap) - sizeof(uint32_t) + (wpl * height * sizeof(uint32_t)));
-  void* p = malloc(new_size);
+  void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
   return p;
 }
 

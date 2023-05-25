@@ -119,16 +119,19 @@ unaligned:
   bgez      a5,align_left_edge // go check alignment
 left_aligned:
 
-//  blt       a3,a11,middle_done // go if no full words to set
-//do_middle:
-//  add       a9,a5,a4      // a9 <-- m_line8 + x
-//  l32i      a2,a14,0      // a2 <-- 4 pixels from bitmap
-//  s32i      a2,a9,0       // m_line32[index] <-- m_color (4 pixels)
-//  add       a14,a14,a11   // a14 <-- pointer to next bitmap pixel
-//  sub       a3,a3,a11     // a3 <-- remaining line width
-//  add       a5,a5,a11     // a5 <-- next x position
-//  bge       a3,a11,do_middle // go if more full words to set
-//middle_done:
+  blt       a3,a11,middle_done // go if no full words to set
+do_middle:
+  add       a9,a5,a4      // a9 <-- m_line8 + x
+  l32i      a2,a14,0      // a2 <-- 4 pixels from bitmap
+  slli      a7,a2,16      // a7 <-- lower-half-word in upper-half-word position
+  srli      a2,a2,16      // a2 <-- upper-half-word in lower-half-word position
+  or        a2,a2,a7      // a2 <-- half-words swapped
+  s32i      a2,a9,0       // m_line32[index] <-- m_color (4 pixels)
+  add       a14,a14,a11   // a14 <-- pointer to next bitmap pixel
+  sub       a3,a3,a11     // a3 <-- remaining line width
+  add       a5,a5,a11     // a5 <-- next x position
+  bge       a3,a11,do_middle // go if more full words to set
+middle_done:
 
 right_edge:
   beqz      a3,skip       // skip if no pixels left to draw

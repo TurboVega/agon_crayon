@@ -153,12 +153,13 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   }
 */
   // Draw a bitmap
-  DiPaintParams p2 = *params;
-  p2.m_horiz_scroll = 0;
-  p2.m_vert_scroll = 0;
-  p2.m_scrolled_y = p2.m_line_index;
+  //DiPaintParams p2 = *params;
+  //p2.m_horiz_scroll = 0;
+  //p2.m_vert_scroll = 0;
+  //p2.m_scrolled_y = p2.m_line_index;
 
-  gp_opaque_bitmap->paint(&p2);
+  gp_opaque_bitmap->paint(params);
+  //gp_opaque_bitmap->paint(&p2);
  // gp_masked_bitmap->paint(params);
 }
 
