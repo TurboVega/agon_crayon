@@ -62,7 +62,7 @@
   .type     DiOpaqueBitmap_paint,@function
 
 DiOpaqueBitmap_paint:
-  entry     sp,32
+  entry     sp,16
   l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
   blt       a4,a5,skip    // skip if scan line is above bitmap area
