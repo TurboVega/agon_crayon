@@ -1,4 +1,4 @@
-// di_diag_right_line.S - Low-level assembler function for drawing diagonal lines to the right
+// di_diag_right_line_asm.S - Low-level assembler function for drawing diagonal lines to the right
 //
 // A diagonal line is 1 pixel thick, and connects the diagonal points of a square.
 // A 'right' line increases in X as it increases in Y (going down).
@@ -61,7 +61,7 @@
   .type     DiDiagonalRightLine_paint,@function
 
 DiDiagonalRightLine_paint:
-  entry     sp,16
+  entry     sp,32
   l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
   blt       a4,a5,skip    // skip if scan line is above vertical line
