@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Other
+arduino.map
+build_opt.h
