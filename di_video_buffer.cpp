@@ -290,17 +290,17 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   show_value(gp_value_bitmap[2], 520, params);
   show_value(gp_value_bitmap[3], 530, params);
 
-  /*int32_t i = params->m_scrolled_y;
+  int32_t i = params->m_scrolled_y;
   if (i >= -(STAR_PADDING/2) && i < ACT_LINES) {
     g_stars[i+(STAR_PADDING/2)].paint(params);
-  }*/
+  }
 
-  /*g_vert_center.paint(params);
+  g_vert_center.paint(params);
   g_horiz_center.paint(params);
   g_diamond_ne.paint(params);
   g_diamond_sw.paint(params);
   g_diamond_nw.paint(params);
-  g_diamond_se.paint(params);*/
+  g_diamond_se.paint(params);
 
 /*
   // Draw small diamond shapes somewhere.
