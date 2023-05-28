@@ -26,6 +26,10 @@
 #include "di_masked_bitmap.h"
 #include "esp_heap_caps.h"
 
+extern "C" {
+IRAM_ATTR void DiMaskedBitmap_paint(void* this_ptr, const DiPaintParams *params);
+}
+
 DiMaskedBitmap::DiMaskedBitmap(uint32_t width, uint32_t height):
   DiDrawingInstrXYWH(0, 0, width, height) {
   m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
@@ -66,7 +70,7 @@ void DiMaskedBitmap::fill(uint8_t color) {
   uint32_t color4 = (((uint32_t)color) << 24) |
       (((uint32_t)color) << 16) |
       (((uint32_t)color) << 8) |
-      ((uint32_t)color);
+      ((uint32_t)color) | SYNCS_OFF_X4;
   uint32_t words = m_words_per_line * m_height;
   uint32_t* dst = m_pixels;
   if (words) {
@@ -77,25 +81,6 @@ void DiMaskedBitmap::fill(uint8_t color) {
 }
 
 void IRAM_ATTR DiMaskedBitmap::paint(const DiPaintParams *params) {
-  if (params->m_scrolled_y >= m_y && params->m_scrolled_y < m_y + m_height) {
-    auto x = m_x;
-    int32_t offset = 0;
-    clamp_left(x, offset, params->m_horiz_scroll);
-    int32_t x2 = m_x + m_width - 1;
-    clamp_right(x2, params->m_horiz_scroll);
-    auto length = x2 - x + 1;
-    auto row_index = params->m_scrolled_y - m_y;
-    auto pix_index = offset;
-    auto src = pixels(m_pixels + (row_index * m_words_per_line)) + pix_index;
-    while (length > 0) {
-      uint8_t color = *src++;
-      if (color & 0xC0) {
-        params->m_line8[FIX_INDEX(x++)] = (color & 0x3F) | SYNCS_OFF;
-      } else {
-        ++x;
-      }
-      --length;
-    }
-  }
+  DiMaskedBitmap_paint((void*)this, params);
 }
 

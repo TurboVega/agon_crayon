@@ -1,6 +1,6 @@
-// di_opaque_bitmap_asm.S - Low-level assembler function for drawing opaque bitmaps 
+// di_masked_bitmap_asm.S - Low-level assembler function for drawing masked bitmaps 
 //
-// An opaque bitmap is a rectangle of fully opaque pixels of various colors. 
+// A masked bitmap is a combination of fully masked and fully transparent pixels.
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -8,14 +8,14 @@
 // in a C source that calls it, using this declaration:
 //
 // extern "C" {
-// IRAM_ATTR void DiOpaqueBitmap_paint(void* this_ptr, const DiPaintParams *params);
+// IRAM_ATTR void DiMaskedBitmap_paint(void* this_ptr, const DiPaintParams *params);
 // }
 //
 // Upon entry to the function, registers are set as follows:
 //
 // a0: return address
 // a1: stack pointer
-// a2: DiOpaqueBitmap* pointer (i.e., 'this')
+// a2: DiMaskedBitmap* pointer (i.e., 'this')
 //     [a2] vtable pointer
 //     [a2+4] m_x
 //     [a2+8] m_y
@@ -58,10 +58,10 @@
 
   .section .iram1.text
   .align
-  .global   DiOpaqueBitmap_paint
-  .type     DiOpaqueBitmap_paint,@function
+  .global   DiMaskedBitmap_paint
+  .type     DiMaskedBitmap_paint,@function
 
-DiOpaqueBitmap_paint:
+DiMaskedBitmap_paint:
   entry     sp,16
   l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
@@ -101,6 +101,7 @@ right_ok:
   movi      a8,2          // value for adjusting index
   movi      a10,1         // used to decrement width by 1
   movi      a11,4         // used to decrement width by 4
+  movi      a12,0x3F3F3F3F // mask for clearing alpha bits
 
 align_left_edge:
   beqz      a3,skip       // skip if no pixels left to draw
@@ -112,33 +113,44 @@ unaligned:
   xor       a9,a5,a8      // a9 <-- x ^ 2
   add       a9,a9,a4      // a9 <-- m_line8 + x
   l8ui      a2,a14,0      // a2 <-- pixel from bitmap
+  bbsi      a2,6,show_pixel // go if pixel must be shown
+  bbci      a2,7,dont_show // go if pixel must not be shown
+show_pixel:
+  and       a2,a2,a12     // clear alpha bits
   s8i       a2,a9,0       // m_line8[index] <-- m_color
+dont_show:
   add       a14,a14,a10   // a14 <-- pointer to next bitmap pixel
   sub       a3,a3,a10     // a3 <-- remaining line width
   add       a5,a5,a10     // a5 <-- next x position
   bgez      a5,align_left_edge // go check alignment
 left_aligned:
 
-  blt       a3,a11,middle_done // go if no full words to set
-do_middle:
-  add       a9,a5,a4      // a9 <-- m_line8 + x
-  l32i      a2,a14,0      // a2 <-- 4 pixels from bitmap
-  slli      a7,a2,16      // a7 <-- lower-half-word in upper-half-word position
-  srli      a2,a2,16      // a2 <-- upper-half-word in lower-half-word position
-  or        a2,a2,a7      // a2 <-- half-words swapped
-  s32i      a2,a9,0       // m_line32[index] <-- m_color (4 pixels)
-  add       a14,a14,a11   // a14 <-- pointer to next bitmap pixel
-  sub       a3,a3,a11     // a3 <-- remaining line width
-  add       a5,a5,a11     // a5 <-- next x position
-  bge       a3,a11,do_middle // go if more full words to set
-middle_done:
+//  blt       a3,a11,middle_done // go if no full words to set
+//do_middle:
+//  add       a9,a5,a4      // a9 <-- m_line8 + x
+//  l32i      a2,a14,0      // a2 <-- 4 pixels from bitmap
+//  slli      a7,a2,16      // a7 <-- lower-half-word in upper-half-word position
+//  srli      a2,a2,16      // a2 <-- upper-half-word in lower-half-word position
+//  or        a2,a2,a7      // a2 <-- half-words swapped
+//  and       a2,a2,a12     // clear alpha bits
+//  s32i      a2,a9,0       // m_line32[index] <-- m_color (4 pixels)
+//  add       a14,a14,a11   // a14 <-- pointer to next bitmap pixel
+//  sub       a3,a3,a11     // a3 <-- remaining line width
+//  add       a5,a5,a11     // a5 <-- next x position
+//  bge       a3,a11,do_middle // go if more full words to set
+//middle_done:
 
 right_edge:
   beqz      a3,skip       // skip if no pixels left to draw
   xor       a9,a5,a8      // a9 <-- x ^ 2
   add       a9,a9,a4      // a9 <-- m_line8 + x
   l8ui      a2,a14,0      // a2 <-- pixel from bitmap
+  bbsi      a2,6,show_pixel2 // go if pixel must be shown
+  bbci      a2,7,dont_show2 // go if pixel must not be shown
+show_pixel2:
+  and       a2,a2,a12     // clear alpha bits
   s8i       a2,a9,0       // m_line8[index] <-- m_color
+dont_show2:
   add       a14,a14,a10   // a14 <-- points to next bitmap pixel
   sub       a3,a3,a10     // a3 <-- remaining line width
   add       a5,a5,a10     // a5 <-- next x position
