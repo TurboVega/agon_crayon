@@ -33,6 +33,7 @@
 #include "di_diag_left_line.h"
 #include "di_opaque_bitmap.h"
 #include "di_masked_bitmap.h"
+#include "di_tile_map.h"
 #include "esp_heap_caps.h"
 
 #define _COMPILE_HEX_DATA_
@@ -162,10 +163,12 @@ static const char* digit_data =
 " *** ";
 */
 
-#define TILES_ACROSS 20
+/*#define TILES_ACROSS 20
 #define TILES_DOWN   20
 
-DiOpaqueBitmap* tile;
+DiOpaqueBitmap* tile;*/
+
+DiTileMap* tile_map;
 
 /*void breakdown_value(uint32_t value, DiOpaqueBitmap** digits) {
   uint32_t d5 = value/100000; value=value%100000;
@@ -255,11 +258,19 @@ void init_stars() {
   breakdown_value(heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL), gp_value_bitmap[3]);
 */
 
-  tile = new(40,30) DiOpaqueBitmap(40,30);
+  /*tile = new(40,30) DiOpaqueBitmap(40,30);
   tile->clear();
   for (int32_t y=0;y<30;y++) {
     for (int32_t x=0;x<40;x++) {
       tile->set_pixel(x, y, gtest_bitmapData[y*64+x]);
+    }
+  }*/
+
+  tile_map = new(40,30) DiTileMap(40,30);
+  tile_map->clear();
+  for (int32_t y=0;y<30;y++) {
+    for (int32_t x=0;x<40;x++) {
+      tile_map->set_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
   }
 }
@@ -368,13 +379,15 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
  // gp_masked_bitmap->paint(params);
  */
 
-  int32_t r = params->m_scrolled_y / 30;
+  /*int32_t r = params->m_scrolled_y / 30;
   if (r >= 0 && r < TILES_DOWN) {
     for (int32_t c = 0; c < TILES_ACROSS; c++) {
       tile->set_position(c * 40, r * 30);
       tile->paint(params);
     }
-  }
+  }*/
+
+  tile_map->paint(params);
 }
 
 void DiVideoBuffer::init_to_black() {
