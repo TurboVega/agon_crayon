@@ -1,6 +1,6 @@
-// di_drawing_insruction.h - Function declarations for base drawing instructions
+// primitive.h - Function declarations for base drawing primitives
 //
-// A drawing instruction tells how to draw a particular type of drawing primitive.
+// A drawing primitive tells how to draw a particular type of simple graphic object.
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -40,7 +40,7 @@ typedef struct {
   int32_t   m_screen_height;
 } DiPaintParams;
 
-class DiDrawingInstruction {
+class DiPrimitive {
   public:
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
@@ -100,101 +100,101 @@ class DiDrawingInstruction {
   }
 };
 
-class DiDrawingInstrX: public DiDrawingInstruction {
+class DiPrimitiveX: public DiPrimitive {
   public:
   int32_t m_x;
 
-  DiDrawingInstrX();
-  DiDrawingInstrX(int32_t x);
+  DiPrimitiveX();
+  DiPrimitiveX(int32_t x);
 };
 
-class DiDrawingInstrXC: public DiDrawingInstrX {
+class DiPrimitiveXC: public DiPrimitiveX {
   public:
   int32_t m_color;
 
-  DiDrawingInstrXC();
-  DiDrawingInstrXC(int32_t x, int8_t color);
+  DiPrimitiveXC();
+  DiPrimitiveXC(int32_t x, int8_t color);
 };
 
-class DiDrawingInstrY: public DiDrawingInstruction {
+class DiPrimitiveY: public DiPrimitive {
   public:
   int32_t m_y;
 
-  DiDrawingInstrY();
-  DiDrawingInstrY(int32_t y);
+  DiPrimitiveY();
+  DiPrimitiveY(int32_t y);
 };
 
-class DiDrawingInstrYC: public DiDrawingInstrY {
+class DiPrimitiveYC: public DiPrimitiveY {
   public:
   int32_t m_color;
 
-  DiDrawingInstrYC();
-  DiDrawingInstrYC(int32_t y, int8_t color);
+  DiPrimitiveYC();
+  DiPrimitiveYC(int32_t y, int8_t color);
 };
 
-class DiDrawingInstrXY: public DiDrawingInstrX {
+class DiPrimitiveXY: public DiPrimitiveX {
   public:
   int32_t m_y;
 
-  DiDrawingInstrXY();
-  DiDrawingInstrXY(int32_t x, int32_t y);
+  DiPrimitiveXY();
+  DiPrimitiveXY(int32_t x, int32_t y);
 };
 
-class DiDrawingInstrXYC: public DiDrawingInstrXY {
+class DiPrimitiveXYC: public DiPrimitiveXY {
   public:
   int32_t m_color;
 
-  DiDrawingInstrXYC();
-  DiDrawingInstrXYC(int32_t x, int32_t y, int8_t color);
+  DiPrimitiveXYC();
+  DiPrimitiveXYC(int32_t x, int32_t y, int8_t color);
 };
 
-class DiDrawingInstrXYW: public DiDrawingInstrXY {
+class DiPrimitiveXYW: public DiPrimitiveXY {
   public:
   int32_t m_width;
   int32_t m_x_extent;
 
-  DiDrawingInstrXYW();
-  DiDrawingInstrXYW(int32_t x, int32_t y, int32_t width);
+  DiPrimitiveXYW();
+  DiPrimitiveXYW(int32_t x, int32_t y, int32_t width);
 };
 
-class DiDrawingInstrXYWC: public DiDrawingInstrXYW {
+class DiPrimitiveXYWC: public DiPrimitiveXYW {
   public:
   int32_t m_color;
 
-  DiDrawingInstrXYWC();
-  DiDrawingInstrXYWC(int32_t x, int32_t y, int32_t width, int8_t color);
+  DiPrimitiveXYWC();
+  DiPrimitiveXYWC(int32_t x, int32_t y, int32_t width, int8_t color);
 };
 
-class DiDrawingInstrXYH: public DiDrawingInstrXY {
+class DiPrimitiveXYH: public DiPrimitiveXY {
   public:
   int32_t m_height;
   int32_t m_y_extent;
 
-  DiDrawingInstrXYH();
-  DiDrawingInstrXYH(int32_t x, int32_t y, int32_t height);
+  DiPrimitiveXYH();
+  DiPrimitiveXYH(int32_t x, int32_t y, int32_t height);
 };
 
-class DiDrawingInstrXYHC: public DiDrawingInstrXYH {
+class DiPrimitiveXYHC: public DiPrimitiveXYH {
   public:
   int32_t m_color;
 
-  DiDrawingInstrXYHC();
-  DiDrawingInstrXYHC(int32_t x, int32_t y, int32_t height, int8_t color);
+  DiPrimitiveXYHC();
+  DiPrimitiveXYHC(int32_t x, int32_t y, int32_t height, int8_t color);
 };
 
-class DiDrawingInstrXYWH: public DiDrawingInstrXYW {
+class DiPrimitiveXYWH: public DiPrimitiveXYW {
   public:
   int32_t m_height;
   int32_t m_y_extent;
 
-  DiDrawingInstrXYWH();
-  DiDrawingInstrXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
+  DiPrimitiveXYWH();
+  DiPrimitiveXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
 };
 
-class DiDrawingInstrXYWHC: public DiDrawingInstrXYWH {
+class DiPrimitiveXYWHC: public DiPrimitiveXYWH {
   public:
   int32_t m_color;
 
-  DiDrawingInstrXYWHC();
-  DiDrawingInstrXYWHC(int32_t x, int32_t y, int32_t width, int32_t height, int8_t color);
+  DiPrimitiveXYWHC();
+  DiPrimitiveXYWHC(int32_t x, int32_t y, int32_t width, int32_t height, int8_t color);
 };

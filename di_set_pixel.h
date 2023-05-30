@@ -24,9 +24,9 @@
 // 
 
 #pragma once
-#include "di_drawing_instruction.h"
+#include "di_primitive.h"
 
-class DiSetPixel: public DiDrawingInstrXYC {
+class DiSetPixel: public DiPrimitiveXYC {
   public:
   DiSetPixel();
   DiSetPixel(int32_t x, int32_t y, uint8_t color);

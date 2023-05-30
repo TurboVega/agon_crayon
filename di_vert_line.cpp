@@ -30,7 +30,7 @@ IRAM_ATTR void DiVerticalLine_paint(void* this_ptr, const DiPaintParams *params)
 }
 
 DiVerticalLine::DiVerticalLine(int32_t x, int32_t y, uint32_t height, uint8_t color)
-  : DiDrawingInstrXYHC(x, y, height, color) {
+  : DiPrimitiveXYHC(x, y, height, color) {
   m_color |= SYNCS_OFF;
 }
 

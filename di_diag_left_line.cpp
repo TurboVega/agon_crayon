@@ -31,7 +31,7 @@ IRAM_ATTR void DiDiagonalLeftLine_paint(void* this_ptr, const DiPaintParams *par
 }
 
 DiDiagonalLeftLine::DiDiagonalLeftLine(int32_t x, int32_t y, int32_t length, uint8_t color)
-  : DiDrawingInstrXYWHC(x, y, length, length, color) {
+  : DiPrimitiveXYWHC(x, y, length, length, color) {
   m_color |= SYNCS_OFF;
 }
 

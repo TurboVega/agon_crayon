@@ -24,9 +24,9 @@
 // 
 
 #pragma once
-#include "di_drawing_instruction.h"
+#include "di_primitive.h"
 
-class DiOpaqueBitmap: public DiDrawingInstrXYWH {
+class DiOpaqueBitmap: public DiPrimitiveXYWH {
   public:
   uint32_t m_words_per_line;
   uint32_t m_bytes_per_line;

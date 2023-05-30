@@ -31,7 +31,7 @@ IRAM_ATTR void DiMaskedBitmap_paint(void* this_ptr, const DiPaintParams *params)
 }
 
 DiMaskedBitmap::DiMaskedBitmap(uint32_t width, uint32_t height):
-  DiDrawingInstrXYWH(0, 0, width, height) {
+  DiPrimitiveXYWH(0, 0, width, height) {
   m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
   m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
 }

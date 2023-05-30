@@ -34,7 +34,7 @@ DiSetPixel::DiSetPixel() {
 }
 
 DiSetPixel::DiSetPixel(int32_t x, int32_t y, uint8_t color)
-  : DiDrawingInstrXYC(x, y, color) {
+  : DiPrimitiveXYC(x, y, color) {
   m_color |= SYNCS_OFF;
 }
 

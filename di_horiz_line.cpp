@@ -30,7 +30,7 @@ IRAM_ATTR void DiHorizontalLine_paint(void* this_ptr, const DiPaintParams *param
 }
 
 DiHorizontalLine::DiHorizontalLine(int32_t x, int32_t y, uint32_t width, uint8_t color)
-  : DiDrawingInstrXYWC(x, y, width, color) {
+  : DiPrimitiveXYWC(x, y, width, color) {
   m_color |= (((uint32_t)color) << 24) |
       (((uint32_t)color) << 16) |
       (((uint32_t)color) << 8) |

@@ -25,9 +25,9 @@
 // 
 
 #pragma once
-#include "di_drawing_instruction.h"
+#include "di_primitive.h"
 
-class DiDiagonalRightLine: public DiDrawingInstrXYWHC {
+class DiDiagonalRightLine: public DiPrimitiveXYWHC {
   public:
   DiDiagonalRightLine(int32_t x, int32_t y, int32_t length, uint8_t color);
 
