@@ -45,7 +45,7 @@ class DiTileMap: public DiPrimitiveXYWH {
   uint32_t m_bytes_per_row;
   uint32_t m_words_for_tiles;
   uint32_t m_bytes_for_tiles;
-  uint32_t* m_tiles;
+  uint32_t** m_tiles;
   uint32_t* m_pixels;
 
   DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t width, uint32_t height);

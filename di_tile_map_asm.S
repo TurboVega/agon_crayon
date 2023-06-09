@@ -27,9 +27,21 @@
 //     [a2+16] m_x_extent
 //     [a2+20] m_height
 //     [a2+24] m_y_extent
-//     [a2+28] m_words_per_line
-//     [a2+32] m_bytes_per_line
-//     [a2+36] m_pixels[]
+//     [a2+28] m_bitmaps
+//     [a2+32] m_columns
+//     [a2+36] m_rows
+//     [a2+40] m_words_per_line
+//     [a2+44] m_bytes_per_line
+//     [a2+48] m_words_per_bitmap
+//     [a2+52] m_bytes_per_bitmap
+//     [a2+56] m_words_for_bitmaps
+//     [a2+60] m_bytes_for_bitmaps
+//     [a2+64] m_words_per_row
+//     [a2+68] m_bytes_per_row
+//     [a2+72] m_words_for_tiles
+//     [a2+76] m_bytes_for_tiles
+//     [a2+80] m_tiles
+//     [a2+84] m_pixels
 //
 // a3: const DiPaintParams *params
 //     [a3] m_line32

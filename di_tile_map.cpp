@@ -50,12 +50,12 @@ DiTileMap::DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t
   m_words_for_tiles = columns * rows;
   m_bytes_for_tiles = m_words_for_tiles * sizeof(uint32_t);
 
-  size_t new_size = (size_t)(m_bytes_for_bitmaps);
-  void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
-  m_tiles = (uint32_t*)p;
-
   size_t new_size = (size_t)(m_bytes_for_tiles);
   void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
+  m_tiles = (uint32_t**)p;
+
+  new_size = (size_t)(m_bytes_for_bitmaps);
+  p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
   m_pixels = (uint32_t*)p;
 }
 
@@ -71,7 +71,7 @@ void DiTileMap::set_position(int32_t x, int32_t y) {
 }
 
 void DiTileMap::set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color) { 
-  *pixels(m_pixels + bitmap * m_bytes_per_bitmap + y * m_words_per_line + x) = (color & 0x3F) | SYNCS_OFF;
+  pixels(m_pixels)[bitmap * m_bytes_per_bitmap + y * m_bytes_per_line + x] = (color & 0x3F) | SYNCS_OFF;
 }
 
 void DiTileMap::set_pixels(int32_t bitmap, int32_t index, int32_t y, uint32_t colors) {

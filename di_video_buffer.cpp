@@ -172,10 +172,12 @@ static const char* digit_data =
 
 DiOpaqueBitmap* tile;*/
 
-DiTileMap* sky;
-DiTileMap* cloud;
-DiTileMap* grass;
-DiTileMap* wall;
+#define SKY_BITMAP   0
+#define CLOUD_BITMAP 1
+#define GRASS_BITMAP 2
+#define WALL_BITMAP  3
+
+DiTileMap* tile_map;
 
 /*void breakdown_value(uint32_t value, DiOpaqueBitmap** digits) {
   uint32_t d5 = value/100000; value=value%100000;
@@ -273,35 +275,41 @@ void init_stars() {
     }
   }*/
 
-  sky = new(40,30) DiTileMap(40,30);
-  sky->clear();
+  tile_map = new DiTileMap(4, 20, 20, 40, 30);
+  tile_map->clear();
   for (int32_t y=0;y<30;y++) {
     for (int32_t x=0;x<40;x++) {
-      sky->set_pixel(x, y, gSKYData[y*64+x]);
+      tile_map->set_pixel(SKY_BITMAP, x, y, gSKYData[y*40+x]);
+      tile_map->set_pixel(CLOUD_BITMAP, x, y, gCLOUDData[y*40+x]);
+      tile_map->set_pixel(GRASS_BITMAP, x, y, gGRASSData[y*40+x]);
+      tile_map->set_pixel(WALL_BITMAP, x, y, gWALLData[y*40+x]);
     }
   }
 
-  cloud = new(40,30) DiTileMap(40,30);
-  cloud->clear();
-  for (int32_t y=0;y<30;y++) {
-    for (int32_t x=0;x<40;x++) {
-      cloud->set_pixel(x, y, gCLOUDData[y*64+x]);
+  int32_t row = 0;
+  for (; row < 2; row++) {
+    for (int32_t col = 0; col< 20; col++) {
+      tile_map->set_tile(col, row, SKY_BITMAP);
     }
   }
-
-  grass = new(40,30) DiTileMap(40,30);
-  grass->clear();
-  for (int32_t y=0;y<30;y++) {
-    for (int32_t x=0;x<40;x++) {
-      grass->set_pixel(x, y, gGRASSData[y*64+x]);
+  for (; row < 6; row++) {
+    for (int32_t col = 0; col< 20; col++) {
+      tile_map->set_tile(col, row, CLOUD_BITMAP);
     }
   }
-
-  wall = new(40,30) DiTileMap(40,30);
-  wall->clear();
-  for (int32_t y=0;y<30;y++) {
-    for (int32_t x=0;x<40;x++) {
-      wall->set_pixel(x, y, gWALLData[y*64+x]);
+  for (; row < 9; row++) {
+    for (int32_t col = 0; col< 20; col++) {
+      tile_map->set_tile(col, row, SKY_BITMAP);
+    }
+  }
+  for (; row < 14; row++) {
+    for (int32_t col = 0; col< 20; col++) {
+      tile_map->set_tile(col, row, GRASS_BITMAP);
+    }
+  }
+  for (; row < 20; row++) {
+    for (int32_t col = 0; col< 20; col++) {
+      tile_map->set_tile(col, row, WALL_BITMAP);
     }
   }
 }
@@ -418,17 +426,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
     }
   }*/
 
-  if (params->m_line_index < 100) {
-    sky->paint(params);
-  } else if (params->m_line_index < 200) {
-    cloud->paint(params);
-  } else if (params->m_line_index < 300) {
-    sky->paint(params);
-  } else if (params->m_line_index < 400) {
-    wall->paint(params);    
-  } else {
-    grass->paint(params);
-  }
+  tile_map->paint(params);
 }
 
 void DiVideoBuffer::init_to_black() {
