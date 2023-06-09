@@ -37,7 +37,11 @@
 #include "esp_heap_caps.h"
 
 #define _COMPILE_HEX_DATA_
-#include "TEST_BITMAP.h"
+#define __root /**/
+#include "samples\\SKY.h"
+#include "samples\\CLOUD.h"
+#include "samples\\GRASS.h"
+#include "samples\\WALL.h"
 
 // dummy data for testing only
 uint32_t sdx[10] = {150,199,225,287,333,378,425,506,583,601};
@@ -168,7 +172,10 @@ static const char* digit_data =
 
 DiOpaqueBitmap* tile;*/
 
-DiTileMap* tile_map;
+DiTileMap* sky;
+DiTileMap* cloud;
+DiTileMap* grass;
+DiTileMap* wall;
 
 /*void breakdown_value(uint32_t value, DiOpaqueBitmap** digits) {
   uint32_t d5 = value/100000; value=value%100000;
@@ -266,11 +273,35 @@ void init_stars() {
     }
   }*/
 
-  tile_map = new(40,30) DiTileMap(40,30);
-  tile_map->clear();
+  sky = new(40,30) DiTileMap(40,30);
+  sky->clear();
   for (int32_t y=0;y<30;y++) {
     for (int32_t x=0;x<40;x++) {
-      tile_map->set_pixel(x, y, gtest_bitmapData[y*64+x]);
+      sky->set_pixel(x, y, gSKYData[y*64+x]);
+    }
+  }
+
+  cloud = new(40,30) DiTileMap(40,30);
+  cloud->clear();
+  for (int32_t y=0;y<30;y++) {
+    for (int32_t x=0;x<40;x++) {
+      cloud->set_pixel(x, y, gCLOUDData[y*64+x]);
+    }
+  }
+
+  grass = new(40,30) DiTileMap(40,30);
+  grass->clear();
+  for (int32_t y=0;y<30;y++) {
+    for (int32_t x=0;x<40;x++) {
+      grass->set_pixel(x, y, gGRASSData[y*64+x]);
+    }
+  }
+
+  wall = new(40,30) DiTileMap(40,30);
+  wall->clear();
+  for (int32_t y=0;y<30;y++) {
+    for (int32_t x=0;x<40;x++) {
+      wall->set_pixel(x, y, gWALLData[y*64+x]);
     }
   }
 }
@@ -387,7 +418,17 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
     }
   }*/
 
-  tile_map->paint(params);
+  if (params->m_line_index < 100) {
+    sky->paint(params);
+  } else if (params->m_line_index < 200) {
+    cloud->paint(params);
+  } else if (params->m_line_index < 300) {
+    sky->paint(params);
+  } else if (params->m_line_index < 400) {
+    wall->paint(params);    
+  } else {
+    grass->paint(params);
+  }
 }
 
 void DiVideoBuffer::init_to_black() {

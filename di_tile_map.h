@@ -32,16 +32,28 @@
 
 class DiTileMap: public DiPrimitiveXYWH {
   public:
+  uint32_t m_bitmaps;
+  uint32_t m_columns;
+  uint32_t m_rows;
   uint32_t m_words_per_line;
   uint32_t m_bytes_per_line;
-  uint32_t m_pixels[1];
+  uint32_t m_words_per_bitmap;
+  uint32_t m_bytes_per_bitmap;
+  uint32_t m_words_for_bitmaps;
+  uint32_t m_bytes_for_bitmaps;
+  uint32_t m_words_per_row;
+  uint32_t m_bytes_per_row;
+  uint32_t m_words_for_tiles;
+  uint32_t m_bytes_for_tiles;
+  uint32_t* m_tiles;
+  uint32_t* m_pixels;
 
-  DiTileMap(uint32_t width, uint32_t height);
-  void* operator new(size_t size, uint32_t width, uint32_t height);
+  DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t width, uint32_t height);
   //void operator delete(void*);
   void set_position(int32_t x, int32_t y);
-  void set_pixel(int32_t x, int32_t y, uint8_t color);
-  void set_pixels(int32_t index, int32_t y, uint32_t colors);
+  void set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color);
+  void set_pixels(int32_t bitmap, int32_t index, int32_t y, uint32_t colors);
+  void set_tile(int32_t column, int32_t row, int32_t bitmap);
   void clear();
   void fill(uint8_t color);
 

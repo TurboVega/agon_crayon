@@ -34,17 +34,29 @@ extern "C" {
 IRAM_ATTR void DiTileMap_paint(void* this_ptr, const DiPaintParams *params);
 }
 
-DiTileMap::DiTileMap(uint32_t width, uint32_t height):
-  DiPrimitiveXYWH(0, 0, width, height) {
+DiTileMap::DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t width, uint32_t height):
+  DiPrimitiveXYWH(0, 0, width, height),
+  m_bitmaps(bitmaps),
+  m_columns(columns),
+  m_rows(rows) {
   m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
   m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
-}
+  m_words_per_bitmap = m_words_per_line * height;
+  m_bytes_per_bitmap = m_words_per_bitmap * sizeof(uint32_t);
+  m_words_per_row = columns;
+  m_bytes_per_row = m_words_per_row * sizeof(uint32_t);
+  m_words_for_bitmaps = m_words_per_bitmap * bitmaps;
+  m_bytes_for_bitmaps = m_words_for_bitmaps * sizeof(uint32_t);
+  m_words_for_tiles = columns * rows;
+  m_bytes_for_tiles = m_words_for_tiles * sizeof(uint32_t);
 
-void* DiTileMap::operator new(size_t size, uint32_t width, uint32_t height) {
-  uint32_t wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
-  size_t new_size = (size_t)(sizeof(DiTileMap) - sizeof(uint32_t) + (wpl * height * sizeof(uint32_t)));
+  size_t new_size = (size_t)(m_bytes_for_bitmaps);
   void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
-  return p;
+  m_tiles = (uint32_t*)p;
+
+  size_t new_size = (size_t)(m_bytes_for_tiles);
+  void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
+  m_pixels = (uint32_t*)p;
 }
 
 //void DiTileMap::operator delete(void*) {
@@ -58,12 +70,16 @@ void DiTileMap::set_position(int32_t x, int32_t y) {
   m_y_extent = m_y + m_height;
 }
 
-void DiTileMap::set_pixel(int32_t x, int32_t y, uint8_t color) { 
-  pixels(m_pixels + y * m_words_per_line)[x] = (color & 0x3F) | SYNCS_OFF;
+void DiTileMap::set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color) { 
+  *pixels(m_pixels + bitmap * m_bytes_per_bitmap + y * m_words_per_line + x) = (color & 0x3F) | SYNCS_OFF;
 }
 
-void DiTileMap::set_pixels(int32_t index, int32_t y, uint32_t colors) {
-  m_pixels[y * m_words_per_line + index] = (colors & 0x3F3F3F3F) | SYNCS_OFF_X4;
+void DiTileMap::set_pixels(int32_t bitmap, int32_t index, int32_t y, uint32_t colors) {
+  m_pixels[bitmap * m_words_per_bitmap + y * m_words_per_line + index] = (colors & 0x3F3F3F3F) | SYNCS_OFF_X4;
+}
+
+void DiTileMap::set_tile(int32_t column, int32_t row, int32_t bitmap) {
+  m_tiles[row * m_words_per_row + column] = m_pixels + bitmap * m_words_per_bitmap;
 }
 
 void DiTileMap::clear() {

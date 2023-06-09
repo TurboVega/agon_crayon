@@ -67,15 +67,24 @@
 
 DiTileMap_paint:
   entry     sp,16
-  l32i      a4,a3,4       // a4 <-- m_line8
-  movi      a5,36         // a5 <-- offset to m_pixels array
-  add       a5,a5,a2      // a5 <-- points to m_pixels array
-  movi      a6,200        // a6 <-- number of loops
-  movi      a8,4          // a8 <-- constant for incrementing pointers
+  l32i      a10,a3,4      // a10 <-- m_line8
+  movi      a11,4         // a11 <-- constant for incrementing offset 
+  movi      a8,40         // a8 <-- constant for incrementing pointer
+  movi      a9,20         // a9 <-- number of tiles to do
+  movi      a12,36        // a12 <-- offset to m_pixels array
+  add       a12,a12,a2    // a12 <-- points to m_pixels array
+do_tile:
+  mov       a5,a12        // a5 <-- points to m_pixels array + offset
+  mov       a4,a10        // a4 <-- m_line8 + offset
+  movi      a6,10         // a6 <-- number of loops
   loop      a6,end_loop   // loop to copy pixel data
   l32i      a7,a5,0       // a7 <-- 4 src pixels
   s32i      a7,a4,0       // m_line8[] <-- src pixel data
-  add       a5,a5,a8      // a5 <-- points to next src pixel
-  add       a4,a4,a8      // a4 <-- points to next dst pixel
+  add       a5,a5,a11     // a5 <-- points to next src pixel
+  add       a4,a4,a11     // a4 <-- points to next dst pixel
 end_loop:
+  add       a10,a10,a11   // a10 <-- m_line8 + offset
+  add       a12,a12,a11   // a12 <-- points to m_pixels array + offset
+  subi      a9,1          // a9 <-- tiles remaining to do
+  bnz       do_tile       // back if more tiles to do
   retw.n
