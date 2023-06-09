@@ -49,6 +49,8 @@ DiTileMap::DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t
   m_bytes_for_bitmaps = m_words_for_bitmaps * sizeof(uint32_t);
   m_words_for_tiles = columns * rows;
   m_bytes_for_tiles = m_words_for_tiles * sizeof(uint32_t);
+  m_words_for_offsets = rows * height * 2;
+  m_bytes_for_offsets = m_words_for_offsets * sizeof(uint32_t);
 
   size_t new_size = (size_t)(m_bytes_for_tiles);
   void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
@@ -57,6 +59,17 @@ DiTileMap::DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t
   new_size = (size_t)(m_bytes_for_bitmaps);
   p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
   m_pixels = (uint32_t*)p;
+
+  new_size = (size_t)(m_bytes_for_offsets);
+  p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
+  m_offsets = (uint32_t*)p;
+
+  for (uint32_t row = 0; row < rows; row++) {
+    for (uint32_t y = 0; y < height; y++) {
+      m_offsets[(row * height + y) * 2] = y * m_words_per_line;
+      m_offsets[(row * height + y) * 2 + 1] = (uint32_t)(m_tiles + row * columns);
+    }
+  }
 }
 
 //void DiTileMap::operator delete(void*) {

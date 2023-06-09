@@ -40,8 +40,11 @@
 //     [a2+68] m_bytes_per_row
 //     [a2+72] m_words_for_tiles
 //     [a2+76] m_bytes_for_tiles
-//     [a2+80] m_tiles
-//     [a2+84] m_pixels
+//     [a2+80] m_words_for_offsets
+//     [a2+84] m_bytes_for_offsets
+//     [a2+88] m_tiles
+//     [a2+92] m_pixels
+//     [a2+96] m_offsets
 //
 // a3: const DiPaintParams *params
 //     [a3] m_line32
@@ -79,24 +82,28 @@
 
 DiTileMap_paint:
   entry     sp,16
-  l32i      a10,a3,4      // a10 <-- m_line8
-  movi      a11,4         // a11 <-- constant for incrementing offset 
-  movi      a8,40         // a8 <-- constant for incrementing pointer
-  movi      a9,20         // a9 <-- number of tiles to do
-  movi      a12,36        // a12 <-- offset to m_pixels array
-  add       a12,a12,a2    // a12 <-- points to m_pixels array
-do_tile:
-  mov       a5,a12        // a5 <-- points to m_pixels array + offset
-  mov       a4,a10        // a4 <-- m_line8 + offset
-  movi      a6,10         // a6 <-- number of loops
-  loop      a6,end_loop   // loop to copy pixel data
-  l32i      a7,a5,0       // a7 <-- 4 src pixels
-  s32i      a7,a4,0       // m_line8[] <-- src pixel data
-  add       a5,a5,a11     // a5 <-- points to next src pixel
-  add       a4,a4,a11     // a4 <-- points to next dst pixel
+  l32i      a4,a3,8     // a4 <-- m_line_index
+  slli      a4,a4,3     // a4 <-- m_line_index * 8
+  l32i      a5,a2,96    // a5 <-- m_offsets
+  add       a4,a4,a5    // a4 <-- m_offsets + m_line_index * 8
+  l32i      a5,a4,4     // a5 <-- m_offsets[m_line_index * 2 + 1] = offset to bitmap line
+  l32i      a4,a4,0     // a4 <-- m_offsets[m_line_index * 2] =  offset to tile map row
+  l32i      a6,a2,32    // a6 <-- m_columns
+  movi      a11,1       // a11 <-- count for decrements
+  l32i      a8,a3,0     // a8 <-- m_line32
+do_tiles:
+  l32i      a7,a4,0     // a7 <-- points to bitmap for current tile
+  add       a7,a7,a5    // a7 <-- points to bitmap line within current tile
+
+  l32i      a10,a2,40     // a10 <-- m_words_per_line
+  loop      a10,end_loop  // loop to copy pixel data
+  l32i      a9,a7,0       // a9 <-- 4 src pixels
+  s32i      a9,a8,0       // m_line32[] <-- src pixel data
+  addi      a7,a7,4       // a7 <-- points to next src pixel
+  addi      a8,a8,4       // a8 <-- points to next dst pixel
 end_loop:
-  add       a10,a10,a11   // a10 <-- m_line8 + offset
-  add       a12,a12,a11   // a12 <-- points to m_pixels array + offset
-  subi      a9,1          // a9 <-- tiles remaining to do
-  bnz       do_tile       // back if more tiles to do
+
+  addi      a4,a4,4     // a4 <-- points to next bitmap address
+  sub       a6,a6,a11   // a6 <-- remaining number of columns
+  beqz      a6,do_tiles // go back if more tiles to do
   retw.n
