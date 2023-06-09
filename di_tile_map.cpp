@@ -104,7 +104,7 @@ void DiTileMap::fill(uint8_t color) {
       (((uint32_t)color) << 16) |
       (((uint32_t)color) << 8) |
       ((uint32_t)color) | SYNCS_OFF_X4;
-  uint32_t words = m_words_per_line * m_height;
+  uint32_t words = m_words_for_bitmaps;
   uint32_t* dst = m_pixels;
   if (words) {
     do {

@@ -87,7 +87,7 @@ DiTileMap_paint:
   l32i      a5,a2,96    // a5 <-- m_offsets
   add       a4,a4,a5    // a4 <-- m_offsets + m_line_index * 8
   l32i      a5,a4,4     // a5 <-- m_offsets[m_line_index * 2 + 1] = offset to bitmap line
-  l32i      a4,a4,0     // a4 <-- m_offsets[m_line_index * 2] =  offset to tile map row
+  l32i      a4,a4,0     // a4 <-- m_offsets[m_line_index * 2] =  points to tile map row
   l32i      a6,a2,32    // a6 <-- m_columns
   movi      a11,1       // a11 <-- count for decrements
   l32i      a8,a3,0     // a8 <-- m_line32
@@ -105,5 +105,5 @@ end_loop:
 
   addi      a4,a4,4     // a4 <-- points to next bitmap address
   sub       a6,a6,a11   // a6 <-- remaining number of columns
-  beqz      a6,do_tiles // go back if more tiles to do
+  bnez      a6,do_tiles // go back if more tiles to do
   retw.n
