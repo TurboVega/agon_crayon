@@ -251,8 +251,8 @@ IRAM_ATTR void loop() {
           scroll_mode = 0;
         }
       }
-      //g_params.m_horiz_scroll += scroll_dx[scroll_mode];
-      //g_params.m_vert_scroll += scroll_dy[scroll_mode];
+      g_params.m_horiz_scroll += scroll_dx[scroll_mode];
+      g_params.m_vert_scroll += scroll_dy[scroll_mode];
    }
   }
 }
