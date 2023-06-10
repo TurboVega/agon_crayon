@@ -348,7 +348,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line8 = (uint8_t*)(m_act);
   params->m_scrolled_y = params->m_line_index + params->m_vert_scroll;
 
-//  memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
+  memset(params->m_line8, 1|SYNCS_OFF, ACT_PIXELS);
 /*
   if (params->m_scrolled_y >= 500) {
     show_value(gp_value_bitmap[0], 500, params);

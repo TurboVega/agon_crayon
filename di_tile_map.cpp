@@ -53,7 +53,7 @@ DiTileMap::DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t
   m_bytes_for_offsets = m_words_for_offsets * sizeof(uint32_t);
 
   size_t new_size = (size_t)(m_bytes_for_tiles);
-  void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
+  void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_INTERNAL);
   m_tiles = (uint32_t**)p;
 
   new_size = (size_t)(m_bytes_for_bitmaps);
@@ -61,13 +61,13 @@ DiTileMap::DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t
   m_pixels = (uint32_t*)p;
 
   new_size = (size_t)(m_bytes_for_offsets);
-  p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
+  p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_INTERNAL);
   m_offsets = (uint32_t*)p;
 
   for (uint32_t row = 0; row < rows; row++) {
     for (uint32_t y = 0; y < height; y++) {
-      m_offsets[(row * height + y) * 2] = y * m_words_per_line;
-      m_offsets[(row * height + y) * 2 + 1] = (uint32_t)(m_tiles + row * columns);
+      m_offsets[(row * height + y) * 2] = (uint32_t)(m_tiles + row * columns);
+      m_offsets[(row * height + y) * 2 + 1] = y * m_bytes_per_line;
     }
   }
 }
@@ -84,7 +84,7 @@ void DiTileMap::set_position(int32_t x, int32_t y) {
 }
 
 void DiTileMap::set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color) { 
-  pixels(m_pixels)[bitmap * m_bytes_per_bitmap + y * m_bytes_per_line + x] = (color & 0x3F) | SYNCS_OFF;
+  pixels(m_pixels)[bitmap * m_bytes_per_bitmap + y * m_bytes_per_line + FIX_INDEX(x)] = (color & 0x3F) | SYNCS_OFF;
 }
 
 void DiTileMap::set_pixels(int32_t bitmap, int32_t index, int32_t y, uint32_t colors) {
