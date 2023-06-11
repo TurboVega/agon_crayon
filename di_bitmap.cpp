@@ -1,6 +1,12 @@
-// di_opaque_bitmap.cpp - Function definitions for drawing opaque bitmaps 
+// di_bitmap.cpp - Function definitions for drawing opaque bitmaps 
 //
 // An opaque bitmap is a rectangle of fully opaque pixels of various colors.
+//
+// A masked bitmap is a combination of fully opaque of various colors,and fully
+// transparent pixels.
+//
+// An transparent bitmap is a rectangle that is a combination of fully transparent pixels,
+// partially transparent pixels, and fully opaque pixels, of various colors. 
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -23,17 +29,21 @@
 // SOFTWARE.
 // 
 
-#include "di_opaque_bitmap.h"
+#include "di_bitmap.h"
 #include "esp_heap_caps.h"
 
 extern "C" {
 IRAM_ATTR void DiOpaqueBitmap_paint(void* this_ptr, const DiPaintParams *params);
+IRAM_ATTR void DiMaskedBitmap_paint(void* this_ptr, const DiPaintParams *params);
+//IRAM_ATTR void DiTransparentBitmap_paint(void* this_ptr, const DiPaintParams *params);
 }
 
 DiOpaqueBitmap::DiOpaqueBitmap(uint32_t width, uint32_t height):
   DiPrimitiveXYWH(0, 0, width, height) {
   m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
   m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
+  m_words_per_position = m_words_per_line * height;
+  m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
 }
 
 void* DiOpaqueBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
@@ -54,15 +64,15 @@ void DiOpaqueBitmap::set_position(int32_t x, int32_t y) {
   m_y_extent = m_y + m_height;
 }
 
-void DiOpaqueBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) { 
+void DiOpaqueBitmap::set_opaque_pixel(int32_t x, int32_t y, uint8_t color) { 
   pixels(m_pixels + y * m_words_per_line)[x] = (color & 0x3F) | SYNCS_OFF;
 }
 
-void DiOpaqueBitmap::set_pixels(int32_t index, int32_t y, uint32_t colors) {
+void DiOpaqueBitmap::set_opaque_pixels(int32_t index, int32_t y, uint32_t colors) {
   m_pixels[y * m_words_per_line + index] = (colors & 0x3F3F3F3F) | SYNCS_OFF_X4;
 }
 
-void DiOpaqueBitmap::clear() {
+/*void DiOpaqueBitmap::clear() {
   fill(MASK_RGB(0,0,0));
 }
 
@@ -78,8 +88,52 @@ void DiOpaqueBitmap::fill(uint8_t color) {
       *dst++ = color4;
     } while (--words);    
   }
-}
+}*/
 
 void IRAM_ATTR DiOpaqueBitmap::paint(const DiPaintParams *params) {
   DiOpaqueBitmap_paint((void*)this, params);
+}
+
+//---------------------------------------------------------------------
+
+ DiMaskedBitmap:: DiMaskedBitmap(uint32_t width, uint32_t height) :
+  DiOpaqueBitmap(width, height) {
+}
+
+void* DiMaskedBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
+  return DiOpaqueBitmap::operator new(size, width, height);
+}
+
+void DiMaskedBitmap::set_masked_pixel(int32_t x, int32_t y, uint8_t color) { 
+  pixels(m_pixels + y * m_words_per_line)[x] = color;
+}
+
+void DiMaskedBitmap::set_masked_pixels(int32_t index, int32_t y, uint32_t colors) {
+  m_pixels[y * m_words_per_line + index] = colors;
+}
+
+void IRAM_ATTR DiMaskedBitmap::paint(const DiPaintParams *params) {
+  DiMaskedBitmap_paint((void*)this, params);
+}
+
+//---------------------------------------------------------------------
+
+ DiTransparentBitmap:: DiTransparentBitmap(uint32_t width, uint32_t height) :
+  DiOpaqueBitmap(width, height) {
+}
+
+void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
+  return DiOpaqueBitmap::operator new(size, width, height);
+}
+
+void DiTransparentBitmap::set_transparent_pixel(int32_t x, int32_t y, uint8_t color) { 
+  pixels(m_pixels + y * m_words_per_line)[x] = (color & 0x3F) | SYNCS_OFF;
+}
+
+void DiTransparentBitmap::set_transparent_pixels(int32_t index, int32_t y, uint32_t colors) {
+  m_pixels[y * m_words_per_line + index] = (colors & 0x3F3F3F3F) | SYNCS_OFF_X4;
+}
+
+void IRAM_ATTR DiTransparentBitmap::paint(const DiPaintParams *params) {
+  //DiTransparentBitmap_paint((void*)this, params);
 }

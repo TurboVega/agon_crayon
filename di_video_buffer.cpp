@@ -31,8 +31,7 @@
 #include "di_horiz_line.h"
 #include "di_diag_right_line.h"
 #include "di_diag_left_line.h"
-#include "di_opaque_bitmap.h"
-#include "di_masked_bitmap.h"
+#include "di_bitmap.h"
 #include "di_tile_map.h"
 #include "esp_heap_caps.h"
 
@@ -207,10 +206,9 @@ void init_stars() {
 
   for (uint32_t d = 0; d < 10; d++) {
     gp_digit_bitmap[d] = new(5,7) DiOpaqueBitmap(5,7);
-    gp_digit_bitmap[d]->clear();
     for (int32_t y=0;y<7;y++) {
       for (int32_t x=0;x<5;x++) {
-        gp_digit_bitmap[d]->set_pixel(x, y, (uint8_t)(digit_data[d*(5*7) + y*5 + x]==' '?0x3F:0x00));
+        gp_digit_bitmap[d]->set_opaque_pixel(x, y, (uint8_t)(digit_data[d*(5*7) + y*5 + x]==' '?0x3F:0x00));
       }
     }
   }
@@ -226,39 +224,30 @@ void init_stars() {
   gp_masked_bitmap7 = new(64,64) DiMaskedBitmap(64,64);
 
   gp_opaque_bitmap0->set_position(100,100);
-  gp_opaque_bitmap0->clear();
   gp_opaque_bitmap1->set_position(201,201);
-  gp_opaque_bitmap1->clear();
   gp_opaque_bitmap2->set_position(302,302);
-  gp_opaque_bitmap2->clear();
   gp_opaque_bitmap3->set_position(403,403);
-  gp_opaque_bitmap3->clear();
 
   gp_masked_bitmap4->set_position(400,100);
-  gp_masked_bitmap4->clear();
   gp_masked_bitmap5->set_position(501,201);
-  gp_masked_bitmap5->clear();
   gp_masked_bitmap6->set_position(603,303);
-  gp_masked_bitmap6->clear();
   gp_masked_bitmap7->set_position(703,403);
-  gp_masked_bitmap7->clear();
 
   //gp_masked_bitmap->set_position(500,200);
-  //gp_masked_bitmap->clear();
 
   for (int32_t y=0;y<64;y++) {
     for (int32_t x=0;x<64;x++) {
-      gp_opaque_bitmap0->set_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_opaque_bitmap1->set_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_opaque_bitmap2->set_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_opaque_bitmap3->set_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_opaque_bitmap0->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_opaque_bitmap1->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_opaque_bitmap2->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_opaque_bitmap3->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
 
-      gp_masked_bitmap4->set_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_masked_bitmap5->set_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_masked_bitmap6->set_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_masked_bitmap7->set_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_masked_bitmap6->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_masked_bitmap7->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
 
-      //gp_masked_bitmap->set_pixel(x, y, gtest_bitmapData[y*64+x]);
+      //gp_masked_bitmap->set__masked_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
   }
 
@@ -268,7 +257,6 @@ void init_stars() {
   breakdown_value(heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL), gp_value_bitmap[3]);
 
   /*tile = new(40,30) DiOpaqueBitmap(40,30);
-  tile->clear();
   for (int32_t y=0;y<30;y++) {
     for (int32_t x=0;x<40;x++) {
       tile->set_pixel(x, y, gtest_bitmapData[y*64+x]);
@@ -358,11 +346,16 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   //memset(params->m_line8, 1|SYNCS_OFF, ACT_PIXELS);
   tile_map->paint(params);
 
-  if (params->m_scrolled_y >= 200 && params->m_scrolled_y < 240) {
-    show_value(gp_value_bitmap[0], 200, params);
-    show_value(gp_value_bitmap[1], 210, params);
-    show_value(gp_value_bitmap[2], 220, params);
-    show_value(gp_value_bitmap[3], 230, params);
+  DiPaintParams p2 = *params;
+  p2.m_horiz_scroll = 0;
+  p2.m_vert_scroll = 0;
+  p2.m_scrolled_y = p2.m_line_index;
+
+  if (params->m_line_index >= 100 && params->m_line_index < 140) {
+    show_value(gp_value_bitmap[0], 100, &p2);
+    show_value(gp_value_bitmap[1], 110, &p2);
+    show_value(gp_value_bitmap[2], 120, &p2);
+    show_value(gp_value_bitmap[3], 130, &p2);
   }
 
   /*int32_t i = params->m_scrolled_y;
@@ -407,15 +400,10 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   }*/
 
   // Draw a bitmap
-  DiPaintParams p2 = *params;
-  p2.m_horiz_scroll = 0;
-  p2.m_vert_scroll = 0;
-  p2.m_scrolled_y = p2.m_line_index;
-
-  gp_opaque_bitmap0->paint(params);
-  gp_opaque_bitmap1->paint(params);
-  gp_opaque_bitmap2->paint(params);
-  gp_opaque_bitmap3->paint(params);
+  gp_opaque_bitmap0->paint(&p2);
+  gp_opaque_bitmap1->paint(&p2);
+  gp_opaque_bitmap2->paint(&p2);
+  gp_opaque_bitmap3->paint(&p2);
 
   gp_masked_bitmap4->paint(&p2);
   gp_masked_bitmap5->paint(&p2);

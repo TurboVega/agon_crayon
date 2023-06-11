@@ -1,4 +1,9 @@
-// di_transparent_bitmap.h - Function declarations for drawing transparent bitmaps 
+// di_bitmap.h - Function declarations for drawing rectangular bitmaps 
+//
+// An opaque bitmap is a rectangle of fully opaque pixels of various colors.
+//
+// A masked bitmap is a combination of fully opaque of various colors,and fully
+// transparent pixels.
 //
 // An transparent bitmap is a rectangle that is a combination of fully transparent pixels,
 // partially transparent pixels, and fully opaque pixels, of various colors. 
@@ -27,20 +32,44 @@
 #pragma once
 #include "di_primitive.h"
 
-class DiTransparentBitmap: public DiPrimitiveXYWH {
+class DiOpaqueBitmap: public DiPrimitiveXYWH {
   public:
   uint32_t m_words_per_line;
   uint32_t m_bytes_per_line;
+  uint32_t m_words_per_position;
+  uint32_t m_bytes_per_position;
   uint32_t m_pixels[1];
 
-  DiTransparentBitmap(uint32_t width, uint32_t height);
+  DiOpaqueBitmap(uint32_t width, uint32_t height);
   void* operator new(size_t size, uint32_t width, uint32_t height);
   //void operator delete(void*);
   void set_position(int32_t x, int32_t y);
-  void set_pixel(int32_t x, int32_t y, uint8_t color);
-  void set_pixels(int32_t index, int32_t y, uint32_t colors);
-  void clear();
-  void fill(uint8_t color);
+  void set_opaque_pixel(int32_t x, int32_t y, uint8_t color);
+  void set_opaque_pixels(int32_t index, int32_t y, uint32_t colors);
+
+  virtual void IRAM_ATTR paint(const DiPaintParams *params);
+};
+
+//---------------------------------------------------------------------
+
+class DiMaskedBitmap: public DiOpaqueBitmap {
+  public:
+  DiMaskedBitmap(uint32_t width, uint32_t height);
+  void* operator new(size_t size, uint32_t width, uint32_t height);
+  void set_masked_pixel(int32_t x, int32_t y, uint8_t color);
+  void set_masked_pixels(int32_t index, int32_t y, uint32_t colors);
+
+  virtual void IRAM_ATTR paint(const DiPaintParams *params);
+};
+
+//---------------------------------------------------------------------
+
+class DiTransparentBitmap: public DiOpaqueBitmap {
+  public:
+  DiTransparentBitmap(uint32_t width, uint32_t height);
+  void* operator new(size_t size, uint32_t width, uint32_t height);
+  void set_transparent_pixel(int32_t x, int32_t y, uint8_t color);
+  void set_transparent_pixels(int32_t index, int32_t y, uint32_t colors);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };
