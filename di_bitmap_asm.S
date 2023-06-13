@@ -91,6 +91,55 @@
   .global   DiMaskedBitmap_paint
   .type     DiMaskedBitmap_paint,@function
 
+// Assume that the logical pixels in one line of the original source bitmap are
+// arranged like this:
+//
+// [Start pixels] [Middle pixels] [End pixels]
+//   0  1  2  3      4  5  6  7     8  9 10 11
+//   a  b  c  d      m  n  o  p     w  x  y  z
+//
+// This means that the physical pixels (data bytes) in the stored bitmap are
+// arranged like this, because of how the I2S hardware expects to see them
+// for DMA purposes:
+//
+// [Start pixels] [Middle pixels] [End pixels]
+//   0  1  2  3      4  5  6  7     8  9 10 11
+//   c  d  a  b      o  p  m  n     y  z  w  x
+//
+// Contained in the m_pixels array are 4 copies of the bitmap pixel data.
+// Each copy has its pixels horizontally offset by a different number of
+// pixels (i.e., by a different number of bytes, since each byte contains
+// a single pixel). The 4 positions of pixel data in the array are:
+//
+// Position A: pixels are at offset 0, and not not shifted to the right or to the left.
+// Position B: pixels are at offset 1, being shifted to the right by 1 pixel, which is
+//             similar to being shifted to the left by 3 pixels.
+// Position C: pixels are at offset 2, being shifted to the right by 2 pixels, which is
+//             similar to being shifted to the left by 2 pixels.
+// Position D: pixels are at offset 3, being shifted to the right by 3 pixels, which is
+//             similar to being shifted to the left by 1 pixel.
+//
+// When copying pixel data to the DMA scan line, both the source X position and
+// the destination X position may be located at any of the 4 pixel offsets, from
+// a word (4-byte) aligned boundary. The following table shows which copy of the
+// pixel data to use when copying source pixels to destination pixels. The first
+// arrangement in each pair is the logical arrangement, and the second arrangement
+// in each pair is the physical arrangement.
+//
+// Dst offset-->   --- Dst offset 0 ----   ------ Dst offset 1 ------  ------ Dst offset 2 ------  ------ Dst offset 3 ------
+//
+// Src offset 0:   A:abcd.mnop.mnop.wxyz   B:-abc.dmno.pmno.pwxy.z---  C:--ab.cdmn.opmn.opwx.yz--  D:---a.bcdm.nopm.nopw.xzy-
+//                 A:cdab.opmn.opmn.yzwx   B:bc-a.nodm.nopm.xypw.--z-  C:ab--.mncd.mnop.wxop.--yz  D:-a--.dmbc.pmno.pwno.y-xz
+//
+// Src offset 1:   D:bcdm.nopm.nopw.xyz-   A:-bcd.mnop.mnop.wxyz.----  B:--bc.dmno.pmno.pwxy.z---  C:---b.cdmn.opmn.opwx.yz--
+//                 D:dmbc.pmno.pwno.z-xy   A:cd-b.opmn.opmn.yzwx.----  B:bc--.nodm.nopm.xypw.--z-  C:-b--.mncd.mnop.wxop.--yz
+//
+// Src offset 2:   C:cdmn.opmn.opwx.yz--   D:-cdm.nopm.nopw.xyz-.----  A:--cd.mnop.mnop.wxyz.----  B:---c.dmno.pmno.pwxy.z---
+//                 C:mncd.mnop.wxop.--yz   D:dm-c.pmno.pwno.z-xy.----  A:cd--.opmn.opmn.yzwx.----  B:-c--.nodm.nopm.xypw.z---
+//
+// Src offset 3:   B:dmno.pmno.pwxy.z---   C:-dmn.opmn.opwx.yz--.----  D:--dm.nopm.nopw.xyz-.----  A:---d.mnop.mnop.wxyz.----
+//                 B:nodm.nopm.xypw.--z-   C:mn-d.mnop.wxop.--yz.----  D:dm--.pmno.pwno.z-xy.----  A:-d--.opmn.opmn.yzwx.----
+//
 
   .align    4
 DiOpaqueBitmap_paint:
@@ -128,17 +177,213 @@ right_ok:
   mul16u    a14,a14,a12   // a14 <-- m_bytes_per_line * (m_scrolled_y - m_y)
   addi      a14,a14,44    // a14 <-- offset within m_pixels array
   add       a14,a14,a2    // a14 <-- pointer to bitmap data line
-  add       a14,a14,a13   // a14 <-- pointer to next bitmap pixel
-  movi      a6,3          // a6 <-- mask for checking byte alignment
-  movi      a8,2          // value for adjusting index
-  movi      a10,1         // used to decrement width by 1
-  movi      a11,4         // used to decrement width by 4
+
+//.......................................
+// Determine the alignment of the source and destination pixels.
+// a13 <-- offset to first visible source pixel
+
+  bbsi      a13,1,src_offset_2_or_3     // go if first visible pixel is at offset 2 or 3
+  bbsi      a13,0,src_offset_1          // go if first visible pixel is at offset 1
+  bbci      a13,0,src_offset_0          // go, because first visible pixel is at offset 0
+src_offset_2_or_3:
+  bbsi      a13,0,src_offset_3          // go if first visible pixel is at offset 3
+  bbci      a13,0,src_offset_2          // go, because first visible pixel is at offset 2
 
 // At this point:
 // a3 <-- final line width
 // a4 <-- m_line8 (or m_line32)
-// a5 <-- final start x (destination)
-// a14 <-- pointer to bitmap pixel (source)
+// a5 <-- final start x
+// a13 <-- offset to first visible source pixel
+// a14 <-- pointer to bitmap data line
+
+//.......................................
+
+src_offset_0:
+  bbsi     a5,1,so_0_dst_offset_2_or_3  // go if first destination pixel is at offset 2 or 3
+  bbsi     a5,0,so_0_dst_offset_1       // go if first destination pixel is at offset 1
+
+// Copy source pixels from offset 0 to destination pixels at offset 0.
+so_0_dst_offset_0:
+  // Logical  A:abcd.mnop.mnop.wxyz
+  // Physical A:cdab.opmn.opmn.yzwx
+  // a14 <-- pointer to source pixels (position A)
+  bbci     a5,0,do_middle_pixels
+
+// Copy source pixels from offset 0 to destination pixels at offset 1.
+so_0_dst_offset_1:
+  // Logical  B:-abc.dmno.pmno.pwxy.z---
+  // Physical B:bc-a.nodm.nopm.xypw.--z-
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  bbsi     a5,0,do_middle_pixels
+
+so_0_dst_offset_2_or_3:
+  bbsi     a5,0,so_0_dst_offset_3       // go if first destination pixel is at offset 3
+
+// Copy source pixels from offset 0 to destination pixels at offset 2.
+so_0_dst_offset_2:
+  // Logical  C:--ab.cdmn.opmn.opwx.yz--
+  // Physical C:ab--.mncd.mnop.wxop.--yz
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  addi     a14,a2,40                    // (position C)
+  bbci     a5,0,do_middle_pixels
+
+// Copy source pixels from offset 0 to destination pixels at offset 3.
+so_0_dst_offset_3:
+  // Logical  D:---a.bcdm.nopm.nopw.xzy-
+  // Physical D:-a--.dmbc.pmno.pwno.y-xz
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  addi     a14,a2,40                    // (position C)
+  addi     a14,a2,40                    // (position D)
+  bbsi     a5,0,do_middle_pixels
+
+//.......................................
+
+src_offset_1:
+  bbsi     a5,1,so_1_dst_offset_2_or_3  // go if first destination pixel is at offset 2 or 3
+  bbsi     a5,0,so_1_dst_offset_1       // go if first destination pixel is at offset 1
+
+// Copy source pixels from offset 1 to destination pixels at offset 0.
+so_1_dst_offset_0:
+  // Logical  D:bcdm.nopm.nopw.xyz-
+  // Physical D:dmbc.pmno.pwno.z-xy
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  addi     a14,a2,40                    // (position C)
+  addi     a14,a2,40                    // (position D)
+  bbci     a5,0,do_middle_pixels
+
+// Copy source pixels from offset 1 to destination pixels at offset 1.
+so_1_dst_offset_1:
+  // Logical  A:-bcd.mnop.mnop.wxyz.----
+  // Physical A:cd-b.opmn.opmn.yzwx.----
+  // a14 <-- pointer to source pixels (position A)
+  bbsi     a5,0,do_middle_pixels
+
+so_1_dst_offset_2_or_3:
+  bbsi     a5,0,so_1_dst_offset_3     // go if first destination pixel is at offset 3
+
+// Copy source pixels from offset 1 to destination pixels at offset 2.
+so_1_dst_offset_2:
+  // Logical  B:--bc.dmno.pmno.pwxy.z---
+  // Physical B:bc--.nodm.nopm.xypw.--z-
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  bbci     a5,0,do_middle_pixels
+
+// Copy source pixels from offset 1 to destination pixels at offset 3.
+so_1_dst_offset_3:
+  // Logical  C:---b.cdmn.opmn.opwx.yz--
+  // Physical C:-b--.mncd.mnop.wxop.--yz
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  addi     a14,a2,40                    // (position C)
+  bbsi     a5,0,do_middle_pixels
+
+//.......................................
+
+src_offset_2:
+  bbsi     a5,1,so_2_dst_offset_2_or_3  // go if first destination pixel is at offset 2 or 3
+  bbsi     a5,0,so_2_dst_offset_1       // go if first destination pixel is at offset 1
+
+// Copy source pixels from offset 2 to destination pixels at offset 0.
+so_2_dst_offset_0:
+  // Logical  C:cdmn.opmn.opwx.yz--
+  // Physical C:mncd.mnop.wxop.--yz
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  addi     a14,a2,40                    // (position C)
+  bbci     a5,0,do_middle_pixels
+
+// Copy source pixels from offset 2 to destination pixels at offset 1.
+so_2_dst_offset_1:
+  // Logical  D:-cdm.nopm.nopw.xyz-.----
+  // Physical D:dm-c.pmno.pwno.z-xy.----
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  addi     a14,a2,40                    // (position C)
+  addi     a14,a2,40                    // (position D)
+  bbsi     a5,0,do_middle_pixels
+
+so_2_dst_offset_2_or_3:
+  bbsi     a5,0,so_2_dst_offset_3       // go if first destination pixel is at offset 3
+
+// Copy source pixels from offset 2 to destination pixels at offset 2.
+so_2_dst_offset_2:
+  // Logical  A:--cd.mnop.mnop.wxyz.----
+  // Physical A:cd--.opmn.opmn.yzwx.----
+  // a14 <-- pointer to source pixels (position A)
+  bbci     a5,0,do_middle_pixels
+
+// Copy source pixels from offset 2 to destination pixels at offset 3.
+so_2_dst_offset_3:
+  // Logical  B:---c.dmno.pmno.pwxy.z---
+  // Physical B:-c--.nodm.nopm.xypw.z---
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  bbsi     a5,0,do_middle_pixels
+
+//.......................................
+
+src_offset_3:
+  bbsi     a5,1,so_3_dst_offset_2_or_3  // go if first destination pixel is at offset 2 or 3
+  bbsi     a5,0,so_3_dst_offset_1       // go if first destination pixel is at offset 1
+
+// Copy source pixels from offset 3 to destination pixels at offset 0.
+so_3_dst_offset_0:
+  // Logical  B:dmno.pmno.pwxy.z---
+  // Physical B:nodm.nopm.xypw.--z-
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  bbci     a5,0,do_middle_pixels
+
+// Copy source pixels from offset 3 to destination pixels at offset 1.
+so_3_dst_offset_1:
+  // Logical  C:-dmn.opmn.opwx.yz--.----
+  // Physical C:mn-d.mnop.wxop.--yz.----
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  addi     a14,a2,40                    // (position C)
+  bbsi     a5,0,do_middle_pixels
+
+so_3_dst_offset_2_or_3:
+  bbsi     a5,0,so_3_dst_offset_3       // go if first destination pixel is at offset 3
+
+// Copy source pixels from offset 3 to destination pixels at offset 2.
+so_3_dst_offset_2:
+  // Logical  D:--dm.nopm.nopw.xyz-.----
+  // Physical D:dm--.pmno.pwno.z-xy.----
+  addi     a14,a2,40                    // a14 <-- pointer to source pixels (position B)
+  addi     a14,a2,40                    // (position C)
+  addi     a14,a2,40                    // (position D)
+  bbci     a5,0,do_middle_pixels
+
+// Copy source pixels from offset 3 to destination pixels at offset 3.
+so_3_dst_offset_3:
+  // Logical  A:---d.mnop.mnop.wxyz.----
+  // Physical A:-d--.opmn.opmn.yzwx.----
+  // a14 <-- pointer to source pixels (position A)
+  bbsi     a5,0,do_middle_pixels
+
+//.......................................
+// a4 <-- m_line8 (or m_line32)
+// a5 <-- final start x
+// a13 <-- offset to first visible source pixel
+// a14 <-- pointer to bitmap data line
+
+do_middle_pixels:
+  movi      a10,0xFFFFFFFC // a10 <-- mask to remove lower 2 bits
+  and       a10,a10,a5    // a10 <-- offset to word-aligned src pixels
+  add       a4,a4,a10     // a4 <-- points to word-aligned dst pixels
+  add       a14,a14,a10   // a14 <-- points to word-aligned source pixels
+  srli      a10,a3,2      // a10 <-- number of full words left to copy
+  loopnez   a10,end_loop  // loop to copy pixel data
+  l32i      a9,a14,0      // a9 <-- 4 src pixels
+  s32i      a9,a4,0       // m_line32[] <-- src pixel data
+  addi      a14,a14,4     // a14 <-- points to next src pixels
+  addi      a4,a4,4       // a4 <-- points to next dst pixels
+end_loop:
+  retw
+
+
+
+  //add       a14,a14,a13   // a14 <-- pointer to next bitmap pixel
+  
+  movi      a6,3          // a6 <-- mask for checking byte alignment
+  movi      a8,2          // value for adjusting index
+  movi      a10,1         // used to decrement width by 1
+  movi      a11,4         // used to decrement width by 4
 
 align_left_edge:
   beqz      a3,skip       // skip if no pixels left to draw
@@ -210,8 +455,8 @@ left_ok_m:
   sub       a13,a5,a13    // a13 <-- offset to first visible pixel
   l32i      a8,a2,16      // a8 <-- m_x_extent  
   add       a8,a8,a6      // a8 (right_hand_x) <-- m_x_extent + m_horiz_scroll
-  beqz      a8,skip       // skip if right_hand_x == 0
-  bltz      a8,skip       // skip if right_hand_x < 0
+  beqz      a8,skip_m     // skip if right_hand_x == 0
+  bltz      a8,skip_m     // skip if right_hand_x < 0
   blt       a8,a7,right_ok_m  // don't shorten line if right_hand_x < m_screen_width
   mov       a8,a7         // a8 (right_hand_x) <-- m_screen_width
 right_ok_m:
@@ -231,7 +476,7 @@ right_ok_m:
   movi      a12,0x3F3F3F3F // mask for clearing alpha bits
 
 align_left_edge_m:
-  beqz      a3,skip       // skip if no pixels left to draw
+  beqz      a3,skip_m     // skip if no pixels left to draw
   and       a7,a14,a6     // a7 <-- (ptr to bitmap pixel) & 3
   bnez      a7,unaligned_m  // go if src pixel address is not aligned
   and       a7,a5,a6      // a7 <-- x & 3
@@ -249,7 +494,7 @@ dont_show_m:
   add       a14,a14,a10   // a14 <-- pointer to next bitmap pixel
   sub       a3,a3,a10     // a3 <-- remaining line width
   add       a5,a5,a10     // a5 <-- next x position
-  bgez      a5,align_left_edge // go check alignment
+  bgez      a5,align_left_edge_m // go check alignment
 left_aligned_m:
 
 //  blt       a3,a11,middle_done // go if no full words to set

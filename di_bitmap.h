@@ -45,9 +45,11 @@ class DiOpaqueBitmap: public DiPrimitiveXYWH {
   //void operator delete(void*);
   void set_position(int32_t x, int32_t y);
   void set_opaque_pixel(int32_t x, int32_t y, uint8_t color);
-  void set_opaque_pixels(int32_t index, int32_t y, uint32_t colors);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
+
+  protected:
+  void set_pixel(int32_t x, int32_t y, uint8_t color);
 };
 
 //---------------------------------------------------------------------
@@ -57,7 +59,6 @@ class DiMaskedBitmap: public DiOpaqueBitmap {
   DiMaskedBitmap(uint32_t width, uint32_t height);
   void* operator new(size_t size, uint32_t width, uint32_t height);
   void set_masked_pixel(int32_t x, int32_t y, uint8_t color);
-  void set_masked_pixels(int32_t index, int32_t y, uint32_t colors);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };
@@ -69,7 +70,6 @@ class DiTransparentBitmap: public DiOpaqueBitmap {
   DiTransparentBitmap(uint32_t width, uint32_t height);
   void* operator new(size_t size, uint32_t width, uint32_t height);
   void set_transparent_pixel(int32_t x, int32_t y, uint8_t color);
-  void set_transparent_pixels(int32_t index, int32_t y, uint32_t colors);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

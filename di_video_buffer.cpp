@@ -71,16 +71,16 @@ DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMO
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 */
 DiOpaqueBitmap* gp_opaque_bitmap0;
-DiOpaqueBitmap* gp_opaque_bitmap1;
-DiOpaqueBitmap* gp_opaque_bitmap2;
-DiOpaqueBitmap* gp_opaque_bitmap3;
+//DiOpaqueBitmap* gp_opaque_bitmap1;
+//DiOpaqueBitmap* gp_opaque_bitmap2;
+//DiOpaqueBitmap* gp_opaque_bitmap3;
 
-DiMaskedBitmap* gp_masked_bitmap4;
-DiMaskedBitmap* gp_masked_bitmap5;
-DiMaskedBitmap* gp_masked_bitmap6;
-DiMaskedBitmap* gp_masked_bitmap7;
+//DiMaskedBitmap* gp_masked_bitmap4;
+//DiMaskedBitmap* gp_masked_bitmap5;
+//DiMaskedBitmap* gp_masked_bitmap6;
+//DiMaskedBitmap* gp_masked_bitmap7;
 
-DiOpaqueBitmap* gp_digit_bitmap[10];
+/*DiOpaqueBitmap* gp_digit_bitmap[10];
 DiOpaqueBitmap* gp_value_bitmap[4][6];
 
 DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
@@ -165,7 +165,7 @@ static const char* digit_data =
 "    *"
 "*   *"
 " *** ";
-
+*/
 /*#define TILES_ACROSS 20
 #define TILES_DOWN   20
 
@@ -178,7 +178,7 @@ DiOpaqueBitmap* tile;*/
 
 DiTileMap* tile_map;
 
-void breakdown_value(uint32_t value, DiOpaqueBitmap** digits) {
+/*void breakdown_value(uint32_t value, DiOpaqueBitmap** digits) {
   uint32_t d5 = value/100000; value=value%100000;
   uint32_t d4 = value/10000; value=value%10000;
   uint32_t d3 = value/1000; value=value%1000;
@@ -192,7 +192,7 @@ void breakdown_value(uint32_t value, DiOpaqueBitmap** digits) {
   digits[2] = gp_digit_bitmap[d2];
   digits[1] = gp_digit_bitmap[d1];
   digits[0] = gp_digit_bitmap[d0];
-}
+}*/
 
 void init_stars() {
 /*  srand(42);
@@ -204,7 +204,7 @@ void init_stars() {
     g_stars[i].m_color = c | SYNCS_OFF;
   }*/
 
-  for (uint32_t d = 0; d < 10; d++) {
+/*  for (uint32_t d = 0; d < 10; d++) {
     gp_digit_bitmap[d] = new(5,7) DiOpaqueBitmap(5,7);
     for (int32_t y=0;y<7;y++) {
       for (int32_t x=0;x<5;x++) {
@@ -212,9 +212,9 @@ void init_stars() {
       }
     }
   }
-
+*/
   gp_opaque_bitmap0 = new(64,64) DiOpaqueBitmap(64,64);
-  gp_opaque_bitmap1 = new(64,64) DiOpaqueBitmap(64,64);
+/*  gp_opaque_bitmap1 = new(64,64) DiOpaqueBitmap(64,64);
   gp_opaque_bitmap2 = new(64,64) DiOpaqueBitmap(64,64);
   gp_opaque_bitmap3 = new(64,64) DiOpaqueBitmap(64,64);
 
@@ -222,8 +222,9 @@ void init_stars() {
   gp_masked_bitmap5 = new(64,64) DiMaskedBitmap(64,64);
   gp_masked_bitmap6 = new(64,64) DiMaskedBitmap(64,64);
   gp_masked_bitmap7 = new(64,64) DiMaskedBitmap(64,64);
-
+*/
   gp_opaque_bitmap0->set_position(100,100);
+/*
   gp_opaque_bitmap1->set_position(201,201);
   gp_opaque_bitmap2->set_position(302,302);
   gp_opaque_bitmap3->set_position(403,403);
@@ -232,37 +233,38 @@ void init_stars() {
   gp_masked_bitmap5->set_position(501,201);
   gp_masked_bitmap6->set_position(603,303);
   gp_masked_bitmap7->set_position(703,403);
-
+*/
   //gp_masked_bitmap->set_position(500,200);
 
   for (int32_t y=0;y<64;y++) {
     for (int32_t x=0;x<64;x++) {
       gp_opaque_bitmap0->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_opaque_bitmap1->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
+      /*gp_opaque_bitmap1->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_opaque_bitmap2->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_opaque_bitmap3->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
 
       gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap6->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_masked_bitmap7->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_masked_bitmap7->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);*/
 
       //gp_masked_bitmap->set__masked_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
   }
 
+/*
   breakdown_value(heap_caps_get_free_size(MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL), gp_value_bitmap[0]);
   breakdown_value(heap_caps_get_largest_free_block(MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL), gp_value_bitmap[1]);
   breakdown_value(heap_caps_get_free_size(MALLOC_CAP_INTERNAL), gp_value_bitmap[2]);
   breakdown_value(heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL), gp_value_bitmap[3]);
-
+*/
   /*tile = new(40,30) DiOpaqueBitmap(40,30);
   for (int32_t y=0;y<30;y++) {
     for (int32_t x=0;x<40;x++) {
       tile->set_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
   }*/
-
+/*
   tile_map = new DiTileMap(4, 20, 20, 40, 30);
   tile_map->clear();
   for (int32_t y=0;y<30;y++) {
@@ -272,8 +274,8 @@ void init_stars() {
       tile_map->set_pixel(GRASS_BITMAP, x, y, gGRASSData[y*40+x]);
       tile_map->set_pixel(WALL_BITMAP, x, y, gWALLData[y*40+x]);
     }
-  }
-
+  }*/
+/*
   const char* tile_ids =
     "   C     C       C  "
     "      C             "
@@ -306,7 +308,7 @@ void init_stars() {
         case '.': tile_map->set_tile(col, row, GRASS_BITMAP); break;
       }
     }
-  }
+  }*/
 }
 
 void DiVideoScanLine::init_to_black() {
@@ -344,19 +346,19 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_scrolled_y = params->m_line_index + params->m_vert_scroll;
 
   //memset(params->m_line8, 1|SYNCS_OFF, ACT_PIXELS);
-  tile_map->paint(params);
+  //tile_map->paint(params);
 
   DiPaintParams p2 = *params;
   p2.m_horiz_scroll = 0;
   p2.m_vert_scroll = 0;
   p2.m_scrolled_y = p2.m_line_index;
 
-  if (params->m_line_index >= 100 && params->m_line_index < 140) {
+  /*if (params->m_line_index >= 100 && params->m_line_index < 140) {
     show_value(gp_value_bitmap[0], 100, &p2);
     show_value(gp_value_bitmap[1], 110, &p2);
     show_value(gp_value_bitmap[2], 120, &p2);
     show_value(gp_value_bitmap[3], 130, &p2);
-  }
+  }*/
 
   /*int32_t i = params->m_scrolled_y;
   if (i >= -(STAR_PADDING/2) && i < ACT_LINES) {
@@ -401,14 +403,14 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
   // Draw a bitmap
   gp_opaque_bitmap0->paint(&p2);
-  gp_opaque_bitmap1->paint(&p2);
-  gp_opaque_bitmap2->paint(&p2);
-  gp_opaque_bitmap3->paint(&p2);
+  //gp_opaque_bitmap1->paint(&p2);
+  //gp_opaque_bitmap2->paint(&p2);
+  //gp_opaque_bitmap3->paint(&p2);
 
-  gp_masked_bitmap4->paint(&p2);
-  gp_masked_bitmap5->paint(&p2);
-  gp_masked_bitmap6->paint(&p2);
-  gp_masked_bitmap7->paint(&p2);
+  //gp_masked_bitmap4->paint(&p2);
+  //gp_masked_bitmap5->paint(&p2);
+  //gp_masked_bitmap6->paint(&p2);
+  //gp_masked_bitmap7->paint(&p2);
 
   //gp_opaque_bitmap->paint(&p2);
  // gp_masked_bitmap->paint(params);

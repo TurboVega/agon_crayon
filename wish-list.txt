@@ -1,0 +1,26 @@
+* draw points
+* draw lines
+* draw rectangles
+* draw triangles
+* draw polygons
+* draw circles and arcs
+* draw ellipses and arcs
+* draw segments and sectors
+* draw bitmaps
+* draw multiple lines or shapes
+* draw filled or unfilled
+* pattern or flood fills
+* draw sprites (one or more frames)
+* rotate bitmap by these angles (0, 90, 180, 270)
+* mirror (flip) bitmap horizontally
+* mirror (flip) bitmap vertically
+* rotate bitmap by arbitrary angle
+* get point (color value at pixel)
+* detect collisions
+* stuff in the GXR
+* draw playlist on demand
+* sprite "hook" point
+* sprite mirroring, scaling, rotating
+* bulk upload of data
+* VDU access from any language
+* tile layers

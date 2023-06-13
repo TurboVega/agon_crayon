@@ -31,6 +31,7 @@
 
 #include "di_bitmap.h"
 #include "esp_heap_caps.h"
+#include <cstring>
 
 extern "C" {
 IRAM_ATTR void DiOpaqueBitmap_paint(void* this_ptr, const DiPaintParams *params);
@@ -40,15 +41,18 @@ IRAM_ATTR void DiMaskedBitmap_paint(void* this_ptr, const DiPaintParams *params)
 
 DiOpaqueBitmap::DiOpaqueBitmap(uint32_t width, uint32_t height):
   DiPrimitiveXYWH(0, 0, width, height) {
-  m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+  m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
   m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
   m_words_per_position = m_words_per_line * height;
   m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
+  memset(m_pixels, 0, m_bytes_per_position * 4);
 }
 
 void* DiOpaqueBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
-  uint32_t wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
-  size_t new_size = (size_t)(sizeof(DiOpaqueBitmap) - sizeof(uint32_t) + (wpl * height * sizeof(uint32_t)));
+  uint32_t wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
+  uint32_t wpp = wpl * height;
+  uint32_t bpp = wpp * sizeof(uint32_t);
+  size_t new_size = (size_t)(sizeof(DiOpaqueBitmap) - sizeof(uint32_t) + (bpp * 4));
   void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
   return p;
 }
@@ -64,12 +68,14 @@ void DiOpaqueBitmap::set_position(int32_t x, int32_t y) {
   m_y_extent = m_y + m_height;
 }
 
-void DiOpaqueBitmap::set_opaque_pixel(int32_t x, int32_t y, uint8_t color) { 
-  pixels(m_pixels + y * m_words_per_line)[x] = (color & 0x3F) | SYNCS_OFF;
+void DiOpaqueBitmap::set_opaque_pixel(int32_t x, int32_t y, uint8_t color) {
+  set_pixel(x, y, (color & 0x3F) | SYNCS_OFF);
 }
 
-void DiOpaqueBitmap::set_opaque_pixels(int32_t index, int32_t y, uint32_t colors) {
-  m_pixels[y * m_words_per_line + index] = (colors & 0x3F3F3F3F) | SYNCS_OFF_X4;
+void DiOpaqueBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) {
+  for (uint32_t pos = 0; pos < 4; pos++) {
+    pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line)[FIX_INDEX(pos + x)] = color;
+  }
 }
 
 /*void DiOpaqueBitmap::clear() {
@@ -104,12 +110,8 @@ void* DiMaskedBitmap::operator new(size_t size, uint32_t width, uint32_t height)
   return DiOpaqueBitmap::operator new(size, width, height);
 }
 
-void DiMaskedBitmap::set_masked_pixel(int32_t x, int32_t y, uint8_t color) { 
-  pixels(m_pixels + y * m_words_per_line)[x] = color;
-}
-
-void DiMaskedBitmap::set_masked_pixels(int32_t index, int32_t y, uint32_t colors) {
-  m_pixels[y * m_words_per_line + index] = colors;
+void DiMaskedBitmap::set_masked_pixel(int32_t x, int32_t y, uint8_t color) {
+  set_pixel(x, y, color);
 }
 
 void IRAM_ATTR DiMaskedBitmap::paint(const DiPaintParams *params) {
@@ -127,11 +129,7 @@ void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t he
 }
 
 void DiTransparentBitmap::set_transparent_pixel(int32_t x, int32_t y, uint8_t color) { 
-  pixels(m_pixels + y * m_words_per_line)[x] = (color & 0x3F) | SYNCS_OFF;
-}
-
-void DiTransparentBitmap::set_transparent_pixels(int32_t index, int32_t y, uint32_t colors) {
-  m_pixels[y * m_words_per_line + index] = (colors & 0x3F3F3F3F) | SYNCS_OFF_X4;
+  set_pixel(x, y, color);
 }
 
 void IRAM_ATTR DiTransparentBitmap::paint(const DiPaintParams *params) {
