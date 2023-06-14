@@ -71,14 +71,14 @@ DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMO
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 */
 DiOpaqueBitmap* gp_opaque_bitmap0;
-//DiOpaqueBitmap* gp_opaque_bitmap1;
-//DiOpaqueBitmap* gp_opaque_bitmap2;
-//DiOpaqueBitmap* gp_opaque_bitmap3;
+DiOpaqueBitmap* gp_opaque_bitmap1;
+DiOpaqueBitmap* gp_opaque_bitmap2;
+DiOpaqueBitmap* gp_opaque_bitmap3;
 
-//DiMaskedBitmap* gp_masked_bitmap4;
-//DiMaskedBitmap* gp_masked_bitmap5;
-//DiMaskedBitmap* gp_masked_bitmap6;
-//DiMaskedBitmap* gp_masked_bitmap7;
+DiMaskedBitmap* gp_masked_bitmap4;
+DiMaskedBitmap* gp_masked_bitmap5;
+DiMaskedBitmap* gp_masked_bitmap6;
+DiMaskedBitmap* gp_masked_bitmap7;
 
 /*DiOpaqueBitmap* gp_digit_bitmap[10];
 DiOpaqueBitmap* gp_value_bitmap[4][6];
@@ -214,7 +214,7 @@ void init_stars() {
   }
 */
   gp_opaque_bitmap0 = new(64,64) DiOpaqueBitmap(64,64);
-/*  gp_opaque_bitmap1 = new(64,64) DiOpaqueBitmap(64,64);
+  gp_opaque_bitmap1 = new(64,64) DiOpaqueBitmap(64,64);
   gp_opaque_bitmap2 = new(64,64) DiOpaqueBitmap(64,64);
   gp_opaque_bitmap3 = new(64,64) DiOpaqueBitmap(64,64);
 
@@ -222,9 +222,8 @@ void init_stars() {
   gp_masked_bitmap5 = new(64,64) DiMaskedBitmap(64,64);
   gp_masked_bitmap6 = new(64,64) DiMaskedBitmap(64,64);
   gp_masked_bitmap7 = new(64,64) DiMaskedBitmap(64,64);
-*/
+
   gp_opaque_bitmap0->set_position(100,100);
-/*
   gp_opaque_bitmap1->set_position(201,201);
   gp_opaque_bitmap2->set_position(302,302);
   gp_opaque_bitmap3->set_position(403,403);
@@ -233,20 +232,20 @@ void init_stars() {
   gp_masked_bitmap5->set_position(501,201);
   gp_masked_bitmap6->set_position(603,303);
   gp_masked_bitmap7->set_position(703,403);
-*/
+
   //gp_masked_bitmap->set_position(500,200);
 
   for (int32_t y=0;y<64;y++) {
     for (int32_t x=0;x<64;x++) {
       gp_opaque_bitmap0->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
-      /*gp_opaque_bitmap1->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
+      gp_opaque_bitmap1->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_opaque_bitmap2->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_opaque_bitmap3->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
 
       gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap6->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_masked_bitmap7->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);*/
+      gp_masked_bitmap7->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
 
       //gp_masked_bitmap->set__masked_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
@@ -343,9 +342,8 @@ void show_value(DiOpaqueBitmap** digits, uint32_t y, DiPaintParams *params) {
 void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
   params->m_line8 = (uint8_t*)(m_act);
-  params->m_scrolled_y = params->m_line_index + params->m_vert_scroll;
 
-  //memset(params->m_line8, 1|SYNCS_OFF, ACT_PIXELS);
+  memset(params->m_line8, 0x14|SYNCS_OFF, ACT_PIXELS);
   //tile_map->paint(params);
 
   DiPaintParams p2 = *params;
@@ -403,14 +401,14 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
   // Draw a bitmap
   gp_opaque_bitmap0->paint(&p2);
-  //gp_opaque_bitmap1->paint(&p2);
-  //gp_opaque_bitmap2->paint(&p2);
-  //gp_opaque_bitmap3->paint(&p2);
+  gp_opaque_bitmap1->paint(&p2);
+  gp_opaque_bitmap2->paint(&p2);
+  gp_opaque_bitmap3->paint(&p2);
 
-  //gp_masked_bitmap4->paint(&p2);
-  //gp_masked_bitmap5->paint(&p2);
-  //gp_masked_bitmap6->paint(&p2);
-  //gp_masked_bitmap7->paint(&p2);
+  gp_masked_bitmap4->paint(&p2);
+  gp_masked_bitmap5->paint(&p2);
+  gp_masked_bitmap6->paint(&p2);
+  gp_masked_bitmap7->paint(&p2);
 
   //gp_opaque_bitmap->paint(&p2);
  // gp_masked_bitmap->paint(params);

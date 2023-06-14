@@ -91,9 +91,8 @@
 #define TINY_DIAMOND_SIZE  50
 #define HALF_TINY_DIAMOND_SIZE (TINY_DIAMOND_SIZE/2)
 
-// 0x12345678 sent as 0x34, 0x12, 0x78, 0x56.
+// 0x12345678, normally stored as 78, 56, 34, 12, is sent as 34 12 78 56.
 #define FIX_INDEX(idx)      ((idx)^2)
-#define FIX_WORD(colors)    (((colors & 0xFF00FF00) >> 8) | ((colors & 0x00FF00FF) << 8))
 
 #define DMA_TOTAL_LINES       (ACT_LINES+VFP_LINES+VS_LINES+VBP_LINES)
 #define DMA_TOTAL_DESCR       (ACT_LINES/NUM_LINES_PER_BUFFER+VFP_LINES+VS_LINES/NUM_LINES_PER_BUFFER+VBP_LINES)

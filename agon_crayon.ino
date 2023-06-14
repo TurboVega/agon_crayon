@@ -43,9 +43,9 @@ DMA_ATTR DiVideoScanLine g_front_porch;
 DMA_ATTR DiVideoBuffer g_vertical_sync;
 DMA_ATTR DiVideoScanLine g_back_porch;
 
-intr_handle_t isr_handle;
+//intr_handle_t isr_handle;
 
-DiPaintParams g_params;
+DMA_ATTR DiPaintParams g_params;
 
 void init_dma_descriptor(DiVideoScanLine* vbuf, uint32_t descr_index) {
   lldesc_t volatile * dd = &dma_descriptor[descr_index];
@@ -216,6 +216,7 @@ IRAM_ATTR void loop() {
       // Active scan line (not end of frame)
       eof = false;
       g_params.m_line_index = descr_index * NUM_LINES_PER_BUFFER;
+      g_params.m_scrolled_y = g_params.m_line_index + g_params.m_vert_scroll;
       g_video_buffer[descr_index & (NUM_ACTIVE_BUFFERS-1)].paint(&g_params);
     } else if (!eof) {
       // End of frame (vertical blanking area)
