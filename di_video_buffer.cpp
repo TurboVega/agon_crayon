@@ -394,10 +394,14 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   //tile_map->paint(params);
 
   DiPaintParams p2 = *params;
-  int32_t s = 0;
-  p2.m_horiz_scroll = s;
+  p2.m_horiz_scroll = 0;
   p2.m_vert_scroll = 0;
-  p2.m_scrolled_y = p2.m_line_index + s;
+  p2.m_scrolled_y = p2.m_line_index;
+
+  DiPaintParams p3 = *params;
+  p3.m_horiz_scroll = 0;
+  p3.m_vert_scroll = 0;
+  p3.m_scrolled_y = p2.m_line_index;
 
   /*if (params->m_line_index >= 100 && params->m_line_index < 140) {
     show_value(gp_value_bitmap[0], 100, &p2);
@@ -462,7 +466,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   // Draw a bitmap
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-      gp_opaque_bitmap[r][c]->paint(&p2);
+      gp_opaque_bitmap[r][c]->paint(&p3);
     }
   }
 
