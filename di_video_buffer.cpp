@@ -343,7 +343,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
   params->m_line8 = (uint8_t*)(m_act);
 
-  memset(params->m_line8, 0x14|SYNCS_OFF, ACT_PIXELS);
+  memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
   //tile_map->paint(params);
 
   DiPaintParams p2 = *params;
@@ -401,14 +401,14 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
   // Draw a bitmap
   gp_opaque_bitmap0->paint(&p2);
-  gp_opaque_bitmap1->paint(&p2);
+  /*gp_opaque_bitmap1->paint(&p2);
   gp_opaque_bitmap2->paint(&p2);
   gp_opaque_bitmap3->paint(&p2);
 
   gp_masked_bitmap4->paint(&p2);
   gp_masked_bitmap5->paint(&p2);
   gp_masked_bitmap6->paint(&p2);
-  gp_masked_bitmap7->paint(&p2);
+  gp_masked_bitmap7->paint(&p2);*/
 
   //gp_opaque_bitmap->paint(&p2);
  // gp_masked_bitmap->paint(params);
