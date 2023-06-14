@@ -284,10 +284,23 @@ so_0_dst_offset_3:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
+
+  movi      a11,0xFFFFFFFC // a11 <-- mask to remove lower 2 bits
+  and       a11,a11,a5    // a11 <-- offset to word-aligned dst pixels
+  add       a4,a4,a11     // a4 <-- points to word-aligned dst pixels
+
+  l32i      a6,a4,0       // a6 <-- 4 dst pixels
+  movi      a11,0xFFFFFF00
+  and       a11,a11,a6    // a11 <-- keepable dst pixels
+  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  or        a6,a6,a11     // a6 <-- new combined pixels
+  s32i      a6,a4,0       // m_line32[] <-- src pixel data
+  add       a4,a4,a10       // a4 <-- points to next dst pixels
+
   add      a14,a14,a10
   addi     a5,a5,1
   sub      a3,a3,a7
-  call0    do_middle_pixels
+  call0    do_middle_pixels2
   mov      a0,a15
   retw
 
