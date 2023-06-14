@@ -401,11 +401,11 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
   // Draw a bitmap
   gp_opaque_bitmap0->paint(&p2);
-  /*gp_opaque_bitmap1->paint(&p2);
+  gp_opaque_bitmap1->paint(&p2);
   gp_opaque_bitmap2->paint(&p2);
   gp_opaque_bitmap3->paint(&p2);
 
-  gp_masked_bitmap4->paint(&p2);
+  /*gp_masked_bitmap4->paint(&p2);
   gp_masked_bitmap5->paint(&p2);
   gp_masked_bitmap6->paint(&p2);
   gp_masked_bitmap7->paint(&p2);*/
