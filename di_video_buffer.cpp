@@ -71,8 +71,8 @@ DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMO
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 */
 
-#define NR 5
-#define NC 1
+#define NR 2
+#define NC 2
 
 DiSetPixel g_x_pixel[5];
 DiSetPixel g_y_pixel[5];
@@ -269,8 +269,8 @@ void init_stars() {
 
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-      gp_opaque_bitmap[r][c]->set_position(-r, r*100+100+r);
-      //gp_opaque_bitmap[r][c]->set_position(c*100+100+c, r*100+100+r);
+      //gp_opaque_bitmap[r][c]->set_position(-r, r*100+100+r);
+      gp_opaque_bitmap[r][c]->set_position(c*100+100+c, r*100+100+r);
       //gp_opaque_bitmap[r][c]->set_position(r-32, r*100+100+r);
     }
   }
@@ -312,7 +312,7 @@ void init_stars() {
       tile->set_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
   }*/
-/*
+
   tile_map = new DiTileMap(4, 20, 20, 40, 30);
   tile_map->clear();
   for (int32_t y=0;y<30;y++) {
@@ -322,8 +322,8 @@ void init_stars() {
       tile_map->set_pixel(GRASS_BITMAP, x, y, gGRASSData[y*40+x]);
       tile_map->set_pixel(WALL_BITMAP, x, y, gWALLData[y*40+x]);
     }
-  }*/
-/*
+  }
+
   const char* tile_ids =
     "   C     C       C  "
     "      C             "
@@ -356,7 +356,7 @@ void init_stars() {
         case '.': tile_map->set_tile(col, row, GRASS_BITMAP); break;
       }
     }
-  }*/
+  }
 }
 
 void DiVideoScanLine::init_to_black() {
@@ -392,8 +392,8 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
   params->m_line8 = (uint8_t*)(m_act);
 
-  memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
-  //tile_map->paint(params);
+  //memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
+  tile_map->paint(params);
 
   DiPaintParams p2 = *params;
   p2.m_horiz_scroll = 0;
@@ -402,7 +402,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
   DiPaintParams p3 = *params;
   p3.m_horiz_scroll = 0;
-  p3.m_vert_scroll = -30;
+  p3.m_vert_scroll = 0;
   p3.m_scrolled_y = p3.m_line_index + p3.m_vert_scroll;
 
   /*if (params->m_line_index >= 100 && params->m_line_index < 140) {
