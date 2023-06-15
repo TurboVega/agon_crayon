@@ -195,6 +195,7 @@ left_ok:
   mov       a8,a7         // a8 (right_hand_x) <-- m_screen_width
 right_ok:
 
+  bgez      a5,dont_inc   // don't shorten line if left_hand_x >= 0
   bbsi      a3,0,inc_len  // go increment length if left_hand_x is not a multiple of 4
   bbci      a3,1,dont_inc // do not increment length if left_hand_x is a multiple of 4
 inc_len:
