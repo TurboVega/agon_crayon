@@ -181,6 +181,7 @@ DiOpaqueBitmap_paint:
   add       a5,a5,a6      // a5 (left_hand_x) <-- m_x + m_horiz_scroll
   mov       a13,a5        // a13 (left_hand_x) <-- m_x + m_horiz_scroll
   l32i      a7,a3,24      // a7 <-- m_screen_width
+  mov       a3,a13        // a3 <-- left_hand_x
   bge       a5,a7,skip2   // skip if left_hand_x >= m_screen_width
   bgez      a5,left_ok    // don't shorten line if left_hand_x >= 0
   xor       a5,a5,a5      // a5 (left_hand_x) <-- 0
@@ -194,11 +195,18 @@ left_ok:
   mov       a8,a7         // a8 (right_hand_x) <-- m_screen_width
 right_ok:
 
+  bbsi      a3,0,inc_len  // go increment length if left_hand_x is not a multiple of 4
+  bbci      a3,1,dont_inc // do not increment length if left_hand_x is a multiple of 4
+inc_len:
+  addi      a8,a8,4       // increase the length by an extra word
+dont_inc:
+
   sub       a3,a8,a5      // a3 <-- final line width
   beqz      a3,skip2      // skip if nothing to draw
   bltz      a3,skip2      // skip if nothing to draw
+
   l32i      a14,a2,32     // a14 <-- m_bytes_per_line
-  mul16u    a14,a14,a12   // a14 <-- m_bytes_per_line * (m_scrolled_y - m_y)
+  mul16s    a14,a14,a12   // a14 <-- m_bytes_per_line * (m_scrolled_y - m_y)
   addi      a14,a14,44    // a14 <-- offset within m_pixels array
   add       a14,a14,a2    // a14 <-- pointer to bitmap data line
   l32i      a11,a2,40     // a11 <-- m_bytes_per_position
@@ -509,100 +517,6 @@ end_loop:
   .align    4
 DiMaskedBitmap_paint:
   entry     sp,16
-  l32i      a4,a3,12      // a4 <-- m_scrolled_y
-  l32i      a5,a2,8       // a5 <-- m_y
-  blt       a4,a5,skip_m  // skip if scan line is above bitmap area
-  l32i      a6,a2,24      // a6 <-- m_y_extent
-  bge       a4,a6,skip_m  // skip if scan line is below bitmap area
-  sub       a12,a4,a5     // a12 <-- m_scrolled_y - m_y
-  l32i      a4,a3,4       // a4 <-- m_line8
-
-  l32i      a5,a2,4       // a5 <-- m_x
-  l32i      a6,a3,16      // a6 <-- m_horiz_scroll
-  add       a5,a5,a6      // a5 (left_hand_x) <-- m_x + m_horiz_scroll
-  mov       a13,a5        // a13 (left_hand_x) <-- m_x + m_horiz_scroll
-  l32i      a7,a3,24      // a7 <-- m_screen_width
-  bge       a5,a7,skip_m  // skip if left_hand_x >= m_screen_width
-  bgez      a5,left_ok_m  // don't shorten line if left_hand_x >= 0
-  xor       a5,a5,a5      // a5 (left_hand_x) <-- 0
-left_ok_m:
-  sub       a13,a5,a13    // a13 <-- offset to first visible pixel
-  l32i      a8,a2,16      // a8 <-- m_x_extent  
-  add       a8,a8,a6      // a8 (right_hand_x) <-- m_x_extent + m_horiz_scroll
-  beqz      a8,skip_m     // skip if right_hand_x == 0
-  bltz      a8,skip_m     // skip if right_hand_x < 0
-  blt       a8,a7,right_ok_m  // don't shorten line if right_hand_x < m_screen_width
-  mov       a8,a7         // a8 (right_hand_x) <-- m_screen_width
-right_ok_m:
-
-  sub       a3,a8,a5      // a3 <-- final line width
-  beqz      a3,skip_m     // skip if nothing to draw
-  bltz      a3,skip_m     // skip if nothing to draw
-  l32i      a14,a2,32     // a14 <-- m_bytes_per_line
-  mul16u    a14,a14,a12   // a14 <-- m_bytes_per_line * (m_scrolled_y - m_y)
-  addi      a14,a14,44    // a14 <-- offset within m_pixels array
-  add       a14,a14,a2    // a14 <-- pointer to bitmap data line
-  add       a14,a14,a13   // a14 <-- pointer to next bitmap pixel
-  movi      a6,3          // a6 <-- mask for checking byte alignment
-  movi      a8,2          // value for adjusting index
-  movi      a10,1         // used to decrement width by 1
-  movi      a11,4         // used to decrement width by 4
-  movi      a12,0x3F3F3F3F // mask for clearing alpha bits
-
-align_left_edge_m:
-  beqz      a3,skip_m     // skip if no pixels left to draw
-  and       a7,a14,a6     // a7 <-- (ptr to bitmap pixel) & 3
-  bnez      a7,unaligned_m  // go if src pixel address is not aligned
-  and       a7,a5,a6      // a7 <-- x & 3
-  beqz      a7,left_aligned_m // don't align if already aligned
-unaligned_m:
-  xor       a9,a5,a8      // a9 <-- x ^ 2
-  add       a9,a9,a4      // a9 <-- m_line8 + x
-  l8ui      a2,a14,0      // a2 <-- pixel from bitmap
-  bbsi      a2,6,show_pixel_m // go if pixel must be shown
-  bbci      a2,7,dont_show_m // go if pixel must not be shown
-show_pixel_m:
-  and       a2,a2,a12     // clear alpha bits
-  s8i       a2,a9,0       // m_line8[index] <-- m_color
-dont_show_m:
-  add       a14,a14,a10   // a14 <-- pointer to next bitmap pixel
-  sub       a3,a3,a10     // a3 <-- remaining line width
-  add       a5,a5,a10     // a5 <-- next x position
-  bgez      a5,align_left_edge_m // go check alignment
-left_aligned_m:
-
-//  blt       a3,a11,middle_done // go if no full words to set
-//do_middle:
-//  add       a9,a5,a4      // a9 <-- m_line8 + x
-//  l32i      a2,a14,0      // a2 <-- 4 pixels from bitmap
-//  slli      a7,a2,16      // a7 <-- lower-half-word in upper-half-word position
-//  srli      a2,a2,16      // a2 <-- upper-half-word in lower-half-word position
-//  or        a2,a2,a7      // a2 <-- half-words swapped
-//  and       a2,a2,a12     // clear alpha bits
-//  s32i      a2,a9,0       // m_line32[index] <-- m_color (4 pixels)
-//  add       a14,a14,a11   // a14 <-- pointer to next bitmap pixel
-//  sub       a3,a3,a11     // a3 <-- remaining line width
-//  add       a5,a5,a11     // a5 <-- next x position
-//  bge       a3,a11,do_middle // go if more full words to set
-//middle_done:
-
-right_edge_m:
-  beqz      a3,skip_m     // skip if no pixels left to draw
-  xor       a9,a5,a8      // a9 <-- x ^ 2
-  add       a9,a9,a4      // a9 <-- m_line8 + x
-  l8ui      a2,a14,0      // a2 <-- pixel from bitmap
-  bbsi      a2,6,show_pixel2_m // go if pixel must be shown
-  bbci      a2,7,dont_show2_m // go if pixel must not be shown
-show_pixel2_m:
-  and       a2,a2,a12     // clear alpha bits
-  s8i       a2,a9,0       // m_line8[index] <-- m_color
-dont_show2_m:
-  add       a14,a14,a10   // a14 <-- points to next bitmap pixel
-  sub       a3,a3,a10     // a3 <-- remaining line width
-  add       a5,a5,a10     // a5 <-- next x position
-  bgez      a5,right_edge_m // go finish drawing
-
-skip_m:
   retw
 
 //----------------------------------------------------------------
