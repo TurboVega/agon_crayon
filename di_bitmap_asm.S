@@ -245,6 +245,14 @@ so_0_dst_offset_1:
   addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels2
+
+  l32i      a6,a4,0       // a6 <-- 4 dst pixels
+  movi      a11,0x00FFFFFF
+  and       a11,a11,a6    // a11 <-- keepable dst pixels
+  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  or        a6,a6,a11     // a6 <-- new combined pixels
+  s32i      a6,a4,0       // m_line32[] <-- src pixel data
+
   mov      a0,a15
   retw
 
@@ -274,6 +282,14 @@ so_0_dst_offset_2:
   addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels2
+
+  l32i      a6,a4,0       // a6 <-- 4 dst pixels
+  movi      a11,0x0000FFFF
+  and       a11,a11,a6    // a11 <-- keepable dst pixels
+  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  or        a6,a6,a11     // a6 <-- new combined pixels
+  s32i      a6,a4,0       // m_line32[] <-- src pixel data
+
   mov      a0,a15
   retw
 
@@ -301,6 +317,14 @@ so_0_dst_offset_3:
   addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels2
+
+  l32i      a6,a4,0       // a6 <-- 4 dst pixels
+  movi      a11,0x000000FF
+  and       a11,a11,a6    // a11 <-- keepable dst pixels
+  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  or        a6,a6,a11     // a6 <-- new combined pixels
+  s32i      a6,a4,0       // m_line32[] <-- src pixel data
+
   mov      a0,a15
   retw
 
