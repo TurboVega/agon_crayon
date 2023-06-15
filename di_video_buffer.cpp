@@ -71,12 +71,12 @@ DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMO
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 */
 
-#define NR 2
-#define NC 2
+#define NR 5
+#define NC 5
 
 DiSetPixel g_x_pixel[5];
 DiSetPixel g_y_pixel[5];
-DiOpaqueBitmap* gp_opaque_bitmap[NR][NC];
+DiOpaqueBitmap* gp_opaque_bitmap;
 
 /*DiMaskedBitmap* gp_masked_bitmap4;
 DiMaskedBitmap* gp_masked_bitmap5;
@@ -256,24 +256,12 @@ void init_stars() {
     }
   }
 */
-  for (uint32_t r = 0; r < NR; r++) {
-    for (uint32_t c = 0; c < NC; c++) {
-      gp_opaque_bitmap[r][c] = new(64,64) DiOpaqueBitmap(64,64);
-    }
-  }
+  gp_opaque_bitmap = new(64,64) DiOpaqueBitmap(64,64);
 
   /*gp_masked_bitmap4 = new(64,64) DiMaskedBitmap(64,64);
   gp_masked_bitmap5 = new(64,64) DiMaskedBitmap(64,64);
   gp_masked_bitmap6 = new(64,64) DiMaskedBitmap(64,64);
   gp_masked_bitmap7 = new(64,64) DiMaskedBitmap(64,64);*/
-
-  for (uint32_t r = 0; r < NR; r++) {
-    for (uint32_t c = 0; c < NC; c++) {
-      //gp_opaque_bitmap[r][c]->set_position(-r, r*100+100+r);
-      gp_opaque_bitmap[r][c]->set_position(c*100+100+c, r*100+100+r);
-      //gp_opaque_bitmap[r][c]->set_position(r-32, r*100+100+r);
-    }
-  }
 
   /*gp_masked_bitmap4->set_position(400,100);
   gp_masked_bitmap5->set_position(501,201);
@@ -285,11 +273,7 @@ void init_stars() {
   for (int32_t y=0;y<64;y++) {
     for (int32_t x=0;x<64;x++) {
 
-      for (uint32_t r = 0; r < NR; r++) {
-        for (uint32_t c = 0; c < NC; c++) {
-          gp_opaque_bitmap[r][c]->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
-        }
-      }
+      gp_opaque_bitmap->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
 
       /*gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
@@ -468,7 +452,8 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   // Draw a bitmap
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-      gp_opaque_bitmap[r][c]->paint(&p3);
+      gp_opaque_bitmap->set_position(c*100+100+c, r*100+100+r);
+      gp_opaque_bitmap->paint(&p3);
     }
   }
 
