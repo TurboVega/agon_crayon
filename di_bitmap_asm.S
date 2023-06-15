@@ -195,21 +195,21 @@ left_ok:
   mov       a8,a7         // a8 (right_hand_x) <-- m_screen_width
 right_ok:
 
-  bgez      a5,dont_inc   // don't shorten line if left_hand_x >= 0
-  bbsi      a3,0,inc_len  // go increment length if left_hand_x is not a multiple of 4
-  bbci      a3,1,dont_inc // do not increment length if left_hand_x is a multiple of 4
-inc_len:
-  addi      a8,a8,4       // increase the length by an extra word
-dont_inc:
+  addi      a7,a2,44      // a7 <-- start of m_pixels
+  bgez      a3,dont_move  // don't move start if left_hand_x >= 0
+  bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
+  bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4
+move_start:
+  addi      a7,a7,4       // move start pixels address by one word
+dont_move:
 
   sub       a3,a8,a5      // a3 <-- final line width
   beqz      a3,skip2      // skip if nothing to draw
   bltz      a3,skip2      // skip if nothing to draw
 
   l32i      a14,a2,32     // a14 <-- m_bytes_per_line
-  mul16s    a14,a14,a12   // a14 <-- m_bytes_per_line * (m_scrolled_y - m_y)
-  addi      a14,a14,44    // a14 <-- offset within m_pixels array
-  add       a14,a14,a2    // a14 <-- pointer to bitmap data line
+  mul16u    a14,a14,a12   // a14 <-- m_bytes_per_line * (m_scrolled_y - m_y)
+  add       a14,a14,a7    // a14 <-- pointer to bitmap data line
   l32i      a11,a2,40     // a11 <-- m_bytes_per_position
   movi      a7,1          // a7 <-- value of 1 for adjusting
   movi      a8,2          // a8 <-- value of 2 for adjusting
@@ -264,15 +264,11 @@ so_0_dst_offset_1:
   // Logical  B:-abc.dmno.pmno.pwxy.z---
   // Physical B:bc-a.nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
-
   DO_START_PIXELS 0x00FF0000
-
   addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
-
   DO_END_PIXELS 0xFF00FFFF
-
   mov      a0,a15
   retw
 
@@ -285,15 +281,11 @@ so_0_dst_offset_2:
   // Physical C:ab--.mncd.mnop.wxop.--yz
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
-
   DO_START_PIXELS 0xFFFF0000
-
   addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
-
   DO_END_PIXELS 0x0000FFFF
-
   mov      a0,a15
   retw
 
@@ -304,15 +296,11 @@ so_0_dst_offset_3:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
-
   DO_START_PIXELS 0xFFFF00FF
-
   addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
-
   DO_END_PIXELS 0x0000FF00
-
   mov      a0,a15
   retw
 
@@ -508,8 +496,8 @@ do_middle_pixels:
   loopnez   a11,end_loop  // loop to copy pixel data
   l32i      a9,a14,0      // a9 <-- 4 src pixels
   s32i      a9,a4,0       // m_line32[] <-- src pixel data
-  addi      a14,a14,4     // a14 <-- points to next src pixels
-  add       a4,a4,a10     // a4 <-- points to next dst pixels
+  add       a4,a4,a10     // a4 <-- points to next 4 dst pixels
+  add       a14,a14,a10   // a14 <-- points to next 4 src pixels
 end_loop:
   ret
 
