@@ -150,7 +150,18 @@
   or        a6,a6,a11     // a6 <-- new combined pixels
   s32i      a6,a4,0       // m_line32[] <-- src pixel data
   add       a4,a4,a10     // a4 <-- points to next dst pixels
-  add      a14,a14,a10    // a14 <-- pointer to next 4 source pixels
+  add       a14,a14,a10   // a14 <-- pointer to next 4 source pixels
+
+  .endm
+
+  .macro    DO_END_PIXELS mask
+
+  l32i      a6,a4,0       // a6 <-- 4 dst pixels
+  movi      a11,\mask     // a11 <-- mask for keeping dst pixels
+  and       a11,a11,a6    // a11 <-- keepable dst pixels
+  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  or        a6,a6,a11     // a6 <-- new combined pixels
+  s32i      a6,a4,0       // m_line32[] <-- src pixel data
 
   .endm
 
@@ -251,12 +262,7 @@ so_0_dst_offset_1:
   sub      a3,a3,a9
   call0    do_middle_pixels
 
-  l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,0x00FFFFFF
-  and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
-  or        a6,a6,a11     // a6 <-- new combined pixels
-  s32i      a6,a4,0       // m_line32[] <-- src pixel data
+  DO_END_PIXELS 0x00FFFFFF
 
   mov      a0,a15
   retw
@@ -277,12 +283,7 @@ so_0_dst_offset_2:
   sub      a3,a3,a8
   call0    do_middle_pixels
 
-  l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,0x0000FFFF
-  and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
-  or        a6,a6,a11     // a6 <-- new combined pixels
-  s32i      a6,a4,0       // m_line32[] <-- src pixel data
+  DO_END_PIXELS 0x0000FFFF
 
   mov      a0,a15
   retw
@@ -301,12 +302,7 @@ so_0_dst_offset_3:
   sub      a3,a3,a7
   call0    do_middle_pixels
 
-  l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,0x000000FF
-  and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
-  or        a6,a6,a11     // a6 <-- new combined pixels
-  s32i      a6,a4,0       // m_line32[] <-- src pixel data
+  DO_END_PIXELS 0x000000FF
 
   mov      a0,a15
   retw
