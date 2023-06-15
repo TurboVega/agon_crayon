@@ -183,9 +183,12 @@ right_ok:
   movi      a9,3          // a9 <-- value of 3 for adjusting
   movi      a10,4         // a10 <-- value of 4 for adjusting
   mov       a15,a0        // a15 <-- save return address
-  //movi      a6,0xFFFFFFFC // a6 <-- mask to remove lower 2 bits
-  //and       a6,a6,a13     // a6 <-- offset to word-aligned src pixels
-  //add       a14,a14,a6    // a4 <-- pointer to bitmap data line + offset to word-aligned src pixels
+
+  movi      a2,0xFFFFFFFC // a2 <-- mask to remove lower 2 bits
+  and       a6,a2,a13     // a6 <-- offset to word-aligned src pixels
+  add       a14,a14,a6    // a14 <-- points to word-aligned src pixels
+  and       a6,a2,a5      // a6 <-- offset to word-aligned dst pixels
+  add       a4,a4,a6      // a4 <-- points to word-aligned dst pixels
 
 //.......................................
 // Determine the alignment of the source and destination pixels.
@@ -229,10 +232,6 @@ so_0_dst_offset_1:
   // Physical B:bc-a.nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
 
-  movi      a11,0xFFFFFFFC // a11 <-- mask to remove lower 2 bits
-  and       a11,a11,a5    // a11 <-- offset to word-aligned dst pixels
-  add       a4,a4,a11     // a4 <-- points to word-aligned dst pixels
-
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
   movi      a11,0xFF000000
   and       a11,a11,a6    // a11 <-- keepable dst pixels
@@ -244,7 +243,7 @@ so_0_dst_offset_1:
   add      a14,a14,a10                  // a14 <-- pointer to next 4 source pixels
   addi     a5,a5,3
   sub      a3,a3,a9
-  call0    do_middle_pixels2
+  call0    do_middle_pixels
 
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
   movi      a11,0x00FFFFFF
@@ -266,10 +265,6 @@ so_0_dst_offset_2:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
 
-  movi      a11,0xFFFFFFFC // a11 <-- mask to remove lower 2 bits
-  and       a11,a11,a5    // a11 <-- offset to word-aligned dst pixels
-  add       a4,a4,a11     // a4 <-- points to word-aligned dst pixels
-
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
   movi      a11,0xFFFF0000
   and       a11,a11,a6    // a11 <-- keepable dst pixels
@@ -281,7 +276,7 @@ so_0_dst_offset_2:
   add      a14,a14,a10
   addi     a5,a5,2
   sub      a3,a3,a8
-  call0    do_middle_pixels2
+  call0    do_middle_pixels
 
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
   movi      a11,0x0000FFFF
@@ -301,10 +296,6 @@ so_0_dst_offset_3:
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
 
-  movi      a11,0xFFFFFFFC // a11 <-- mask to remove lower 2 bits
-  and       a11,a11,a5    // a11 <-- offset to word-aligned dst pixels
-  add       a4,a4,a11     // a4 <-- points to word-aligned dst pixels
-
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
   movi      a11,0xFFFFFF00
   and       a11,a11,a6    // a11 <-- keepable dst pixels
@@ -316,7 +307,7 @@ so_0_dst_offset_3:
   add      a14,a14,a10
   addi     a5,a5,1
   sub      a3,a3,a7
-  call0    do_middle_pixels2
+  call0    do_middle_pixels
 
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
   movi      a11,0x000000FF
@@ -498,11 +489,6 @@ so_3_dst_offset_3:
 // a14 <-- pointer to bitmap data line
 
 do_middle_pixels:
-  movi      a11,0xFFFFFFFC // a11 <-- mask to remove lower 2 bits
-  and       a11,a11,a5    // a11 <-- offset to word-aligned dst pixels
-  add       a4,a4,a11     // a4 <-- points to word-aligned dst pixels
-  ////add       a14,a14,a11   // a14 <-- points to word-aligned source pixels
-do_middle_pixels2:
   srli      a11,a3,2      // a11 <-- number of full words left to copy
   loopnez   a11,end_loop  // loop to copy pixel data
   l32i      a9,a14,0      // a9 <-- 4 src pixels
