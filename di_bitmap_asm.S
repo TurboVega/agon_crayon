@@ -141,6 +141,19 @@
 //                 B:nodm.nopm.xypw.--z-   C:mn-d.mnop.wxop.--yz.----  D:dm--.pmno.pwno.z-xy.----  A:-d--.opmn.opmn.yzwx.----
 //
 
+  .macro    DO_START_PIXELS mask
+
+  l32i      a6,a4,0       // a6 <-- 4 dst pixels
+  movi      a11,\mask     // a11 <-- mask for keeping dst pixels
+  and       a11,a11,a6    // a11 <-- keepable dst pixels
+  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  or        a6,a6,a11     // a6 <-- new combined pixels
+  s32i      a6,a4,0       // m_line32[] <-- src pixel data
+  add       a4,a4,a10     // a4 <-- points to next dst pixels
+  add      a14,a14,a10    // a14 <-- pointer to next 4 source pixels
+
+  .endm
+
   .align    4
 DiOpaqueBitmap_paint:
   entry     sp,16
@@ -232,15 +245,8 @@ so_0_dst_offset_1:
   // Physical B:bc-a.nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
 
-  l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,0xFF000000
-  and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
-  or        a6,a6,a11     // a6 <-- new combined pixels
-  s32i      a6,a4,0       // m_line32[] <-- src pixel data
-  add       a4,a4,a10     // a4 <-- points to next dst pixels
+  DO_START_PIXELS 0xFF000000
 
-  add      a14,a14,a10                  // a14 <-- pointer to next 4 source pixels
   addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
@@ -265,15 +271,8 @@ so_0_dst_offset_2:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
 
-  l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,0xFFFF0000
-  and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
-  or        a6,a6,a11     // a6 <-- new combined pixels
-  s32i      a6,a4,0       // m_line32[] <-- src pixel data
-  add       a4,a4,a10       // a4 <-- points to next dst pixels
+  DO_START_PIXELS 0xFFFF0000
 
-  add      a14,a14,a10
   addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
@@ -296,15 +295,8 @@ so_0_dst_offset_3:
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
 
-  l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,0xFFFFFF00
-  and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
-  or        a6,a6,a11     // a6 <-- new combined pixels
-  s32i      a6,a4,0       // m_line32[] <-- src pixel data
-  add       a4,a4,a10       // a4 <-- points to next dst pixels
+  DO_START_PIXELS 0xFFFFFF00
 
-  add      a14,a14,a10
   addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels

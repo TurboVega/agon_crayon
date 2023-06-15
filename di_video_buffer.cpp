@@ -71,8 +71,8 @@ DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMO
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 */
 
-#define NR 1
-#define NC 5
+#define NR 5
+#define NC 1
 
 DiSetPixel g_x_pixel[5];
 DiSetPixel g_y_pixel[5];
@@ -270,6 +270,7 @@ void init_stars() {
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
       gp_opaque_bitmap[r][c]->set_position(c*100+100+c, r*100+100+r);
+      //gp_opaque_bitmap[r][c]->set_position(r-32, r*100+100+r);
     }
   }
 
@@ -399,9 +400,9 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   p2.m_scrolled_y = p2.m_line_index;
 
   DiPaintParams p3 = *params;
-  p3.m_horiz_scroll = 0;
-  p3.m_vert_scroll = 0;
-  p3.m_scrolled_y = p2.m_line_index;
+  //p3.m_horiz_scroll = 0;
+  //p3.m_vert_scroll = 0;
+  //p3.m_scrolled_y = p2.m_line_index;
 
   /*if (params->m_line_index >= 100 && params->m_line_index < 140) {
     show_value(gp_value_bitmap[0], 100, &p2);
