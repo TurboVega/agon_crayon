@@ -169,10 +169,11 @@ static const char* digit_data =
 "*   *"
 " *** ";
 */
-/*#define TILES_ACROSS 20
-#define TILES_DOWN   20
 
-DiOpaqueBitmap* tile;*/
+#define TILES_ACROSS 22
+#define TILES_DOWN   22
+#define TILE_WIDTH   40
+#define TILE_HEIGHT  30
 
 #define SKY_BITMAP   0
 #define CLOUD_BITMAP 1
@@ -290,50 +291,47 @@ void init_stars() {
   breakdown_value(heap_caps_get_free_size(MALLOC_CAP_INTERNAL), gp_value_bitmap[2]);
   breakdown_value(heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL), gp_value_bitmap[3]);
 */
-  /*tile = new(40,30) DiOpaqueBitmap(40,30);
-  for (int32_t y=0;y<30;y++) {
-    for (int32_t x=0;x<40;x++) {
-      tile->set_pixel(x, y, gtest_bitmapData[y*64+x]);
-    }
-  }*/
 
-  tile_map = new DiTileMap(4, 20, 20, 40, 30);
-  tile_map->clear();
-  for (int32_t y=0;y<30;y++) {
-    for (int32_t x=0;x<40;x++) {
-      tile_map->set_pixel(SKY_BITMAP, x, y, gSKYData[y*40+x]);
-      tile_map->set_pixel(CLOUD_BITMAP, x, y, gCLOUDData[y*40+x]);
-      tile_map->set_pixel(GRASS_BITMAP, x, y, gGRASSData[y*40+x]);
-      tile_map->set_pixel(WALL_BITMAP, x, y, gWALLData[y*40+x]);
+  tile_map = new DiTileMap(ACT_PIXELS, ACT_LINES, 4, TILES_ACROSS, TILES_DOWN, TILE_WIDTH, TILE_HEIGHT);
+  for (int32_t y=0;y<TILE_HEIGHT;y++) {
+    for (int32_t x=0;x<TILE_WIDTH;x++) {
+      tile_map->set_pixel(SKY_BITMAP, x, y, gSKYData[y*TILE_WIDTH+x]);
+      tile_map->set_pixel(CLOUD_BITMAP, x, y, gCLOUDData[y*TILE_WIDTH+x]);
+      tile_map->set_pixel(GRASS_BITMAP, x, y, gGRASSData[y*TILE_WIDTH+x]);
+      tile_map->set_pixel(WALL_BITMAP, x, y, gWALLData[y*TILE_WIDTH+x]);
     }
   }
 
   const char* tile_ids =
-    "   C     C       C  "
-    "      C             "
-    "          C  C      "
-    "   C               C"
-    "           C        "
-    "                    "
-    "                    "
-    "                    "
-    "    WW WW  WW WW    "
-    "  WWWWWWWWWWWWWWWW  "
-    "  WWW    WW    WWW  "
-    "  WWW    WW    WWW  "
-    "..WWWWWWWWWWWWWWWW.."
-    "..WWWWWWWWWWWWWWWW.."
-    "...................."
-    "...................."
-    "...................."
-    "...................."
-    "...................."
-    "....................";
+    "                C       "
+    "     C     C       C    "
+    "        C               "
+    "            C  C        "
+    "     C               C  "
+    "             C          "
+    "                        "
+    "  C              C      "
+    "                        "
+    "                        "
+    "     WW  WW  WW  WW     "
+    "      WW WW  WW WW      "
+    "    WWWWWWWWWWWWWWWW    "
+    "    WWW    WW    WWW    "
+    "    WWWWWWWWWWWWWWWW    "
+    "....WWWWWWWWWWWWWWWW...."
+    "....WWWWWWWWWWWWWWWW...."
+    "....WWWWWWWWWWWWWWWW...."
+    "........................"
+    "........................"
+    "........................"
+    "........................"
+    "........................"
+    "........................";
 
   ;
-  for (int32_t row = 0; row < 20; row++) {
-    for (int32_t col = 0; col< 20; col++) {
-      switch (tile_ids[row*20+col]) {
+  for (int32_t row = 0; row < TILES_DOWN; row++) {
+    for (int32_t col = 0; col< TILES_ACROSS; col++) {
+      switch (tile_ids[row*TILES_ACROSS+col]) {
         case ' ': tile_map->set_tile(col, row, SKY_BITMAP); break;
         case 'C': tile_map->set_tile(col, row, CLOUD_BITMAP); break;
         case 'W': tile_map->set_tile(col, row, WALL_BITMAP); break;
@@ -465,13 +463,6 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
  // gp_masked_bitmap->paint(params);
 
-  /*int32_t r = params->m_scrolled_y / 30;
-  if (r >= 0 && r < TILES_DOWN) {
-    for (int32_t c = 0; c < TILES_ACROSS; c++) {
-      tile->set_position(c * 40, r * 30);
-      tile->paint(params);
-    }
-  }*/
 }
 
 void DiVideoBuffer::init_to_black() {

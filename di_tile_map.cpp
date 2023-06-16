@@ -34,7 +34,9 @@ extern "C" {
 IRAM_ATTR void DiTileMap_paint(void* this_ptr, const DiPaintParams *params);
 }
 
-DiTileMap::DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t width, uint32_t height):
+DiTileMap::DiTileMap(uint32_t screen_width, uint32_t screen_height,
+                      uint32_t bitmaps, uint32_t columns, uint32_t rows,
+                      uint32_t width, uint32_t height):
   DiPrimitiveXYWH(0, 0, width, height),
   m_bitmaps(bitmaps),
   m_columns(columns),
@@ -51,6 +53,8 @@ DiTileMap::DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t
   m_bytes_for_tiles = m_words_for_tiles * sizeof(uint32_t);
   m_words_for_offsets = rows * height * 2;
   m_bytes_for_offsets = m_words_for_offsets * sizeof(uint32_t);
+  m_visible_columns = screen_width / width;
+  m_visible_rows = screen_height / height;
 
   size_t new_size = (size_t)(m_bytes_for_tiles);
   void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_INTERNAL);
@@ -66,8 +70,8 @@ DiTileMap::DiTileMap(uint32_t bitmaps, uint32_t columns, uint32_t rows, uint32_t
 
   for (uint32_t row = 0; row < rows; row++) {
     for (uint32_t y = 0; y < height; y++) {
-      m_offsets[(row * height + y) * 2] = (uint32_t)(m_tiles + row * columns);
-      m_offsets[(row * height + y) * 2 + 1] = y * m_bytes_per_line;
+      m_offsets[(row * height + y) * 2] = (uint32_t)(m_tiles + row * columns); // points to tile map row
+      m_offsets[(row * height + y) * 2 + 1] = y * m_bytes_per_line; // offset to bitmap line
     }
   }
 }
@@ -93,24 +97,6 @@ void DiTileMap::set_pixels(int32_t bitmap, int32_t index, int32_t y, uint32_t co
 
 void DiTileMap::set_tile(int32_t column, int32_t row, int32_t bitmap) {
   m_tiles[row * m_words_per_row + column] = m_pixels + bitmap * m_words_per_bitmap;
-}
-
-void DiTileMap::clear() {
-  fill(MASK_RGB(0,0,0));
-}
-
-void DiTileMap::fill(uint8_t color) {
-  uint32_t color4 = (((uint32_t)color) << 24) |
-      (((uint32_t)color) << 16) |
-      (((uint32_t)color) << 8) |
-      ((uint32_t)color) | SYNCS_OFF_X4;
-  uint32_t words = m_words_for_bitmaps;
-  uint32_t* dst = m_pixels;
-  if (words) {
-    do {
-      *dst++ = color4;
-    } while (--words);    
-  }
 }
 
 void IRAM_ATTR DiTileMap::paint(const DiPaintParams *params) {
