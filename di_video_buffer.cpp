@@ -170,8 +170,8 @@ static const char* digit_data =
 " *** ";
 */
 
-#define TILES_ACROSS 22
-#define TILES_DOWN   22
+#define TILES_ACROSS 24
+#define TILES_DOWN   24
 #define TILE_WIDTH   40
 #define TILE_HEIGHT  30
 
