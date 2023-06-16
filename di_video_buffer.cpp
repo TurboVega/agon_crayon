@@ -386,9 +386,9 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
   DiPaintParams p3;
   memcpy(&p3, params, sizeof(DiPaintParams));
-  p3.m_horiz_scroll = 0;
-  p3.m_vert_scroll = 0;
-  p3.m_scrolled_y = p3.m_line_index + p3.m_vert_scroll;
+  //p3.m_horiz_scroll = 0;
+  //p3.m_vert_scroll = 0;
+  //p3.m_scrolled_y = p3.m_line_index + p3.m_vert_scroll;
 
   /*if (params->m_line_index >= 100 && params->m_line_index < 140) {
     show_value(gp_value_bitmap[0], 100, &p2);
@@ -490,5 +490,6 @@ void IRAM_ATTR DiVideoBuffer::paint(DiPaintParams *params) {
   // Since there are only 2 lines per buffer, we unroll the loop here, for speed.
   m_line[0].paint(params);
   ++(params->m_line_index);
+  params->m_scrolled_y = params->m_line_index + params->m_vert_scroll;
   m_line[1].paint(params);
 }
