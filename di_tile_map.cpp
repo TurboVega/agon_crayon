@@ -29,6 +29,7 @@
 
 #include "di_tile_map.h"
 #include "esp_heap_caps.h"
+#include <cstring>
 
 extern "C" {
 IRAM_ATTR void DiTileMap_paint(void* this_ptr, const DiPaintParams *params);
@@ -43,7 +44,9 @@ DiTileMap::DiTileMap(uint32_t screen_width, uint32_t screen_height,
   m_rows(rows) {
   m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
   m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
-  m_words_per_bitmap = m_words_per_line * height;
+  m_words_per_position = m_words_per_line * height;
+  m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
+  m_words_per_bitmap = m_words_per_position * 4;
   m_bytes_per_bitmap = m_words_per_bitmap * sizeof(uint32_t);
   m_words_per_row = columns;
   m_bytes_per_row = m_words_per_row * sizeof(uint32_t);
@@ -63,6 +66,7 @@ DiTileMap::DiTileMap(uint32_t screen_width, uint32_t screen_height,
   new_size = (size_t)(m_bytes_for_bitmaps);
   p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
   m_pixels = (uint32_t*)p;
+  memset(m_pixels, 0, m_bytes_for_bitmaps);
 
   new_size = (size_t)(m_bytes_for_offsets);
   p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_INTERNAL);
@@ -88,7 +92,10 @@ void DiTileMap::set_position(int32_t x, int32_t y) {
 }
 
 void DiTileMap::set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color) { 
-  pixels(m_pixels)[bitmap * m_bytes_per_bitmap + y * m_bytes_per_line + FIX_INDEX(x)] = (color & 0x3F) | SYNCS_OFF;
+  for (uint32_t pos = 0; pos < 4; pos++) {
+    pixels(m_pixels)[bitmap * m_bytes_per_bitmap + pos * m_bytes_per_position + y * m_bytes_per_line + FIX_INDEX(x)] =
+      (color & 0x3F) | SYNCS_OFF;
+  }
 }
 
 void DiTileMap::set_tile(int32_t column, int32_t row, int32_t bitmap) {

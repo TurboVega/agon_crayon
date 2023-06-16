@@ -44,9 +44,11 @@
 //     [a2+84] m_bytes_for_offsets
 //     [a2+88] m_visible_columns
 //     [a2+92] m_visible_rows
-//     [a2+96] m_tiles
-//     [a2+100] m_pixels
-//     [a2+104] m_offsets
+//     [a2+96] m_words_per_position
+//     [a2+100] m_bytes_per_position
+//     [a2+104] m_tiles
+//     [a2+108] m_pixels
+//     [a2+112] m_offsets
 //
 // a3: const DiPaintParams *params
 //     [a3] m_line32
@@ -86,7 +88,7 @@ DiTileMap_paint:
   entry     sp,16
   l32i      a4,a3,8     // a4 <-- m_line_index
   slli      a4,a4,3     // a4 <-- m_line_index * 8
-  l32i      a5,a2,104   // a5 <-- m_offsets
+  l32i      a5,a2,112   // a5 <-- m_offsets
   add       a4,a4,a5    // a4 <-- m_offsets + m_line_index * 8, i.e., &m_offsets[m_line_index * 2]
   l32i      a5,a4,4     // a5 <-- m_offsets[m_line_index * 2 + 1], i.e., offset to bitmap line
   l32i      a4,a4,0     // a4 <-- m_offsets[m_line_index * 2], i.e.,  points to tile map row
