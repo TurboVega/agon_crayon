@@ -204,9 +204,12 @@ int32_t scroll_dx[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
 int32_t scroll_dy[9] = {0, -1, 1, 1, 0, -1, -1, 0, 1};
 
 uint8_t scroll_count = 0;
+uint16_t delay_count = 0;
 
 IRAM_ATTR void loop() {
   bool eof = false;
+  g_params.m_horiz_scroll = 0;
+  g_params.m_vert_scroll = 0;
   g_params.m_screen_width = ACT_PIXELS;
   g_params.m_screen_height = ACT_LINES;
   while (true) {
@@ -246,14 +249,18 @@ IRAM_ATTR void loop() {
       }*/
 
       // do scrolling
-      if (++scroll_count >= 120) {
-        scroll_count = 0;
-        if (++scroll_mode >= 9) {
-          scroll_mode = 0;
+      if (delay_count >= 60*5) {
+        if (++scroll_count >= 120) {
+          scroll_count = 0;
+          if (++scroll_mode >= 9) {
+            scroll_mode = 0;
+          }
         }
+        g_params.m_horiz_scroll += scroll_dx[scroll_mode];
+        g_params.m_vert_scroll += scroll_dy[scroll_mode];
+      } else {
+        delay_count++;
       }
-      g_params.m_horiz_scroll += scroll_dx[scroll_mode];
-      g_params.m_vert_scroll += scroll_dy[scroll_mode];
    }
   }
 }

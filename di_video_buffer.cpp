@@ -384,8 +384,9 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   p2.m_vert_scroll = 0;
   p2.m_scrolled_y = p2.m_line_index;
 
-  DiPaintParams p3 = *params;
-  p3.m_horiz_scroll = -102;
+  DiPaintParams p3;
+  memcpy(&p3, params, sizeof(DiPaintParams));
+  p3.m_horiz_scroll = 0;
   p3.m_vert_scroll = 0;
   p3.m_scrolled_y = p3.m_line_index + p3.m_vert_scroll;
 
