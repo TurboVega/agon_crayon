@@ -6,6 +6,10 @@
 // area of the screen may be displayed at any given moment. In other words
 // multiple tiles show at the same time.
 //
+// The tile map may be scrolled in any of 8 directions, by setting m_x and m_y
+// to the scroll distances on the 2 axes. Just be careful not to scroll too far,
+// such that the visible screen would contain pixels not in the logical map.
+//
 // Copyright (c) 2023 Curtis Whitley
 // 
 // The function defined in this source may be specified
@@ -95,9 +99,23 @@ DiTileMap_paint:
   l32i      a6,a2,88    // a6 <-- m_visible_columns
   movi      a11,1       // a11 <-- count for decrements
   l32i      a8,a3,0     // a8 <-- m_line32
+
+  l32i      a12,a2,4    // a12 <-- m_x
+  movi      a13,0xFFFFFFFC // a13 <-- mask to clear lower 2 bits
+  and       a14,a12,a13 // a14 <-- offset to bitmap data word, based on m_x
+  l32i      a13,a2,100  // a13 <-- m_bytes_per_position
+  bbci      a12,1,not_2_or_3 // go if lower 2 bits (byte offset) less than 2
+  add       a14,a14,a13 // a14 <-- bitmap start + 1 more position
+  add       a14,a14,a13 // a14 <-- bitmap start + 1 more position
+not_2_or_3:
+  bbci      a12,0,dont_inc // go if lower bit is zero
+  add       a14,a14,a13 // a14 <-- bitmap start + 1 more position
+dont_inc:
+
 do_tiles:
   l32i      a7,a4,0     // a7 <-- points to bitmap for current tile
   add       a7,a7,a5    // a7 <-- points to bitmap line within current tile
+  add       a7,a7,a14   // a7 <-- adjusted for m_x byte offset
 
   l32i      a10,a2,40     // a10 <-- m_words_per_line
   loop      a10,end_loop  // loop to copy pixel data

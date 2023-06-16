@@ -370,11 +370,15 @@ void show_value(DiOpaqueBitmap** digits, uint32_t y, DiPaintParams *params) {
   digits[0]->paint(params);
 }
 
+int32_t tmx = 21;
+int32_t tmy = 23;
+
 void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
   params->m_line8 = (uint8_t*)(m_act);
 
   //memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
+  tile_map->set_position(tmx,tmy);
   tile_map->paint(params);
 
   DiPaintParams p2 = *params;

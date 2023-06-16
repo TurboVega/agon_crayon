@@ -6,6 +6,10 @@
 // area of the screen may be displayed at any given moment. In other words
 // multiple tiles show at the same time.
 //
+// The tile map may be scrolled in any of 8 directions, by setting m_x and m_y
+// to the scroll distances on the 2 axes. Just be careful not to scroll too far,
+// such that the visible screen would contain pixels not in the logical map.
+//
 // Copyright (c) 2023 Curtis Whitley
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy

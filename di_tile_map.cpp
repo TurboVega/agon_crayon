@@ -6,6 +6,10 @@
 // area of the screen may be displayed at any given moment. In other words
 // multiple tiles show at the same time.
 //
+// The tile map may be scrolled in any of 8 directions, by setting m_x and m_y
+// to the scroll distances on the 2 axes. Just be careful not to scroll too far,
+// such that the visible screen would contain pixels not in the logical map.
+//
 // Copyright (c) 2023 Curtis Whitley
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -93,7 +97,7 @@ void DiTileMap::set_position(int32_t x, int32_t y) {
 
 void DiTileMap::set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color) { 
   for (uint32_t pos = 0; pos < 4; pos++) {
-    pixels(m_pixels)[bitmap * m_bytes_per_bitmap + pos * m_bytes_per_position + y * m_bytes_per_line + FIX_INDEX(x)] =
+    pixels(m_pixels)[bitmap * m_bytes_per_bitmap + pos * m_bytes_per_position + y * m_bytes_per_line + FIX_INDEX(pos + x)] =
       (color & 0x3F) | SYNCS_OFF;
   }
 }
