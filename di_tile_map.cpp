@@ -91,10 +91,6 @@ void DiTileMap::set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color) {
   pixels(m_pixels)[bitmap * m_bytes_per_bitmap + y * m_bytes_per_line + FIX_INDEX(x)] = (color & 0x3F) | SYNCS_OFF;
 }
 
-void DiTileMap::set_pixels(int32_t bitmap, int32_t index, int32_t y, uint32_t colors) {
-  m_pixels[bitmap * m_words_per_bitmap + y * m_words_per_line + index] = (colors & 0x3F3F3F3F) | SYNCS_OFF_X4;
-}
-
 void DiTileMap::set_tile(int32_t column, int32_t row, int32_t bitmap) {
   m_tiles[row * m_words_per_row + column] = m_pixels + bitmap * m_words_per_bitmap;
 }

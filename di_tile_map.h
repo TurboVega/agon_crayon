@@ -59,7 +59,6 @@ class DiTileMap: public DiPrimitiveXYWH {
   //void operator delete(void*);
   void set_position(int32_t x, int32_t y);
   void set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color);
-  void set_pixels(int32_t bitmap, int32_t index, int32_t y, uint32_t colors);
   void set_tile(int32_t column, int32_t row, int32_t bitmap);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
