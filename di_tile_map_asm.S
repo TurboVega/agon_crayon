@@ -101,21 +101,29 @@ DiTileMap_paint:
   l32i      a8,a3,0     // a8 <-- m_line32
 
   l32i      a12,a2,4    // a12 <-- m_x
-  movi      a13,0xFFFFFFFC // a13 <-- mask to clear lower 2 bits
-  and       a14,a12,a13 // a14 <-- offset to bitmap data word, based on m_x
-  l32i      a13,a2,100  // a13 <-- m_bytes_per_position
-  bbci      a12,1,not_2_or_3 // go if lower 2 bits (byte offset) less than 2
-  add       a14,a14,a13 // a14 <-- bitmap start + 1 more position
-  add       a14,a14,a13 // a14 <-- bitmap start + 1 more position
-not_2_or_3:
-  bbci      a12,0,dont_inc // go if lower bit is zero
-  add       a14,a14,a13 // a14 <-- bitmap start + 1 more position
-dont_inc:
+  l32i      a14,a2,12   // a12 <-- m_width
+  blt       a12,a14,within_tile // go if x is within tile width
+adjust_width:
+  sub       a12,a12,a14 // a14 <-- x reduced by tile width
+  addi      a4,a4,4     // a4 <-- adjusted pointer to tile map row
+  bge       a12,a14,adjust_width // go if x is at or beyond tile width
+within_tile:
+
+//  movi      a13,0xFFFFFFFC // a13 <-- mask to clear lower 2 bits
+//  and       a14,a12,a13 // a14 <-- offset to bitmap data word, based on m_x
+//  l32i      a13,a2,100  // a13 <-- m_bytes_per_position
+//  bbci      a12,1,not_2_or_3 // go if lower 2 bits (byte offset) less than 2
+//  add       a14,a14,a13 // a14 <-- bitmap start + 1 more position
+//  add       a14,a14,a13 // a14 <-- bitmap start + 1 more position
+//not_2_or_3:
+//  bbci      a12,0,dont_inc // go if lower bit is zero
+//  add       a14,a14,a13 // a14 <-- bitmap start + 1 more position
+//dont_inc:
 
 do_tiles:
   l32i      a7,a4,0     // a7 <-- points to bitmap for current tile
   add       a7,a7,a5    // a7 <-- points to bitmap line within current tile
-  add       a7,a7,a14   // a7 <-- adjusted for m_x byte offset
+  //add       a7,a7,a14   // a7 <-- adjusted for m_x byte offset                   CHANGE??
 
   l32i      a10,a2,40     // a10 <-- m_words_per_line
   loop      a10,end_loop  // loop to copy pixel data
