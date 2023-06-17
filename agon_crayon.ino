@@ -205,6 +205,9 @@ int32_t scroll_dy[9] = {0, -1, 1, 1, 0, -1, -1, 0, 1};
 
 uint8_t scroll_count = 0;
 uint16_t delay_count = 0;
+int32_t tmx = 0;
+int32_t tmy = 0;
+int32_t tmd = 1;
 
 IRAM_ATTR void loop() {
   bool eof = false;
@@ -258,6 +261,16 @@ IRAM_ATTR void loop() {
         }
         g_params.m_horiz_scroll += scroll_dx[scroll_mode];
         g_params.m_vert_scroll += scroll_dy[scroll_mode];
+
+        if (tmd > 0) {
+          if (++tmx == 79) {
+            tmd = -1;
+          }
+        } else {
+          if (--tmx == 0) {
+            tmd = 1;
+          }
+        }
       } else {
         delay_count++;
       }

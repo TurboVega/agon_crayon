@@ -370,8 +370,8 @@ void show_value(DiOpaqueBitmap** digits, uint32_t y, DiPaintParams *params) {
   digits[0]->paint(params);
 }
 
-int32_t tmx = 137;
-int32_t tmy = 0;
+extern int32_t tmx;
+extern int32_t tmy;
 
 void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
