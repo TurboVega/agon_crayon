@@ -50,9 +50,10 @@
 //     [a2+92] m_visible_rows
 //     [a2+96] m_words_per_position
 //     [a2+100] m_bytes_per_position
-//     [a2+104] m_tiles
-//     [a2+108] m_pixels
-//     [a2+112] m_offsets
+//     [a2+104] m_draw_words_per_line
+//     [a2+108] m_tiles
+//     [a2+112] m_pixels
+//     [a2+116] m_offsets
 //
 // a3: const DiPaintParams *params
 //     [a3] m_line32
@@ -92,7 +93,7 @@ DiTileMap_paint:
   entry     sp,16
   l32i      a4,a3,8     // a4 <-- m_line_index
   slli      a4,a4,3     // a4 <-- m_line_index * 8
-  l32i      a5,a2,112   // a5 <-- m_offsets
+  l32i      a5,a2,116   // a5 <-- m_offsets
   add       a4,a4,a5    // a4 <-- m_offsets + m_line_index * 8, i.e., &m_offsets[m_line_index * 2]
   l32i      a5,a4,4     // a5 <-- m_offsets[m_line_index * 2 + 1], i.e., offset to bitmap line
   l32i      a4,a4,0     // a4 <-- m_offsets[m_line_index * 2], i.e.,  points to tile map row
@@ -111,16 +112,16 @@ within_tile:
 
   movi      a13,0xFFFFFFFC    // a13 <-- mask to clear lower 2 bits
   and       a14,a12,a13       // a14 <-- offset to bitmap data word, based on m_x
-//  l32i      a13,a2,100        // a13 <-- m_bytes_per_position
-//  bbci      a12,1,not_2_or_3  // go if lower 2 bits (byte offset) less than 2
-//  add       a14,a14,a13       // a14 <-- bitmap start + 1 more position
-//  add       a14,a14,a13       // a14 <-- bitmap start + 1 more position
+  l32i      a13,a2,100        // a13 <-- m_bytes_per_position
+  bbci      a12,1,not_2_or_3  // go if lower 2 bits (byte offset) less than 2
+  add       a14,a14,a13       // a14 <-- bitmap start + 1 more position
+  add       a14,a14,a13       // a14 <-- bitmap start + 1 more position
 not_2_or_3:
-//  bbci      a12,0,dont_inc    // go if lower bit is zero
-//  add       a14,a14,a13       // a14 <-- bitmap start + 1 more position
+  bbci      a12,0,dont_inc    // go if lower bit is zero
+  add       a14,a14,a13       // a14 <-- bitmap start + 1 more position
 dont_inc:
 
-  l32i      a10,a2,40         // a10 <-- m_words_per_line
+  l32i      a10,a2,104        // a10 <-- m_draw_words_per_line
   srli      a12,a12,2         // a12 <-- (reduced x) / 4
   sub       a10,a10,a12       // a10 <-- adjusted count of words in bitmap line
 
@@ -137,7 +138,7 @@ do_tiles:
   addi      a8,a8,4           // a8 <-- points to next dst pixel
 end_loop:
 
-  l32i      a10,a2,40         // a10 <-- m_words_per_line
+  l32i      a10,a2,104        // a10 <-- m_draw_words_per_line
   addi      a4,a4,4           // a4 <-- points to next bitmap address
   sub       a6,a6,a11         // a6 <-- remaining number of columns
   bnez      a6,do_tiles       // go back if more tiles to do

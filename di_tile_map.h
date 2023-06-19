@@ -55,6 +55,7 @@ class DiTileMap: public DiPrimitiveXYWH {
   uint32_t m_visible_rows;
   uint32_t m_words_per_position;
   uint32_t m_bytes_per_position;
+  uint32_t m_draw_words_per_line;
   uint32_t** m_tiles;
   uint32_t* m_pixels;
   uint32_t* m_offsets;

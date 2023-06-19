@@ -35,13 +35,26 @@
 #include "di_tile_map.h"
 #include "esp_heap_caps.h"
 
+#define DRAW_OPAQUE_BITMAP 1
+#define DRAW_PIXELS 1
+
 #define _COMPILE_HEX_DATA_
 #define __root /**/
+#if DRAW_TILE_MAP
 #include "samples\\SKY.h"
 #include "samples\\CLOUD.h"
 #include "samples\\GRASS.h"
 #include "samples\\WALL.h"
+#endif
+
+#if DRAW_OPAQUE_BITMAP
 #include "samples\\TEST_BITMAP.h"
+#include "samples\\plants\\apple\\apple_seq32.h"
+#include "samples\\plants\\bananas\\bananas_seq32.h"
+#include "samples\\plants\\grapes\\grapes_seq32.h"
+#include "samples\\plants\\pumpkin\\pumpkin_seq32.h"
+#include "samples\\plants\\pineapple\\pineapple_seq32.h"
+#endif
 
 // dummy data for testing only
 uint32_t sdx[10] = {150,199,225,287,333,378,425,506,583,601};
@@ -71,13 +84,17 @@ DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMO
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 */
 
-#define NR 5
+#define NR 1
 #define NC 5
 
+#if DRAW_PIXELS
 DiSetPixel g_x_pixel[5];
 DiSetPixel g_y_pixel[5];
-DiOpaqueBitmap* gp_opaque_bitmap;
+#endif
 
+#if DRAW_OPAQUE_BITMAP
+DiOpaqueBitmap* gp_opaque_bitmap[1];
+#endif
 /*DiMaskedBitmap* gp_masked_bitmap4;
 DiMaskedBitmap* gp_masked_bitmap5;
 DiMaskedBitmap* gp_masked_bitmap6;
@@ -170,6 +187,7 @@ static const char* digit_data =
 " *** ";
 */
 
+#if DRAW_TILE_MAP
 #define TILES_ACROSS 24
 #define TILES_DOWN   24
 #define TILE_WIDTH   40
@@ -181,6 +199,7 @@ static const char* digit_data =
 #define WALL_BITMAP  3
 
 DiTileMap* tile_map;
+#endif
 
 /*void breakdown_value(uint32_t value, DiOpaqueBitmap** digits) {
   uint32_t d5 = value/100000; value=value%100000;
@@ -208,6 +227,7 @@ void init_stars() {
     g_stars[i].m_color = c | SYNCS_OFF;
   }*/
 
+#if DRAW_PIXELS
   g_x_pixel[0].m_x = 100;
   g_x_pixel[0].m_y = 98;
   g_x_pixel[0].m_color = 0x14;
@@ -247,6 +267,7 @@ void init_stars() {
   g_y_pixel[4].m_x = 98;
   g_y_pixel[4].m_y = 500;
   g_y_pixel[4].m_color = 0x14;
+#endif
 
 /*  for (uint32_t d = 0; d < 10; d++) {
     gp_digit_bitmap[d] = new(5,7) DiOpaqueBitmap(5,7);
@@ -257,7 +278,11 @@ void init_stars() {
     }
   }
 */
-  gp_opaque_bitmap = new(64,64) DiOpaqueBitmap(64,64);
+#if DRAW_OPAQUE_BITMAP
+//  for (int32_t c = 0; c < NC; c++) {
+    gp_opaque_bitmap[0] = new(32,384) DiOpaqueBitmap(32,384);
+//  }
+#endif
 
   /*gp_masked_bitmap4 = new(64,64) DiMaskedBitmap(64,64);
   gp_masked_bitmap5 = new(64,64) DiMaskedBitmap(64,64);
@@ -271,10 +296,18 @@ void init_stars() {
 
   //gp_masked_bitmap->set_position(500,200);
 
-  for (int32_t y=0;y<64;y++) {
-    for (int32_t x=0;x<64;x++) {
-
-      gp_opaque_bitmap->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
+#if DRAW_OPAQUE_BITMAP
+  for (int32_t y=0;y<384;y++) {
+    for (int32_t x=0;x<32;x++) {
+      gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
+      //gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
+      //gp_opaque_bitmap[2]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
+      //gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
+      //gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
+      //gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
+      //gp_opaque_bitmap[2]->set_opaque_pixel(x, y, ggrapes_seq32Data[y*32+x]);
+      //gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
+      //gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gpineapple_seq32Data[y*32+x]);
 
       /*gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
@@ -284,7 +317,7 @@ void init_stars() {
       //gp_masked_bitmap->set__masked_pixel(x, y, gtest_bitmapData[y*64+x]);
     }
   }
-
+#endif
 /*
   breakdown_value(heap_caps_get_free_size(MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL), gp_value_bitmap[0]);
   breakdown_value(heap_caps_get_largest_free_block(MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL), gp_value_bitmap[1]);
@@ -292,6 +325,7 @@ void init_stars() {
   breakdown_value(heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL), gp_value_bitmap[3]);
 */
 
+#if DRAW_TILE_MAP
   tile_map = new DiTileMap(ACT_PIXELS, ACT_LINES, 4, TILES_ACROSS, TILES_DOWN, TILE_WIDTH, TILE_HEIGHT);
   for (int32_t y=0;y<TILE_HEIGHT;y++) {
     for (int32_t x=0;x<TILE_WIDTH;x++) {
@@ -339,6 +373,7 @@ void init_stars() {
       }
     }
   }
+#endif
 }
 
 void DiVideoScanLine::init_to_black() {
@@ -377,9 +412,12 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
   params->m_line8 = (uint8_t*)(m_act);
 
-  //memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
+  memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
+
+#if DRAW_TILE_MAP
   tile_map->set_position(tmx,tmy);
   tile_map->paint(params);
+#endif
 
   DiPaintParams p2 = *params;
   p2.m_horiz_scroll = 0;
@@ -440,6 +478,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
     }
   }*/
 
+#if DRAW_PIXELS
   g_x_pixel[0].paint(&p2);
   g_x_pixel[1].paint(&p2);
   g_x_pixel[2].paint(&p2);
@@ -451,14 +490,17 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   g_y_pixel[2].paint(&p2);
   g_y_pixel[3].paint(&p2);
   g_y_pixel[4].paint(&p2);
+#endif
 
+#if DRAW_OPAQUE_BITMAP
   // Draw a bitmap
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-      gp_opaque_bitmap->set_position(c*100+100+c, r*100+100+r);
-      gp_opaque_bitmap->paint(&p3);
+      gp_opaque_bitmap[0]->set_position(c*100+100+c, r*100+100+r);
+      gp_opaque_bitmap[0]->paint(&p3);
     }
   }
+#endif
 
   /*gp_masked_bitmap4->paint(&p2);
   gp_masked_bitmap5->paint(&p2);

@@ -1,0 +1,2163 @@
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 alnum 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: alnum
+alnum\abc.png, 208x96, Rgba8
+File alnum\abc.png has 7 unique colors (maximum is 64).
+alnum\abc000.png, 16x16, Rgb8
+File alnum\abc000.png has 5 unique colors (maximum is 64).
+alnum\abc001.png, 16x16, Rgb8
+File alnum\abc001.png has 5 unique colors (maximum is 64).
+alnum\abc002.png, 16x16, Rgb8
+File alnum\abc002.png has 5 unique colors (maximum is 64).
+alnum\abc003.png, 16x16, Rgb8
+File alnum\abc003.png has 5 unique colors (maximum is 64).
+alnum\abc004.png, 16x16, Rgb8
+File alnum\abc004.png has 5 unique colors (maximum is 64).
+alnum\abc005.png, 16x16, Rgb8
+File alnum\abc005.png has 5 unique colors (maximum is 64).
+alnum\abc006.png, 16x16, Rgb8
+File alnum\abc006.png has 5 unique colors (maximum is 64).
+alnum\abc007.png, 16x16, Rgb8
+File alnum\abc007.png has 5 unique colors (maximum is 64).
+alnum\abc008.png, 16x16, Rgb8
+File alnum\abc008.png has 5 unique colors (maximum is 64).
+alnum\abc009.png, 16x16, Rgb8
+File alnum\abc009.png has 5 unique colors (maximum is 64).
+alnum\abc010.png, 16x16, Rgb8
+File alnum\abc010.png has 6 unique colors (maximum is 64).
+alnum\abc011.png, 16x16, Rgb8
+File alnum\abc011.png has 5 unique colors (maximum is 64).
+alnum\abc012.png, 16x16, Rgb8
+File alnum\abc012.png has 5 unique colors (maximum is 64).
+alnum\abc013.png, 16x16, Rgb8
+File alnum\abc013.png has 5 unique colors (maximum is 64).
+alnum\abc014.png, 16x16, Rgb8
+File alnum\abc014.png has 5 unique colors (maximum is 64).
+alnum\abc015.png, 16x16, Rgb8
+File alnum\abc015.png has 5 unique colors (maximum is 64).
+alnum\abc016.png, 16x16, Rgb8
+File alnum\abc016.png has 5 unique colors (maximum is 64).
+alnum\abc017.png, 16x16, Rgb8
+File alnum\abc017.png has 5 unique colors (maximum is 64).
+alnum\abc018.png, 16x16, Rgb8
+File alnum\abc018.png has 5 unique colors (maximum is 64).
+alnum\abc019.png, 16x16, Rgb8
+File alnum\abc019.png has 6 unique colors (maximum is 64).
+alnum\abc020.png, 16x16, Rgb8
+File alnum\abc020.png has 5 unique colors (maximum is 64).
+alnum\abc021.png, 16x16, Rgb8
+File alnum\abc021.png has 5 unique colors (maximum is 64).
+alnum\abc022.png, 16x16, Rgb8
+File alnum\abc022.png has 5 unique colors (maximum is 64).
+alnum\abc023.png, 16x16, Rgb8
+File alnum\abc023.png has 6 unique colors (maximum is 64).
+alnum\abc024.png, 16x16, Rgb8
+File alnum\abc024.png has 5 unique colors (maximum is 64).
+alnum\abc025.png, 16x16, Rgb8
+File alnum\abc025.png has 5 unique colors (maximum is 64).
+alnum\abc026.png, 16x16, Rgb8
+File alnum\abc026.png has 5 unique colors (maximum is 64).
+alnum\abc027.png, 16x16, Rgb8
+File alnum\abc027.png has 5 unique colors (maximum is 64).
+alnum\abc028.png, 16x16, Rgb8
+File alnum\abc028.png has 5 unique colors (maximum is 64).
+alnum\abc029.png, 16x16, Rgb8
+File alnum\abc029.png has 5 unique colors (maximum is 64).
+alnum\abc030.png, 16x16, Rgb8
+File alnum\abc030.png has 5 unique colors (maximum is 64).
+alnum\abc031.png, 16x16, Rgb8
+File alnum\abc031.png has 5 unique colors (maximum is 64).
+alnum\abc032.png, 16x16, Rgb8
+File alnum\abc032.png has 5 unique colors (maximum is 64).
+alnum\abc033.png, 16x16, Rgb8
+File alnum\abc033.png has 6 unique colors (maximum is 64).
+alnum\abc034.png, 16x16, Rgb8
+File alnum\abc034.png has 6 unique colors (maximum is 64).
+alnum\abc035.png, 16x16, Rgb8
+File alnum\abc035.png has 6 unique colors (maximum is 64).
+alnum\abc036.png, 16x16, Rgb8
+File alnum\abc036.png has 5 unique colors (maximum is 64).
+alnum\abc037.png, 16x16, Rgb8
+File alnum\abc037.png has 5 unique colors (maximum is 64).
+alnum\abc038.png, 16x16, Rgb8
+File alnum\abc038.png has 5 unique colors (maximum is 64).
+alnum\abc039.png, 16x16, Rgb8
+File alnum\abc039.png has 5 unique colors (maximum is 64).
+alnum\abc040.png, 16x16, Rgb8
+File alnum\abc040.png has 5 unique colors (maximum is 64).
+alnum\abc041.png, 16x16, Rgb8
+File alnum\abc041.png has 5 unique colors (maximum is 64).
+alnum\abc042.png, 16x16, Rgb8
+File alnum\abc042.png has 5 unique colors (maximum is 64).
+alnum\abc043.png, 16x16, Rgb8
+File alnum\abc043.png has 5 unique colors (maximum is 64).
+alnum\abc044.png, 16x16, Rgb8
+File alnum\abc044.png has 5 unique colors (maximum is 64).
+alnum\abc045.png, 16x16, Rgb8
+File alnum\abc045.png has 6 unique colors (maximum is 64).
+alnum\abc046.png, 16x16, Rgb8
+File alnum\abc046.png has 6 unique colors (maximum is 64).
+alnum\abc047.png, 16x16, Rgb8
+File alnum\abc047.png has 5 unique colors (maximum is 64).
+alnum\abc048.png, 16x16, Rgb8
+File alnum\abc048.png has 6 unique colors (maximum is 64).
+alnum\abc049.png, 16x16, Rgb8
+File alnum\abc049.png has 5 unique colors (maximum is 64).
+alnum\abc050.png, 16x16, Rgb8
+File alnum\abc050.png has 5 unique colors (maximum is 64).
+alnum\abc051.png, 16x16, Rgb8
+File alnum\abc051.png has 5 unique colors (maximum is 64).
+alnum\abc052.png, 16x16, Rgb8
+File alnum\abc052.png has 5 unique colors (maximum is 64).
+alnum\abc053.png, 16x16, Rgb8
+File alnum\abc053.png has 5 unique colors (maximum is 64).
+alnum\abc054.png, 16x16, Rgb8
+File alnum\abc054.png has 5 unique colors (maximum is 64).
+alnum\abc055.png, 16x16, Rgb8
+File alnum\abc055.png has 5 unique colors (maximum is 64).
+alnum\abc056.png, 16x16, Rgb8
+File alnum\abc056.png has 5 unique colors (maximum is 64).
+alnum\abc057.png, 16x16, Rgb8
+File alnum\abc057.png has 6 unique colors (maximum is 64).
+alnum\abc058.png, 16x16, Rgb8
+File alnum\abc058.png has 7 unique colors (maximum is 64).
+alnum\abc059.png, 16x16, Rgb8
+File alnum\abc059.png has 5 unique colors (maximum is 64).
+alnum\abc060.png, 16x16, Rgb8
+File alnum\abc060.png has 5 unique colors (maximum is 64).
+alnum\abc061.png, 16x16, Rgb8
+File alnum\abc061.png has 5 unique colors (maximum is 64).
+alnum\abc062.png, 16x16, Rgb8
+File alnum\abc062.png has 5 unique colors (maximum is 64).
+alnum\abc063.png, 16x16, Rgb8
+File alnum\abc063.png has 1 unique colors (maximum is 64).
+alnum\abc064.png, 16x16, Rgb8
+File alnum\abc064.png has 5 unique colors (maximum is 64).
+alnum\abc065.png, 16x16, Rgb8
+File alnum\abc065.png has 4 unique colors (maximum is 64).
+alnum\abc066.png, 16x16, Rgb8
+File alnum\abc066.png has 5 unique colors (maximum is 64).
+alnum\abc067.png, 16x16, Rgb8
+File alnum\abc067.png has 5 unique colors (maximum is 64).
+alnum\abc068.png, 16x16, Rgb8
+File alnum\abc068.png has 5 unique colors (maximum is 64).
+alnum\abc069.png, 16x16, Rgb8
+File alnum\abc069.png has 5 unique colors (maximum is 64).
+alnum\abc070.png, 16x16, Rgb8
+File alnum\abc070.png has 5 unique colors (maximum is 64).
+alnum\abc071.png, 16x16, Rgb8
+File alnum\abc071.png has 5 unique colors (maximum is 64).
+alnum\abc072.png, 16x16, Rgb8
+File alnum\abc072.png has 5 unique colors (maximum is 64).
+alnum\abc073.png, 16x16, Rgb8
+File alnum\abc073.png has 5 unique colors (maximum is 64).
+alnum\abc074.png, 16x16, Rgb8
+File alnum\abc074.png has 6 unique colors (maximum is 64).
+alnum\abc075.png, 16x16, Rgb8
+File alnum\abc075.png has 5 unique colors (maximum is 64).
+alnum\abc076.png, 16x16, Rgb8
+File alnum\abc076.png has 5 unique colors (maximum is 64).
+alnum\abc077.png, 16x16, Rgb8
+File alnum\abc077.png has 5 unique colors (maximum is 64).
+alnum\alnum.png, 16x1264, Rgba8
+File alnum\alnum.png has 7 unique colors (maximum is 64).
+alnum\blank.png, 16x16, Rgb8
+File alnum\blank.png has 1 unique colors (maximum is 64).
+
+---alnum\abc.png---
+
+Wrote file (ALNUM\ABC.BIN) as 19968 bytes.
+Wrote RGB file (ALNUM\ABC.BIN.RGB) as 59904 bytes.
+
+---alnum\abc000.png---
+
+Wrote file (ALNUM\ABC000.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC000.BIN.RGB) as 768 bytes.
+
+---alnum\abc001.png---
+
+Wrote file (ALNUM\ABC001.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC001.BIN.RGB) as 768 bytes.
+
+---alnum\abc002.png---
+
+Wrote file (ALNUM\ABC002.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC002.BIN.RGB) as 768 bytes.
+
+---alnum\abc003.png---
+
+Wrote file (ALNUM\ABC003.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC003.BIN.RGB) as 768 bytes.
+
+---alnum\abc004.png---
+
+Wrote file (ALNUM\ABC004.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC004.BIN.RGB) as 768 bytes.
+
+---alnum\abc005.png---
+
+Wrote file (ALNUM\ABC005.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC005.BIN.RGB) as 768 bytes.
+
+---alnum\abc006.png---
+
+Wrote file (ALNUM\ABC006.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC006.BIN.RGB) as 768 bytes.
+
+---alnum\abc007.png---
+
+Wrote file (ALNUM\ABC007.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC007.BIN.RGB) as 768 bytes.
+
+---alnum\abc008.png---
+
+Wrote file (ALNUM\ABC008.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC008.BIN.RGB) as 768 bytes.
+
+---alnum\abc009.png---
+
+Wrote file (ALNUM\ABC009.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC009.BIN.RGB) as 768 bytes.
+
+---alnum\abc010.png---
+
+Wrote file (ALNUM\ABC010.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC010.BIN.RGB) as 768 bytes.
+
+---alnum\abc011.png---
+
+Wrote file (ALNUM\ABC011.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC011.BIN.RGB) as 768 bytes.
+
+---alnum\abc012.png---
+
+Wrote file (ALNUM\ABC012.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC012.BIN.RGB) as 768 bytes.
+
+---alnum\abc013.png---
+
+Wrote file (ALNUM\ABC013.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC013.BIN.RGB) as 768 bytes.
+
+---alnum\abc014.png---
+
+Wrote file (ALNUM\ABC014.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC014.BIN.RGB) as 768 bytes.
+
+---alnum\abc015.png---
+
+Wrote file (ALNUM\ABC015.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC015.BIN.RGB) as 768 bytes.
+
+---alnum\abc016.png---
+
+Wrote file (ALNUM\ABC016.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC016.BIN.RGB) as 768 bytes.
+
+---alnum\abc017.png---
+
+Wrote file (ALNUM\ABC017.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC017.BIN.RGB) as 768 bytes.
+
+---alnum\abc018.png---
+
+Wrote file (ALNUM\ABC018.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC018.BIN.RGB) as 768 bytes.
+
+---alnum\abc019.png---
+
+Wrote file (ALNUM\ABC019.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC019.BIN.RGB) as 768 bytes.
+
+---alnum\abc020.png---
+
+Wrote file (ALNUM\ABC020.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC020.BIN.RGB) as 768 bytes.
+
+---alnum\abc021.png---
+
+Wrote file (ALNUM\ABC021.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC021.BIN.RGB) as 768 bytes.
+
+---alnum\abc022.png---
+
+Wrote file (ALNUM\ABC022.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC022.BIN.RGB) as 768 bytes.
+
+---alnum\abc023.png---
+
+Wrote file (ALNUM\ABC023.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC023.BIN.RGB) as 768 bytes.
+
+---alnum\abc024.png---
+
+Wrote file (ALNUM\ABC024.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC024.BIN.RGB) as 768 bytes.
+
+---alnum\abc025.png---
+
+Wrote file (ALNUM\ABC025.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC025.BIN.RGB) as 768 bytes.
+
+---alnum\abc026.png---
+
+Wrote file (ALNUM\ABC026.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC026.BIN.RGB) as 768 bytes.
+
+---alnum\abc027.png---
+
+Wrote file (ALNUM\ABC027.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC027.BIN.RGB) as 768 bytes.
+
+---alnum\abc028.png---
+
+Wrote file (ALNUM\ABC028.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC028.BIN.RGB) as 768 bytes.
+
+---alnum\abc029.png---
+
+Wrote file (ALNUM\ABC029.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC029.BIN.RGB) as 768 bytes.
+
+---alnum\abc030.png---
+
+Wrote file (ALNUM\ABC030.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC030.BIN.RGB) as 768 bytes.
+
+---alnum\abc031.png---
+
+Wrote file (ALNUM\ABC031.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC031.BIN.RGB) as 768 bytes.
+
+---alnum\abc032.png---
+
+Wrote file (ALNUM\ABC032.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC032.BIN.RGB) as 768 bytes.
+
+---alnum\abc033.png---
+
+Wrote file (ALNUM\ABC033.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC033.BIN.RGB) as 768 bytes.
+
+---alnum\abc034.png---
+
+Wrote file (ALNUM\ABC034.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC034.BIN.RGB) as 768 bytes.
+
+---alnum\abc035.png---
+
+Wrote file (ALNUM\ABC035.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC035.BIN.RGB) as 768 bytes.
+
+---alnum\abc036.png---
+
+Wrote file (ALNUM\ABC036.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC036.BIN.RGB) as 768 bytes.
+
+---alnum\abc037.png---
+
+Wrote file (ALNUM\ABC037.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC037.BIN.RGB) as 768 bytes.
+
+---alnum\abc038.png---
+
+Wrote file (ALNUM\ABC038.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC038.BIN.RGB) as 768 bytes.
+
+---alnum\abc039.png---
+
+Wrote file (ALNUM\ABC039.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC039.BIN.RGB) as 768 bytes.
+
+---alnum\abc040.png---
+
+Wrote file (ALNUM\ABC040.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC040.BIN.RGB) as 768 bytes.
+
+---alnum\abc041.png---
+
+Wrote file (ALNUM\ABC041.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC041.BIN.RGB) as 768 bytes.
+
+---alnum\abc042.png---
+
+Wrote file (ALNUM\ABC042.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC042.BIN.RGB) as 768 bytes.
+
+---alnum\abc043.png---
+
+Wrote file (ALNUM\ABC043.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC043.BIN.RGB) as 768 bytes.
+
+---alnum\abc044.png---
+
+Wrote file (ALNUM\ABC044.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC044.BIN.RGB) as 768 bytes.
+
+---alnum\abc045.png---
+
+Wrote file (ALNUM\ABC045.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC045.BIN.RGB) as 768 bytes.
+
+---alnum\abc046.png---
+
+Wrote file (ALNUM\ABC046.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC046.BIN.RGB) as 768 bytes.
+
+---alnum\abc047.png---
+
+Wrote file (ALNUM\ABC047.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC047.BIN.RGB) as 768 bytes.
+
+---alnum\abc048.png---
+
+Wrote file (ALNUM\ABC048.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC048.BIN.RGB) as 768 bytes.
+
+---alnum\abc049.png---
+
+Wrote file (ALNUM\ABC049.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC049.BIN.RGB) as 768 bytes.
+
+---alnum\abc050.png---
+
+Wrote file (ALNUM\ABC050.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC050.BIN.RGB) as 768 bytes.
+
+---alnum\abc051.png---
+
+Wrote file (ALNUM\ABC051.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC051.BIN.RGB) as 768 bytes.
+
+---alnum\abc052.png---
+
+Wrote file (ALNUM\ABC052.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC052.BIN.RGB) as 768 bytes.
+
+---alnum\abc053.png---
+
+Wrote file (ALNUM\ABC053.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC053.BIN.RGB) as 768 bytes.
+
+---alnum\abc054.png---
+
+Wrote file (ALNUM\ABC054.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC054.BIN.RGB) as 768 bytes.
+
+---alnum\abc055.png---
+
+Wrote file (ALNUM\ABC055.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC055.BIN.RGB) as 768 bytes.
+
+---alnum\abc056.png---
+
+Wrote file (ALNUM\ABC056.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC056.BIN.RGB) as 768 bytes.
+
+---alnum\abc057.png---
+
+Wrote file (ALNUM\ABC057.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC057.BIN.RGB) as 768 bytes.
+
+---alnum\abc058.png---
+
+Wrote file (ALNUM\ABC058.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC058.BIN.RGB) as 768 bytes.
+
+---alnum\abc059.png---
+
+Wrote file (ALNUM\ABC059.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC059.BIN.RGB) as 768 bytes.
+
+---alnum\abc060.png---
+
+Wrote file (ALNUM\ABC060.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC060.BIN.RGB) as 768 bytes.
+
+---alnum\abc061.png---
+
+Wrote file (ALNUM\ABC061.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC061.BIN.RGB) as 768 bytes.
+
+---alnum\abc062.png---
+
+Wrote file (ALNUM\ABC062.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC062.BIN.RGB) as 768 bytes.
+
+---alnum\abc063.png---
+
+Wrote file (ALNUM\ABC063.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC063.BIN.RGB) as 768 bytes.
+
+---alnum\abc064.png---
+
+Wrote file (ALNUM\ABC064.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC064.BIN.RGB) as 768 bytes.
+
+---alnum\abc065.png---
+
+Wrote file (ALNUM\ABC065.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC065.BIN.RGB) as 768 bytes.
+
+---alnum\abc066.png---
+
+Wrote file (ALNUM\ABC066.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC066.BIN.RGB) as 768 bytes.
+
+---alnum\abc067.png---
+
+Wrote file (ALNUM\ABC067.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC067.BIN.RGB) as 768 bytes.
+
+---alnum\abc068.png---
+
+Wrote file (ALNUM\ABC068.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC068.BIN.RGB) as 768 bytes.
+
+---alnum\abc069.png---
+
+Wrote file (ALNUM\ABC069.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC069.BIN.RGB) as 768 bytes.
+
+---alnum\abc070.png---
+
+Wrote file (ALNUM\ABC070.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC070.BIN.RGB) as 768 bytes.
+
+---alnum\abc071.png---
+
+Wrote file (ALNUM\ABC071.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC071.BIN.RGB) as 768 bytes.
+
+---alnum\abc072.png---
+
+Wrote file (ALNUM\ABC072.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC072.BIN.RGB) as 768 bytes.
+
+---alnum\abc073.png---
+
+Wrote file (ALNUM\ABC073.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC073.BIN.RGB) as 768 bytes.
+
+---alnum\abc074.png---
+
+Wrote file (ALNUM\ABC074.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC074.BIN.RGB) as 768 bytes.
+
+---alnum\abc075.png---
+
+Wrote file (ALNUM\ABC075.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC075.BIN.RGB) as 768 bytes.
+
+---alnum\abc076.png---
+
+Wrote file (ALNUM\ABC076.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC076.BIN.RGB) as 768 bytes.
+
+---alnum\abc077.png---
+
+Wrote file (ALNUM\ABC077.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\ABC077.BIN.RGB) as 768 bytes.
+
+---alnum\alnum.png---
+
+Wrote file (ALNUM\ALNUM.BIN) as 20224 bytes.
+Wrote RGB file (ALNUM\ALNUM.BIN.RGB) as 60672 bytes.
+
+---alnum\blank.png---
+
+Wrote file (ALNUM\BLANK.BIN) as 256 bytes.
+Wrote RGB file (ALNUM\BLANK.BIN.RGB) as 768 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 04dffH  19968   208    96  alnum\abc.png
+04e00H 04effH    256    16    16  alnum\abc000.png
+04f00H 04fffH    256    16    16  alnum\abc001.png
+05000H 050ffH    256    16    16  alnum\abc002.png
+05100H 051ffH    256    16    16  alnum\abc003.png
+05200H 052ffH    256    16    16  alnum\abc004.png
+05300H 053ffH    256    16    16  alnum\abc005.png
+05400H 054ffH    256    16    16  alnum\abc006.png
+05500H 055ffH    256    16    16  alnum\abc007.png
+05600H 056ffH    256    16    16  alnum\abc008.png
+05700H 057ffH    256    16    16  alnum\abc009.png
+05800H 058ffH    256    16    16  alnum\abc010.png
+05900H 059ffH    256    16    16  alnum\abc011.png
+05a00H 05affH    256    16    16  alnum\abc012.png
+05b00H 05bffH    256    16    16  alnum\abc013.png
+05c00H 05cffH    256    16    16  alnum\abc014.png
+05d00H 05dffH    256    16    16  alnum\abc015.png
+05e00H 05effH    256    16    16  alnum\abc016.png
+05f00H 05fffH    256    16    16  alnum\abc017.png
+06000H 060ffH    256    16    16  alnum\abc018.png
+06100H 061ffH    256    16    16  alnum\abc019.png
+06200H 062ffH    256    16    16  alnum\abc020.png
+06300H 063ffH    256    16    16  alnum\abc021.png
+06400H 064ffH    256    16    16  alnum\abc022.png
+06500H 065ffH    256    16    16  alnum\abc023.png
+06600H 066ffH    256    16    16  alnum\abc024.png
+06700H 067ffH    256    16    16  alnum\abc025.png
+06800H 068ffH    256    16    16  alnum\abc026.png
+06900H 069ffH    256    16    16  alnum\abc027.png
+06a00H 06affH    256    16    16  alnum\abc028.png
+06b00H 06bffH    256    16    16  alnum\abc029.png
+06c00H 06cffH    256    16    16  alnum\abc030.png
+06d00H 06dffH    256    16    16  alnum\abc031.png
+06e00H 06effH    256    16    16  alnum\abc032.png
+06f00H 06fffH    256    16    16  alnum\abc033.png
+07000H 070ffH    256    16    16  alnum\abc034.png
+07100H 071ffH    256    16    16  alnum\abc035.png
+07200H 072ffH    256    16    16  alnum\abc036.png
+07300H 073ffH    256    16    16  alnum\abc037.png
+07400H 074ffH    256    16    16  alnum\abc038.png
+07500H 075ffH    256    16    16  alnum\abc039.png
+07600H 076ffH    256    16    16  alnum\abc040.png
+07700H 077ffH    256    16    16  alnum\abc041.png
+07800H 078ffH    256    16    16  alnum\abc042.png
+07900H 079ffH    256    16    16  alnum\abc043.png
+07a00H 07affH    256    16    16  alnum\abc044.png
+07b00H 07bffH    256    16    16  alnum\abc045.png
+07c00H 07cffH    256    16    16  alnum\abc046.png
+07d00H 07dffH    256    16    16  alnum\abc047.png
+07e00H 07effH    256    16    16  alnum\abc048.png
+07f00H 07fffH    256    16    16  alnum\abc049.png
+08000H 080ffH    256    16    16  alnum\abc050.png
+08100H 081ffH    256    16    16  alnum\abc051.png
+08200H 082ffH    256    16    16  alnum\abc052.png
+08300H 083ffH    256    16    16  alnum\abc053.png
+08400H 084ffH    256    16    16  alnum\abc054.png
+08500H 085ffH    256    16    16  alnum\abc055.png
+08600H 086ffH    256    16    16  alnum\abc056.png
+08700H 087ffH    256    16    16  alnum\abc057.png
+08800H 088ffH    256    16    16  alnum\abc058.png
+08900H 089ffH    256    16    16  alnum\abc059.png
+08a00H 08affH    256    16    16  alnum\abc060.png
+08b00H 08bffH    256    16    16  alnum\abc061.png
+08c00H 08cffH    256    16    16  alnum\abc062.png
+08d00H 08dffH    256    16    16  alnum\abc063.png
+08e00H 08effH    256    16    16  alnum\abc064.png
+08f00H 08fffH    256    16    16  alnum\abc065.png
+09000H 090ffH    256    16    16  alnum\abc066.png
+09100H 091ffH    256    16    16  alnum\abc067.png
+09200H 092ffH    256    16    16  alnum\abc068.png
+09300H 093ffH    256    16    16  alnum\abc069.png
+09400H 094ffH    256    16    16  alnum\abc070.png
+09500H 095ffH    256    16    16  alnum\abc071.png
+09600H 096ffH    256    16    16  alnum\abc072.png
+09700H 097ffH    256    16    16  alnum\abc073.png
+09800H 098ffH    256    16    16  alnum\abc074.png
+09900H 099ffH    256    16    16  alnum\abc075.png
+09a00H 09affH    256    16    16  alnum\abc076.png
+09b00H 09bffH    256    16    16  alnum\abc077.png
+09c00H 0eaffH  20224    16  1264  alnum\alnum.png
+0eb00H 0ebffH    256    16    16  alnum\blank.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 apple 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: apple
+apple\board.png, 208x160, Rgba8
+File apple\board.png has 13 unique colors (maximum is 64).
+apple\brdtiles.png, 16x2096, Rgba8
+File apple\brdtiles.png has 13 unique colors (maximum is 64).
+apple\seq08.png, 8x96, Rgba8
+File apple\seq08.png has 8 unique colors (maximum is 64).
+apple\seq16.png, 16x192, Rgba8
+File apple\seq16.png has 11 unique colors (maximum is 64).
+apple\seq32.png, 32x384, Rgba8
+File apple\seq32.png has 13 unique colors (maximum is 64).
+apple\seq64.png, 64x768, Rgba8
+File apple\seq64.png has 16 unique colors (maximum is 64).
+
+---apple\board.png---
+
+Wrote file (APPLE\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (APPLE\BOARD.BIN.RGB) as 99840 bytes.
+
+---apple\brdtiles.png---
+
+Wrote file (APPLE\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (APPLE\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---apple\seq08.png---
+
+Wrote file (APPLE\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (APPLE\SEQ08.BIN.RGB) as 2304 bytes.
+
+---apple\seq16.png---
+
+Wrote file (APPLE\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (APPLE\SEQ16.BIN.RGB) as 9216 bytes.
+
+---apple\seq32.png---
+
+Wrote file (APPLE\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (APPLE\SEQ32.BIN.RGB) as 36864 bytes.
+
+---apple\seq64.png---
+
+Wrote file (APPLE\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (APPLE\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  apple\board.png
+08200H 104ffH  33536    16  2096  apple\brdtiles.png
+10500H 107ffH    768     8    96  apple\seq08.png
+10800H 113ffH   3072    16   192  apple\seq16.png
+11400H 143ffH  12288    32   384  apple\seq32.png
+14400H 203ffH  49152    64   768  apple\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 avocado 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: avocado
+avocado\board.png, 208x160, Rgba8
+File avocado\board.png has 20 unique colors (maximum is 64).
+avocado\brdtiles.png, 16x2096, Rgba8
+File avocado\brdtiles.png has 18 unique colors (maximum is 64).
+avocado\seq08.png, 8x96, Rgba8
+File avocado\seq08.png has 7 unique colors (maximum is 64).
+avocado\seq16.png, 16x192, Rgba8
+File avocado\seq16.png has 11 unique colors (maximum is 64).
+avocado\seq32.png, 32x384, Rgba8
+File avocado\seq32.png has 13 unique colors (maximum is 64).
+avocado\seq64.png, 64x768, Rgba8
+File avocado\seq64.png has 13 unique colors (maximum is 64).
+
+---avocado\board.png---
+
+Wrote file (AVOCADO\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (AVOCADO\BOARD.BIN.RGB) as 99840 bytes.
+
+---avocado\brdtiles.png---
+
+Wrote file (AVOCADO\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (AVOCADO\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---avocado\seq08.png---
+
+Wrote file (AVOCADO\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (AVOCADO\SEQ08.BIN.RGB) as 2304 bytes.
+
+---avocado\seq16.png---
+
+Wrote file (AVOCADO\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (AVOCADO\SEQ16.BIN.RGB) as 9216 bytes.
+
+---avocado\seq32.png---
+
+Wrote file (AVOCADO\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (AVOCADO\SEQ32.BIN.RGB) as 36864 bytes.
+
+---avocado\seq64.png---
+
+Wrote file (AVOCADO\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (AVOCADO\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  avocado\board.png
+08200H 104ffH  33536    16  2096  avocado\brdtiles.png
+10500H 107ffH    768     8    96  avocado\seq08.png
+10800H 113ffH   3072    16   192  avocado\seq16.png
+11400H 143ffH  12288    32   384  avocado\seq32.png
+14400H 203ffH  49152    64   768  avocado\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 bananas 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: bananas
+bananas\board.png, 208x160, Rgba8
+File bananas\board.png has 12 unique colors (maximum is 64).
+bananas\brdtiles.png, 16x2096, Rgba8
+File bananas\brdtiles.png has 12 unique colors (maximum is 64).
+bananas\seq08.png, 8x96, Rgba8
+File bananas\seq08.png has 6 unique colors (maximum is 64).
+bananas\seq16.png, 16x192, Rgba8
+File bananas\seq16.png has 8 unique colors (maximum is 64).
+bananas\seq32.png, 32x384, Rgba8
+File bananas\seq32.png has 12 unique colors (maximum is 64).
+bananas\seq64.png, 64x768, Rgba8
+File bananas\seq64.png has 13 unique colors (maximum is 64).
+
+---bananas\board.png---
+
+Wrote file (BANANAS\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (BANANAS\BOARD.BIN.RGB) as 99840 bytes.
+
+---bananas\brdtiles.png---
+
+Wrote file (BANANAS\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (BANANAS\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---bananas\seq08.png---
+
+Wrote file (BANANAS\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (BANANAS\SEQ08.BIN.RGB) as 2304 bytes.
+
+---bananas\seq16.png---
+
+Wrote file (BANANAS\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (BANANAS\SEQ16.BIN.RGB) as 9216 bytes.
+
+---bananas\seq32.png---
+
+Wrote file (BANANAS\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (BANANAS\SEQ32.BIN.RGB) as 36864 bytes.
+
+---bananas\seq64.png---
+
+Wrote file (BANANAS\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (BANANAS\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  bananas\board.png
+08200H 104ffH  33536    16  2096  bananas\brdtiles.png
+10500H 107ffH    768     8    96  bananas\seq08.png
+10800H 113ffH   3072    16   192  bananas\seq16.png
+11400H 143ffH  12288    32   384  bananas\seq32.png
+14400H 203ffH  49152    64   768  bananas\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 boards 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: boards
+boards\board0_resized.png, 208x160, Rgba8
+File boards\board0_resized.png has 13 unique colors (maximum is 64).
+boards\board1_resized.png, 208x160, Rgba8
+File boards\board1_resized.png has 17 unique colors (maximum is 64).
+boards\board2_resized.png, 208x160, Rgba8
+File boards\board2_resized.png has 13 unique colors (maximum is 64).
+boards\board3_resized.png, 208x160, Rgba8
+File boards\board3_resized.png has 12 unique colors (maximum is 64).
+boards\board4_resized.png, 208x160, Rgba8
+File boards\board4_resized.png has 15 unique colors (maximum is 64).
+boards\board5_resized.png, 208x160, Rgba8
+File boards\board5_resized.png has 11 unique colors (maximum is 64).
+boards\board6_resized.png, 208x160, Rgba8
+File boards\board6_resized.png has 20 unique colors (maximum is 64).
+boards\board7_resized.png, 208x160, Rgba8
+File boards\board7_resized.png has 13 unique colors (maximum is 64).
+boards\board8_resized.png, 208x160, Rgba8
+File boards\board8_resized.png has 15 unique colors (maximum is 64).
+
+---boards\board0_resized.png---
+
+Wrote file (BOARDS\BOARD0_RESIZED.BIN) as 33280 bytes.
+Wrote RGB file (BOARDS\BOARD0_RESIZED.BIN.RGB) as 99840 bytes.
+
+---boards\board1_resized.png---
+
+Wrote file (BOARDS\BOARD1_RESIZED.BIN) as 33280 bytes.
+Wrote RGB file (BOARDS\BOARD1_RESIZED.BIN.RGB) as 99840 bytes.
+
+---boards\board2_resized.png---
+
+Wrote file (BOARDS\BOARD2_RESIZED.BIN) as 33280 bytes.
+Wrote RGB file (BOARDS\BOARD2_RESIZED.BIN.RGB) as 99840 bytes.
+
+---boards\board3_resized.png---
+
+Wrote file (BOARDS\BOARD3_RESIZED.BIN) as 33280 bytes.
+Wrote RGB file (BOARDS\BOARD3_RESIZED.BIN.RGB) as 99840 bytes.
+
+---boards\board4_resized.png---
+
+Wrote file (BOARDS\BOARD4_RESIZED.BIN) as 33280 bytes.
+Wrote RGB file (BOARDS\BOARD4_RESIZED.BIN.RGB) as 99840 bytes.
+
+---boards\board5_resized.png---
+
+Wrote file (BOARDS\BOARD5_RESIZED.BIN) as 33280 bytes.
+Wrote RGB file (BOARDS\BOARD5_RESIZED.BIN.RGB) as 99840 bytes.
+
+---boards\board6_resized.png---
+
+Wrote file (BOARDS\BOARD6_RESIZED.BIN) as 33280 bytes.
+Wrote RGB file (BOARDS\BOARD6_RESIZED.BIN.RGB) as 99840 bytes.
+
+---boards\board7_resized.png---
+
+Wrote file (BOARDS\BOARD7_RESIZED.BIN) as 33280 bytes.
+Wrote RGB file (BOARDS\BOARD7_RESIZED.BIN.RGB) as 99840 bytes.
+
+---boards\board8_resized.png---
+
+Wrote file (BOARDS\BOARD8_RESIZED.BIN) as 33280 bytes.
+Wrote RGB file (BOARDS\BOARD8_RESIZED.BIN.RGB) as 99840 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  boards\board0_resized.png
+08200H 103ffH  33280   208   160  boards\board1_resized.png
+10400H 185ffH  33280   208   160  boards\board2_resized.png
+18600H 207ffH  33280   208   160  boards\board3_resized.png
+20800H 289ffH  33280   208   160  boards\board4_resized.png
+28a00H 30bffH  33280   208   160  boards\board5_resized.png
+30c00H 38dffH  33280   208   160  boards\board6_resized.png
+38e00H 40fffH  33280   208   160  boards\board7_resized.png
+41000H 491ffH  33280   208   160  boards\board8_resized.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 cabbage 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: cabbage
+cabbage\board.png, 208x160, Rgba8
+File cabbage\board.png has 12 unique colors (maximum is 64).
+cabbage\brdtiles.png, 16x2096, Rgba8
+File cabbage\brdtiles.png has 12 unique colors (maximum is 64).
+cabbage\seq08.png, 8x96, Rgba8
+File cabbage\seq08.png has 7 unique colors (maximum is 64).
+cabbage\seq16.png, 16x192, Rgba8
+File cabbage\seq16.png has 9 unique colors (maximum is 64).
+cabbage\seq32.png, 32x384, Rgba8
+File cabbage\seq32.png has 11 unique colors (maximum is 64).
+cabbage\seq64.png, 64x768, Rgba8
+File cabbage\seq64.png has 12 unique colors (maximum is 64).
+
+---cabbage\board.png---
+
+Wrote file (CABBAGE\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (CABBAGE\BOARD.BIN.RGB) as 99840 bytes.
+
+---cabbage\brdtiles.png---
+
+Wrote file (CABBAGE\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (CABBAGE\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---cabbage\seq08.png---
+
+Wrote file (CABBAGE\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (CABBAGE\SEQ08.BIN.RGB) as 2304 bytes.
+
+---cabbage\seq16.png---
+
+Wrote file (CABBAGE\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (CABBAGE\SEQ16.BIN.RGB) as 9216 bytes.
+
+---cabbage\seq32.png---
+
+Wrote file (CABBAGE\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (CABBAGE\SEQ32.BIN.RGB) as 36864 bytes.
+
+---cabbage\seq64.png---
+
+Wrote file (CABBAGE\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (CABBAGE\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  cabbage\board.png
+08200H 104ffH  33536    16  2096  cabbage\brdtiles.png
+10500H 107ffH    768     8    96  cabbage\seq08.png
+10800H 113ffH   3072    16   192  cabbage\seq16.png
+11400H 143ffH  12288    32   384  cabbage\seq32.png
+14400H 203ffH  49152    64   768  cabbage\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 carrot 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: carrot
+carrot\board.png, 208x160, Rgba8
+File carrot\board.png has 17 unique colors (maximum is 64).
+carrot\brdtiles.png, 16x2096, Rgba8
+File carrot\brdtiles.png has 17 unique colors (maximum is 64).
+carrot\seq08.png, 8x96, Rgba8
+File carrot\seq08.png has 7 unique colors (maximum is 64).
+carrot\seq16.png, 16x192, Rgba8
+File carrot\seq16.png has 9 unique colors (maximum is 64).
+carrot\seq32.png, 32x384, Rgba8
+File carrot\seq32.png has 13 unique colors (maximum is 64).
+carrot\seq64.png, 64x768, Rgba8
+File carrot\seq64.png has 14 unique colors (maximum is 64).
+
+---carrot\board.png---
+
+Wrote file (CARROT\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (CARROT\BOARD.BIN.RGB) as 99840 bytes.
+
+---carrot\brdtiles.png---
+
+Wrote file (CARROT\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (CARROT\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---carrot\seq08.png---
+
+Wrote file (CARROT\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (CARROT\SEQ08.BIN.RGB) as 2304 bytes.
+
+---carrot\seq16.png---
+
+Wrote file (CARROT\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (CARROT\SEQ16.BIN.RGB) as 9216 bytes.
+
+---carrot\seq32.png---
+
+Wrote file (CARROT\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (CARROT\SEQ32.BIN.RGB) as 36864 bytes.
+
+---carrot\seq64.png---
+
+Wrote file (CARROT\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (CARROT\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  carrot\board.png
+08200H 104ffH  33536    16  2096  carrot\brdtiles.png
+10500H 107ffH    768     8    96  carrot\seq08.png
+10800H 113ffH   3072    16   192  carrot\seq16.png
+11400H 143ffH  12288    32   384  carrot\seq32.png
+14400H 203ffH  49152    64   768  carrot\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 cherries 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: cherries
+cherries\board.png, 208x160, Rgba8
+File cherries\board.png has 13 unique colors (maximum is 64).
+cherries\brdtiles.png, 16x2096, Rgba8
+File cherries\brdtiles.png has 13 unique colors (maximum is 64).
+cherries\seq08.png, 8x96, Rgba8
+File cherries\seq08.png has 6 unique colors (maximum is 64).
+cherries\seq16.png, 16x192, Rgba8
+File cherries\seq16.png has 9 unique colors (maximum is 64).
+cherries\seq32.png, 32x384, Rgba8
+File cherries\seq32.png has 12 unique colors (maximum is 64).
+cherries\seq64.png, 64x768, Rgba8
+File cherries\seq64.png has 16 unique colors (maximum is 64).
+
+---cherries\board.png---
+
+Wrote file (CHERRIES\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (CHERRIES\BOARD.BIN.RGB) as 99840 bytes.
+
+---cherries\brdtiles.png---
+
+Wrote file (CHERRIES\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (CHERRIES\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---cherries\seq08.png---
+
+Wrote file (CHERRIES\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (CHERRIES\SEQ08.BIN.RGB) as 2304 bytes.
+
+---cherries\seq16.png---
+
+Wrote file (CHERRIES\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (CHERRIES\SEQ16.BIN.RGB) as 9216 bytes.
+
+---cherries\seq32.png---
+
+Wrote file (CHERRIES\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (CHERRIES\SEQ32.BIN.RGB) as 36864 bytes.
+
+---cherries\seq64.png---
+
+Wrote file (CHERRIES\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (CHERRIES\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  cherries\board.png
+08200H 104ffH  33536    16  2096  cherries\brdtiles.png
+10500H 107ffH    768     8    96  cherries\seq08.png
+10800H 113ffH   3072    16   192  cherries\seq16.png
+11400H 143ffH  12288    32   384  cherries\seq32.png
+14400H 203ffH  49152    64   768  cherries\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 custardapple 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: custardapple
+custardapple\board.png, 208x160, Rgba8
+File custardapple\board.png has 15 unique colors (maximum is 64).
+custardapple\brdtiles.png, 16x2096, Rgba8
+File custardapple\brdtiles.png has 15 unique colors (maximum is 64).
+custardapple\seq08.png, 8x96, Rgba8
+File custardapple\seq08.png has 4 unique colors (maximum is 64).
+custardapple\seq16.png, 16x192, Rgba8
+File custardapple\seq16.png has 8 unique colors (maximum is 64).
+custardapple\seq32.png, 32x384, Rgba8
+File custardapple\seq32.png has 10 unique colors (maximum is 64).
+custardapple\seq64.png, 64x768, Rgba8
+File custardapple\seq64.png has 13 unique colors (maximum is 64).
+
+---custardapple\board.png---
+
+Wrote file (CUSTARDAPPLE\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (CUSTARDAPPLE\BOARD.BIN.RGB) as 99840 bytes.
+
+---custardapple\brdtiles.png---
+
+Wrote file (CUSTARDAPPLE\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (CUSTARDAPPLE\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---custardapple\seq08.png---
+
+Wrote file (CUSTARDAPPLE\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (CUSTARDAPPLE\SEQ08.BIN.RGB) as 2304 bytes.
+
+---custardapple\seq16.png---
+
+Wrote file (CUSTARDAPPLE\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (CUSTARDAPPLE\SEQ16.BIN.RGB) as 9216 bytes.
+
+---custardapple\seq32.png---
+
+Wrote file (CUSTARDAPPLE\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (CUSTARDAPPLE\SEQ32.BIN.RGB) as 36864 bytes.
+
+---custardapple\seq64.png---
+
+Wrote file (CUSTARDAPPLE\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (CUSTARDAPPLE\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  custardapple\board.png
+08200H 104ffH  33536    16  2096  custardapple\brdtiles.png
+10500H 107ffH    768     8    96  custardapple\seq08.png
+10800H 113ffH   3072    16   192  custardapple\seq16.png
+11400H 143ffH  12288    32   384  custardapple\seq32.png
+14400H 203ffH  49152    64   768  custardapple\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 eggplant 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: eggplant
+eggplant\board.png, 208x160, Rgba8
+File eggplant\board.png has 15 unique colors (maximum is 64).
+eggplant\brdtiles.png, 16x2096, Rgba8
+File eggplant\brdtiles.png has 15 unique colors (maximum is 64).
+eggplant\seq08.png, 8x96, Rgba8
+File eggplant\seq08.png has 4 unique colors (maximum is 64).
+eggplant\seq16.png, 16x192, Rgba8
+File eggplant\seq16.png has 7 unique colors (maximum is 64).
+eggplant\seq32.png, 32x384, Rgba8
+File eggplant\seq32.png has 9 unique colors (maximum is 64).
+eggplant\seq64.png, 64x768, Rgba8
+File eggplant\seq64.png has 11 unique colors (maximum is 64).
+
+---eggplant\board.png---
+
+Wrote file (EGGPLANT\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (EGGPLANT\BOARD.BIN.RGB) as 99840 bytes.
+
+---eggplant\brdtiles.png---
+
+Wrote file (EGGPLANT\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (EGGPLANT\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---eggplant\seq08.png---
+
+Wrote file (EGGPLANT\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (EGGPLANT\SEQ08.BIN.RGB) as 2304 bytes.
+
+---eggplant\seq16.png---
+
+Wrote file (EGGPLANT\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (EGGPLANT\SEQ16.BIN.RGB) as 9216 bytes.
+
+---eggplant\seq32.png---
+
+Wrote file (EGGPLANT\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (EGGPLANT\SEQ32.BIN.RGB) as 36864 bytes.
+
+---eggplant\seq64.png---
+
+Wrote file (EGGPLANT\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (EGGPLANT\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  eggplant\board.png
+08200H 104ffH  33536    16  2096  eggplant\brdtiles.png
+10500H 107ffH    768     8    96  eggplant\seq08.png
+10800H 113ffH   3072    16   192  eggplant\seq16.png
+11400H 143ffH  12288    32   384  eggplant\seq32.png
+14400H 203ffH  49152    64   768  eggplant\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 ginger 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: ginger
+ginger\board.png, 208x160, Rgba8
+File ginger\board.png has 15 unique colors (maximum is 64).
+ginger\brdtiles.png, 16x2096, Rgba8
+File ginger\brdtiles.png has 15 unique colors (maximum is 64).
+ginger\seq08.png, 8x96, Rgba8
+File ginger\seq08.png has 6 unique colors (maximum is 64).
+ginger\seq16.png, 16x192, Rgba8
+File ginger\seq16.png has 8 unique colors (maximum is 64).
+ginger\seq32.png, 32x384, Rgba8
+File ginger\seq32.png has 10 unique colors (maximum is 64).
+ginger\seq64.png, 64x768, Rgba8
+File ginger\seq64.png has 11 unique colors (maximum is 64).
+
+---ginger\board.png---
+
+Wrote file (GINGER\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (GINGER\BOARD.BIN.RGB) as 99840 bytes.
+
+---ginger\brdtiles.png---
+
+Wrote file (GINGER\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (GINGER\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---ginger\seq08.png---
+
+Wrote file (GINGER\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (GINGER\SEQ08.BIN.RGB) as 2304 bytes.
+
+---ginger\seq16.png---
+
+Wrote file (GINGER\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (GINGER\SEQ16.BIN.RGB) as 9216 bytes.
+
+---ginger\seq32.png---
+
+Wrote file (GINGER\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (GINGER\SEQ32.BIN.RGB) as 36864 bytes.
+
+---ginger\seq64.png---
+
+Wrote file (GINGER\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (GINGER\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  ginger\board.png
+08200H 104ffH  33536    16  2096  ginger\brdtiles.png
+10500H 107ffH    768     8    96  ginger\seq08.png
+10800H 113ffH   3072    16   192  ginger\seq16.png
+11400H 143ffH  12288    32   384  ginger\seq32.png
+14400H 203ffH  49152    64   768  ginger\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 grapes 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: grapes
+grapes\board.png, 208x160, Rgba8
+File grapes\board.png has 13 unique colors (maximum is 64).
+grapes\brdtiles.png, 16x2096, Rgba8
+File grapes\brdtiles.png has 13 unique colors (maximum is 64).
+grapes\seq08.png, 8x96, Rgba8
+File grapes\seq08.png has 6 unique colors (maximum is 64).
+grapes\seq16.png, 16x192, Rgba8
+File grapes\seq16.png has 7 unique colors (maximum is 64).
+grapes\seq32.png, 32x384, Rgba8
+File grapes\seq32.png has 10 unique colors (maximum is 64).
+grapes\seq64.png, 64x768, Rgba8
+File grapes\seq64.png has 13 unique colors (maximum is 64).
+
+---grapes\board.png---
+
+Wrote file (GRAPES\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (GRAPES\BOARD.BIN.RGB) as 99840 bytes.
+
+---grapes\brdtiles.png---
+
+Wrote file (GRAPES\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (GRAPES\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---grapes\seq08.png---
+
+Wrote file (GRAPES\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (GRAPES\SEQ08.BIN.RGB) as 2304 bytes.
+
+---grapes\seq16.png---
+
+Wrote file (GRAPES\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (GRAPES\SEQ16.BIN.RGB) as 9216 bytes.
+
+---grapes\seq32.png---
+
+Wrote file (GRAPES\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (GRAPES\SEQ32.BIN.RGB) as 36864 bytes.
+
+---grapes\seq64.png---
+
+Wrote file (GRAPES\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (GRAPES\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  grapes\board.png
+08200H 104ffH  33536    16  2096  grapes\brdtiles.png
+10500H 107ffH    768     8    96  grapes\seq08.png
+10800H 113ffH   3072    16   192  grapes\seq16.png
+11400H 143ffH  12288    32   384  grapes\seq32.png
+14400H 203ffH  49152    64   768  grapes\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 greenpepper 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: greenpepper
+greenpepper\board.png, 208x160, Rgba8
+File greenpepper\board.png has 13 unique colors (maximum is 64).
+greenpepper\brdtiles.png, 16x2096, Rgba8
+File greenpepper\brdtiles.png has 13 unique colors (maximum is 64).
+greenpepper\seq08.png, 8x96, Rgba8
+File greenpepper\seq08.png has 5 unique colors (maximum is 64).
+greenpepper\seq16.png, 16x192, Rgba8
+File greenpepper\seq16.png has 7 unique colors (maximum is 64).
+greenpepper\seq32.png, 32x384, Rgba8
+File greenpepper\seq32.png has 11 unique colors (maximum is 64).
+greenpepper\seq64.png, 64x768, Rgba8
+File greenpepper\seq64.png has 13 unique colors (maximum is 64).
+
+---greenpepper\board.png---
+
+Wrote file (GREENPEPPER\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (GREENPEPPER\BOARD.BIN.RGB) as 99840 bytes.
+
+---greenpepper\brdtiles.png---
+
+Wrote file (GREENPEPPER\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (GREENPEPPER\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---greenpepper\seq08.png---
+
+Wrote file (GREENPEPPER\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (GREENPEPPER\SEQ08.BIN.RGB) as 2304 bytes.
+
+---greenpepper\seq16.png---
+
+Wrote file (GREENPEPPER\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (GREENPEPPER\SEQ16.BIN.RGB) as 9216 bytes.
+
+---greenpepper\seq32.png---
+
+Wrote file (GREENPEPPER\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (GREENPEPPER\SEQ32.BIN.RGB) as 36864 bytes.
+
+---greenpepper\seq64.png---
+
+Wrote file (GREENPEPPER\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (GREENPEPPER\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  greenpepper\board.png
+08200H 104ffH  33536    16  2096  greenpepper\brdtiles.png
+10500H 107ffH    768     8    96  greenpepper\seq08.png
+10800H 113ffH   3072    16   192  greenpepper\seq16.png
+11400H 143ffH  12288    32   384  greenpepper\seq32.png
+14400H 203ffH  49152    64   768  greenpepper\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 kiwi 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: kiwi
+kiwi\board.png, 208x160, Rgba8
+File kiwi\board.png has 11 unique colors (maximum is 64).
+kiwi\brdtiles.png, 16x2096, Rgba8
+File kiwi\brdtiles.png has 11 unique colors (maximum is 64).
+kiwi\seq08.png, 8x96, Rgba8
+File kiwi\seq08.png has 8 unique colors (maximum is 64).
+kiwi\seq16.png, 16x192, Rgba8
+File kiwi\seq16.png has 10 unique colors (maximum is 64).
+kiwi\seq32.png, 32x384, Rgba8
+File kiwi\seq32.png has 12 unique colors (maximum is 64).
+kiwi\seq64.png, 64x768, Rgba8
+File kiwi\seq64.png has 14 unique colors (maximum is 64).
+
+---kiwi\board.png---
+
+Wrote file (KIWI\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (KIWI\BOARD.BIN.RGB) as 99840 bytes.
+
+---kiwi\brdtiles.png---
+
+Wrote file (KIWI\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (KIWI\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---kiwi\seq08.png---
+
+Wrote file (KIWI\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (KIWI\SEQ08.BIN.RGB) as 2304 bytes.
+
+---kiwi\seq16.png---
+
+Wrote file (KIWI\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (KIWI\SEQ16.BIN.RGB) as 9216 bytes.
+
+---kiwi\seq32.png---
+
+Wrote file (KIWI\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (KIWI\SEQ32.BIN.RGB) as 36864 bytes.
+
+---kiwi\seq64.png---
+
+Wrote file (KIWI\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (KIWI\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  kiwi\board.png
+08200H 104ffH  33536    16  2096  kiwi\brdtiles.png
+10500H 107ffH    768     8    96  kiwi\seq08.png
+10800H 113ffH   3072    16   192  kiwi\seq16.png
+11400H 143ffH  12288    32   384  kiwi\seq32.png
+14400H 203ffH  49152    64   768  kiwi\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 longpepper 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: longpepper
+longpepper\board.png, 208x160, Rgba8
+File longpepper\board.png has 13 unique colors (maximum is 64).
+longpepper\brdtiles.png, 16x2096, Rgba8
+File longpepper\brdtiles.png has 13 unique colors (maximum is 64).
+longpepper\seq08.png, 8x96, Rgba8
+File longpepper\seq08.png has 4 unique colors (maximum is 64).
+longpepper\seq16.png, 16x192, Rgba8
+File longpepper\seq16.png has 5 unique colors (maximum is 64).
+longpepper\seq32.png, 32x384, Rgba8
+File longpepper\seq32.png has 7 unique colors (maximum is 64).
+longpepper\seq64.png, 64x768, Rgba8
+File longpepper\seq64.png has 11 unique colors (maximum is 64).
+
+---longpepper\board.png---
+
+Wrote file (LONGPEPPER\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (LONGPEPPER\BOARD.BIN.RGB) as 99840 bytes.
+
+---longpepper\brdtiles.png---
+
+Wrote file (LONGPEPPER\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (LONGPEPPER\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---longpepper\seq08.png---
+
+Wrote file (LONGPEPPER\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (LONGPEPPER\SEQ08.BIN.RGB) as 2304 bytes.
+
+---longpepper\seq16.png---
+
+Wrote file (LONGPEPPER\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (LONGPEPPER\SEQ16.BIN.RGB) as 9216 bytes.
+
+---longpepper\seq32.png---
+
+Wrote file (LONGPEPPER\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (LONGPEPPER\SEQ32.BIN.RGB) as 36864 bytes.
+
+---longpepper\seq64.png---
+
+Wrote file (LONGPEPPER\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (LONGPEPPER\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  longpepper\board.png
+08200H 104ffH  33536    16  2096  longpepper\brdtiles.png
+10500H 107ffH    768     8    96  longpepper\seq08.png
+10800H 113ffH   3072    16   192  longpepper\seq16.png
+11400H 143ffH  12288    32   384  longpepper\seq32.png
+14400H 203ffH  49152    64   768  longpepper\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 mango 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: mango
+mango\board.png, 208x160, Rgba8
+File mango\board.png has 11 unique colors (maximum is 64).
+mango\brdtiles.png, 16x2096, Rgba8
+File mango\brdtiles.png has 11 unique colors (maximum is 64).
+mango\seq08.png, 8x96, Rgba8
+File mango\seq08.png has 6 unique colors (maximum is 64).
+mango\seq16.png, 16x192, Rgba8
+File mango\seq16.png has 8 unique colors (maximum is 64).
+mango\seq32.png, 32x384, Rgba8
+File mango\seq32.png has 11 unique colors (maximum is 64).
+mango\seq64.png, 64x768, Rgba8
+File mango\seq64.png has 13 unique colors (maximum is 64).
+
+---mango\board.png---
+
+Wrote file (MANGO\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (MANGO\BOARD.BIN.RGB) as 99840 bytes.
+
+---mango\brdtiles.png---
+
+Wrote file (MANGO\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (MANGO\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---mango\seq08.png---
+
+Wrote file (MANGO\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (MANGO\SEQ08.BIN.RGB) as 2304 bytes.
+
+---mango\seq16.png---
+
+Wrote file (MANGO\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (MANGO\SEQ16.BIN.RGB) as 9216 bytes.
+
+---mango\seq32.png---
+
+Wrote file (MANGO\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (MANGO\SEQ32.BIN.RGB) as 36864 bytes.
+
+---mango\seq64.png---
+
+Wrote file (MANGO\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (MANGO\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  mango\board.png
+08200H 104ffH  33536    16  2096  mango\brdtiles.png
+10500H 107ffH    768     8    96  mango\seq08.png
+10800H 113ffH   3072    16   192  mango\seq16.png
+11400H 143ffH  12288    32   384  mango\seq32.png
+14400H 203ffH  49152    64   768  mango\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 orange 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: orange
+orange\board.png, 208x160, Rgba8
+File orange\board.png has 12 unique colors (maximum is 64).
+orange\brdtiles.png, 16x2096, Rgba8
+File orange\brdtiles.png has 12 unique colors (maximum is 64).
+orange\seq08.png, 8x96, Rgba8
+File orange\seq08.png has 5 unique colors (maximum is 64).
+orange\seq16.png, 16x192, Rgba8
+File orange\seq16.png has 8 unique colors (maximum is 64).
+orange\seq32.png, 32x384, Rgba8
+File orange\seq32.png has 11 unique colors (maximum is 64).
+orange\seq64.png, 64x768, Rgba8
+File orange\seq64.png has 12 unique colors (maximum is 64).
+
+---orange\board.png---
+
+Wrote file (ORANGE\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (ORANGE\BOARD.BIN.RGB) as 99840 bytes.
+
+---orange\brdtiles.png---
+
+Wrote file (ORANGE\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (ORANGE\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---orange\seq08.png---
+
+Wrote file (ORANGE\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (ORANGE\SEQ08.BIN.RGB) as 2304 bytes.
+
+---orange\seq16.png---
+
+Wrote file (ORANGE\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (ORANGE\SEQ16.BIN.RGB) as 9216 bytes.
+
+---orange\seq32.png---
+
+Wrote file (ORANGE\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (ORANGE\SEQ32.BIN.RGB) as 36864 bytes.
+
+---orange\seq64.png---
+
+Wrote file (ORANGE\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (ORANGE\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  orange\board.png
+08200H 104ffH  33536    16  2096  orange\brdtiles.png
+10500H 107ffH    768     8    96  orange\seq08.png
+10800H 113ffH   3072    16   192  orange\seq16.png
+11400H 143ffH  12288    32   384  orange\seq32.png
+14400H 203ffH  49152    64   768  orange\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 pear 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: pear
+pear\board.png, 208x160, Rgba8
+File pear\board.png has 17 unique colors (maximum is 64).
+pear\brdtiles.png, 16x2096, Rgba8
+File pear\brdtiles.png has 17 unique colors (maximum is 64).
+pear\seq08.png, 8x96, Rgba8
+File pear\seq08.png has 3 unique colors (maximum is 64).
+pear\seq16.png, 16x192, Rgba8
+File pear\seq16.png has 9 unique colors (maximum is 64).
+pear\seq32.png, 32x384, Rgba8
+File pear\seq32.png has 11 unique colors (maximum is 64).
+pear\seq64.png, 64x768, Rgba8
+File pear\seq64.png has 13 unique colors (maximum is 64).
+
+---pear\board.png---
+
+Wrote file (PEAR\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (PEAR\BOARD.BIN.RGB) as 99840 bytes.
+
+---pear\brdtiles.png---
+
+Wrote file (PEAR\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (PEAR\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---pear\seq08.png---
+
+Wrote file (PEAR\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (PEAR\SEQ08.BIN.RGB) as 2304 bytes.
+
+---pear\seq16.png---
+
+Wrote file (PEAR\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (PEAR\SEQ16.BIN.RGB) as 9216 bytes.
+
+---pear\seq32.png---
+
+Wrote file (PEAR\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (PEAR\SEQ32.BIN.RGB) as 36864 bytes.
+
+---pear\seq64.png---
+
+Wrote file (PEAR\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (PEAR\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  pear\board.png
+08200H 104ffH  33536    16  2096  pear\brdtiles.png
+10500H 107ffH    768     8    96  pear\seq08.png
+10800H 113ffH   3072    16   192  pear\seq16.png
+11400H 143ffH  12288    32   384  pear\seq32.png
+14400H 203ffH  49152    64   768  pear\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 peas 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: peas
+peas\board.png, 208x160, Rgba8
+File peas\board.png has 20 unique colors (maximum is 64).
+peas\brdtiles.png, 16x2096, Rgba8
+File peas\brdtiles.png has 18 unique colors (maximum is 64).
+peas\seq08.png, 8x96, Rgba8
+File peas\seq08.png has 4 unique colors (maximum is 64).
+peas\seq16.png, 16x192, Rgba8
+File peas\seq16.png has 7 unique colors (maximum is 64).
+peas\seq32.png, 32x384, Rgba8
+File peas\seq32.png has 10 unique colors (maximum is 64).
+peas\seq64.png, 64x768, Rgba8
+File peas\seq64.png has 10 unique colors (maximum is 64).
+
+---peas\board.png---
+
+Wrote file (PEAS\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (PEAS\BOARD.BIN.RGB) as 99840 bytes.
+
+---peas\brdtiles.png---
+
+Wrote file (PEAS\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (PEAS\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---peas\seq08.png---
+
+Wrote file (PEAS\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (PEAS\SEQ08.BIN.RGB) as 2304 bytes.
+
+---peas\seq16.png---
+
+Wrote file (PEAS\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (PEAS\SEQ16.BIN.RGB) as 9216 bytes.
+
+---peas\seq32.png---
+
+Wrote file (PEAS\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (PEAS\SEQ32.BIN.RGB) as 36864 bytes.
+
+---peas\seq64.png---
+
+Wrote file (PEAS\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (PEAS\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  peas\board.png
+08200H 104ffH  33536    16  2096  peas\brdtiles.png
+10500H 107ffH    768     8    96  peas\seq08.png
+10800H 113ffH   3072    16   192  peas\seq16.png
+11400H 143ffH  12288    32   384  peas\seq32.png
+14400H 203ffH  49152    64   768  peas\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 pineapple 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: pineapple
+pineapple\board.png, 208x160, Rgba8
+File pineapple\board.png has 15 unique colors (maximum is 64).
+pineapple\brdtiles.png, 16x2096, Rgba8
+File pineapple\brdtiles.png has 15 unique colors (maximum is 64).
+pineapple\seq08.png, 8x96, Rgba8
+File pineapple\seq08.png has 7 unique colors (maximum is 64).
+pineapple\seq16.png, 16x192, Rgba8
+File pineapple\seq16.png has 8 unique colors (maximum is 64).
+pineapple\seq32.png, 32x384, Rgba8
+File pineapple\seq32.png has 12 unique colors (maximum is 64).
+pineapple\seq64.png, 64x768, Rgba8
+File pineapple\seq64.png has 14 unique colors (maximum is 64).
+
+---pineapple\board.png---
+
+Wrote file (PINEAPPLE\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (PINEAPPLE\BOARD.BIN.RGB) as 99840 bytes.
+
+---pineapple\brdtiles.png---
+
+Wrote file (PINEAPPLE\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (PINEAPPLE\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---pineapple\seq08.png---
+
+Wrote file (PINEAPPLE\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (PINEAPPLE\SEQ08.BIN.RGB) as 2304 bytes.
+
+---pineapple\seq16.png---
+
+Wrote file (PINEAPPLE\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (PINEAPPLE\SEQ16.BIN.RGB) as 9216 bytes.
+
+---pineapple\seq32.png---
+
+Wrote file (PINEAPPLE\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (PINEAPPLE\SEQ32.BIN.RGB) as 36864 bytes.
+
+---pineapple\seq64.png---
+
+Wrote file (PINEAPPLE\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (PINEAPPLE\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  pineapple\board.png
+08200H 104ffH  33536    16  2096  pineapple\brdtiles.png
+10500H 107ffH    768     8    96  pineapple\seq08.png
+10800H 113ffH   3072    16   192  pineapple\seq16.png
+11400H 143ffH  12288    32   384  pineapple\seq32.png
+14400H 203ffH  49152    64   768  pineapple\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 plum 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: plum
+plum\board.png, 208x160, Rgba8
+File plum\board.png has 17 unique colors (maximum is 64).
+plum\brdtiles.png, 16x2096, Rgba8
+File plum\brdtiles.png has 17 unique colors (maximum is 64).
+plum\seq08.png, 8x96, Rgba8
+File plum\seq08.png has 4 unique colors (maximum is 64).
+plum\seq16.png, 16x192, Rgba8
+File plum\seq16.png has 6 unique colors (maximum is 64).
+plum\seq32.png, 32x384, Rgba8
+File plum\seq32.png has 7 unique colors (maximum is 64).
+plum\seq64.png, 64x768, Rgba8
+File plum\seq64.png has 8 unique colors (maximum is 64).
+
+---plum\board.png---
+
+Wrote file (PLUM\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (PLUM\BOARD.BIN.RGB) as 99840 bytes.
+
+---plum\brdtiles.png---
+
+Wrote file (PLUM\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (PLUM\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---plum\seq08.png---
+
+Wrote file (PLUM\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (PLUM\SEQ08.BIN.RGB) as 2304 bytes.
+
+---plum\seq16.png---
+
+Wrote file (PLUM\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (PLUM\SEQ16.BIN.RGB) as 9216 bytes.
+
+---plum\seq32.png---
+
+Wrote file (PLUM\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (PLUM\SEQ32.BIN.RGB) as 36864 bytes.
+
+---plum\seq64.png---
+
+Wrote file (PLUM\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (PLUM\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  plum\board.png
+08200H 104ffH  33536    16  2096  plum\brdtiles.png
+10500H 107ffH    768     8    96  plum\seq08.png
+10800H 113ffH   3072    16   192  plum\seq16.png
+11400H 143ffH  12288    32   384  plum\seq32.png
+14400H 203ffH  49152    64   768  plum\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 pomegranate 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: pomegranate
+pomegranate\board.png, 208x160, Rgba8
+File pomegranate\board.png has 20 unique colors (maximum is 64).
+pomegranate\brdtiles.png, 16x2096, Rgba8
+File pomegranate\brdtiles.png has 18 unique colors (maximum is 64).
+pomegranate\seq08.png, 8x96, Rgba8
+File pomegranate\seq08.png has 6 unique colors (maximum is 64).
+pomegranate\seq16.png, 16x192, Rgba8
+File pomegranate\seq16.png has 10 unique colors (maximum is 64).
+pomegranate\seq32.png, 32x384, Rgba8
+File pomegranate\seq32.png has 12 unique colors (maximum is 64).
+pomegranate\seq64.png, 64x768, Rgba8
+File pomegranate\seq64.png has 15 unique colors (maximum is 64).
+
+---pomegranate\board.png---
+
+Wrote file (POMEGRANATE\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (POMEGRANATE\BOARD.BIN.RGB) as 99840 bytes.
+
+---pomegranate\brdtiles.png---
+
+Wrote file (POMEGRANATE\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (POMEGRANATE\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---pomegranate\seq08.png---
+
+Wrote file (POMEGRANATE\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (POMEGRANATE\SEQ08.BIN.RGB) as 2304 bytes.
+
+---pomegranate\seq16.png---
+
+Wrote file (POMEGRANATE\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (POMEGRANATE\SEQ16.BIN.RGB) as 9216 bytes.
+
+---pomegranate\seq32.png---
+
+Wrote file (POMEGRANATE\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (POMEGRANATE\SEQ32.BIN.RGB) as 36864 bytes.
+
+---pomegranate\seq64.png---
+
+Wrote file (POMEGRANATE\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (POMEGRANATE\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  pomegranate\board.png
+08200H 104ffH  33536    16  2096  pomegranate\brdtiles.png
+10500H 107ffH    768     8    96  pomegranate\seq08.png
+10800H 113ffH   3072    16   192  pomegranate\seq16.png
+11400H 143ffH  12288    32   384  pomegranate\seq32.png
+14400H 203ffH  49152    64   768  pomegranate\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 pumpkin 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: pumpkin
+pumpkin\board.png, 208x160, Rgba8
+File pumpkin\board.png has 13 unique colors (maximum is 64).
+pumpkin\brdtiles.png, 16x2096, Rgba8
+File pumpkin\brdtiles.png has 13 unique colors (maximum is 64).
+pumpkin\seq08.png, 8x96, Rgba8
+File pumpkin\seq08.png has 7 unique colors (maximum is 64).
+pumpkin\seq16.png, 16x192, Rgba8
+File pumpkin\seq16.png has 8 unique colors (maximum is 64).
+pumpkin\seq32.png, 32x384, Rgba8
+File pumpkin\seq32.png has 11 unique colors (maximum is 64).
+pumpkin\seq64.png, 64x768, Rgba8
+File pumpkin\seq64.png has 11 unique colors (maximum is 64).
+
+---pumpkin\board.png---
+
+Wrote file (PUMPKIN\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (PUMPKIN\BOARD.BIN.RGB) as 99840 bytes.
+
+---pumpkin\brdtiles.png---
+
+Wrote file (PUMPKIN\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (PUMPKIN\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---pumpkin\seq08.png---
+
+Wrote file (PUMPKIN\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (PUMPKIN\SEQ08.BIN.RGB) as 2304 bytes.
+
+---pumpkin\seq16.png---
+
+Wrote file (PUMPKIN\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (PUMPKIN\SEQ16.BIN.RGB) as 9216 bytes.
+
+---pumpkin\seq32.png---
+
+Wrote file (PUMPKIN\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (PUMPKIN\SEQ32.BIN.RGB) as 36864 bytes.
+
+---pumpkin\seq64.png---
+
+Wrote file (PUMPKIN\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (PUMPKIN\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  pumpkin\board.png
+08200H 104ffH  33536    16  2096  pumpkin\brdtiles.png
+10500H 107ffH    768     8    96  pumpkin\seq08.png
+10800H 113ffH   3072    16   192  pumpkin\seq16.png
+11400H 143ffH  12288    32   384  pumpkin\seq32.png
+14400H 203ffH  49152    64   768  pumpkin\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 squash 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: squash
+squash\board.png, 208x160, Rgba8
+File squash\board.png has 13 unique colors (maximum is 64).
+squash\brdtiles.png, 16x2096, Rgba8
+File squash\brdtiles.png has 13 unique colors (maximum is 64).
+squash\seq08.png, 8x96, Rgba8
+File squash\seq08.png has 6 unique colors (maximum is 64).
+squash\seq16.png, 16x192, Rgba8
+File squash\seq16.png has 8 unique colors (maximum is 64).
+squash\seq32.png, 32x384, Rgba8
+File squash\seq32.png has 10 unique colors (maximum is 64).
+squash\seq64.png, 64x768, Rgba8
+File squash\seq64.png has 12 unique colors (maximum is 64).
+
+---squash\board.png---
+
+Wrote file (SQUASH\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (SQUASH\BOARD.BIN.RGB) as 99840 bytes.
+
+---squash\brdtiles.png---
+
+Wrote file (SQUASH\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (SQUASH\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---squash\seq08.png---
+
+Wrote file (SQUASH\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (SQUASH\SEQ08.BIN.RGB) as 2304 bytes.
+
+---squash\seq16.png---
+
+Wrote file (SQUASH\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (SQUASH\SEQ16.BIN.RGB) as 9216 bytes.
+
+---squash\seq32.png---
+
+Wrote file (SQUASH\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (SQUASH\SEQ32.BIN.RGB) as 36864 bytes.
+
+---squash\seq64.png---
+
+Wrote file (SQUASH\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (SQUASH\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  squash\board.png
+08200H 104ffH  33536    16  2096  squash\brdtiles.png
+10500H 107ffH    768     8    96  squash\seq08.png
+10800H 113ffH   3072    16   192  squash\seq16.png
+11400H 143ffH  12288    32   384  squash\seq32.png
+14400H 203ffH  49152    64   768  squash\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 strawberry 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: strawberry
+strawberry\board.png, 208x160, Rgba8
+File strawberry\board.png has 11 unique colors (maximum is 64).
+strawberry\brdtiles.png, 16x2096, Rgba8
+File strawberry\brdtiles.png has 11 unique colors (maximum is 64).
+strawberry\seq08.png, 8x96, Rgba8
+File strawberry\seq08.png has 8 unique colors (maximum is 64).
+strawberry\seq16.png, 16x192, Rgba8
+File strawberry\seq16.png has 11 unique colors (maximum is 64).
+strawberry\seq32.png, 32x384, Rgba8
+File strawberry\seq32.png has 13 unique colors (maximum is 64).
+strawberry\seq64.png, 64x768, Rgba8
+File strawberry\seq64.png has 15 unique colors (maximum is 64).
+
+---strawberry\board.png---
+
+Wrote file (STRAWBERRY\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (STRAWBERRY\BOARD.BIN.RGB) as 99840 bytes.
+
+---strawberry\brdtiles.png---
+
+Wrote file (STRAWBERRY\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (STRAWBERRY\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---strawberry\seq08.png---
+
+Wrote file (STRAWBERRY\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (STRAWBERRY\SEQ08.BIN.RGB) as 2304 bytes.
+
+---strawberry\seq16.png---
+
+Wrote file (STRAWBERRY\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (STRAWBERRY\SEQ16.BIN.RGB) as 9216 bytes.
+
+---strawberry\seq32.png---
+
+Wrote file (STRAWBERRY\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (STRAWBERRY\SEQ32.BIN.RGB) as 36864 bytes.
+
+---strawberry\seq64.png---
+
+Wrote file (STRAWBERRY\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (STRAWBERRY\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  strawberry\board.png
+08200H 104ffH  33536    16  2096  strawberry\brdtiles.png
+10500H 107ffH    768     8    96  strawberry\seq08.png
+10800H 113ffH   3072    16   192  strawberry\seq16.png
+11400H 143ffH  12288    32   384  strawberry\seq32.png
+14400H 203ffH  49152    64   768  strawberry\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 tomato 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: tomato
+tomato\board.png, 208x160, Rgba8
+File tomato\board.png has 13 unique colors (maximum is 64).
+tomato\brdtiles.png, 16x2096, Rgba8
+File tomato\brdtiles.png has 13 unique colors (maximum is 64).
+tomato\seq08.png, 8x96, Rgba8
+File tomato\seq08.png has 8 unique colors (maximum is 64).
+tomato\seq16.png, 16x192, Rgba8
+File tomato\seq16.png has 9 unique colors (maximum is 64).
+tomato\seq32.png, 32x384, Rgba8
+File tomato\seq32.png has 12 unique colors (maximum is 64).
+tomato\seq64.png, 64x768, Rgba8
+File tomato\seq64.png has 14 unique colors (maximum is 64).
+
+---tomato\board.png---
+
+Wrote file (TOMATO\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (TOMATO\BOARD.BIN.RGB) as 99840 bytes.
+
+---tomato\brdtiles.png---
+
+Wrote file (TOMATO\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (TOMATO\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---tomato\seq08.png---
+
+Wrote file (TOMATO\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (TOMATO\SEQ08.BIN.RGB) as 2304 bytes.
+
+---tomato\seq16.png---
+
+Wrote file (TOMATO\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (TOMATO\SEQ16.BIN.RGB) as 9216 bytes.
+
+---tomato\seq32.png---
+
+Wrote file (TOMATO\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (TOMATO\SEQ32.BIN.RGB) as 36864 bytes.
+
+---tomato\seq64.png---
+
+Wrote file (TOMATO\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (TOMATO\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  tomato\board.png
+08200H 104ffH  33536    16  2096  tomato\brdtiles.png
+10500H 107ffH    768     8    96  tomato\seq08.png
+10800H 113ffH   3072    16   192  tomato\seq16.png
+11400H 143ffH  12288    32   384  tomato\seq32.png
+14400H 203ffH  49152    64   768  tomato\seq64.png
+
+D:\AgonLight2\agon_crayon\samples\plants>c:image2agon.exe -b 8 watermelon 
+Image to Agon (PNG-to-Agon-binary file convertor) V1.3
+Reading: watermelon
+watermelon\board.png, 208x160, Rgba8
+File watermelon\board.png has 13 unique colors (maximum is 64).
+watermelon\brdtiles.png, 16x2096, Rgba8
+File watermelon\brdtiles.png has 13 unique colors (maximum is 64).
+watermelon\seq08.png, 8x96, Rgba8
+File watermelon\seq08.png has 7 unique colors (maximum is 64).
+watermelon\seq16.png, 16x192, Rgba8
+File watermelon\seq16.png has 9 unique colors (maximum is 64).
+watermelon\seq32.png, 32x384, Rgba8
+File watermelon\seq32.png has 12 unique colors (maximum is 64).
+watermelon\seq64.png, 64x768, Rgba8
+File watermelon\seq64.png has 12 unique colors (maximum is 64).
+
+---watermelon\board.png---
+
+Wrote file (WATERMELON\BOARD.BIN) as 33280 bytes.
+Wrote RGB file (WATERMELON\BOARD.BIN.RGB) as 99840 bytes.
+
+---watermelon\brdtiles.png---
+
+Wrote file (WATERMELON\BRDTILES.BIN) as 33536 bytes.
+Wrote RGB file (WATERMELON\BRDTILES.BIN.RGB) as 100608 bytes.
+
+---watermelon\seq08.png---
+
+Wrote file (WATERMELON\SEQ08.BIN) as 768 bytes.
+Wrote RGB file (WATERMELON\SEQ08.BIN.RGB) as 2304 bytes.
+
+---watermelon\seq16.png---
+
+Wrote file (WATERMELON\SEQ16.BIN) as 3072 bytes.
+Wrote RGB file (WATERMELON\SEQ16.BIN.RGB) as 9216 bytes.
+
+---watermelon\seq32.png---
+
+Wrote file (WATERMELON\SEQ32.BIN) as 12288 bytes.
+Wrote RGB file (WATERMELON\SEQ32.BIN.RGB) as 36864 bytes.
+
+---watermelon\seq64.png---
+
+Wrote file (WATERMELON\SEQ64.BIN) as 49152 bytes.
+Wrote RGB file (WATERMELON\SEQ64.BIN.RGB) as 147456 bytes.
+
+Relative Memory Map
+
+Start  End    Size   Width Height Path/Name
+------ ------ ------ ----- ------ ----------------------------------
+00000H 081ffH  33280   208   160  watermelon\board.png
+08200H 104ffH  33536    16  2096  watermelon\brdtiles.png
+10500H 107ffH    768     8    96  watermelon\seq08.png
+10800H 113ffH   3072    16   192  watermelon\seq16.png
+11400H 143ffH  12288    32   384  watermelon\seq32.png
+14400H 203ffH  49152    64   768  watermelon\seq64.png

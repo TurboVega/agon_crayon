@@ -46,7 +46,8 @@ DiTileMap::DiTileMap(uint32_t screen_width, uint32_t screen_height,
   m_bitmaps(bitmaps),
   m_columns(columns),
   m_rows(rows) {
-  m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+  m_draw_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+  m_words_per_line = m_draw_words_per_line + 2;
   m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
   m_words_per_position = m_words_per_line * height;
   m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
@@ -78,7 +79,7 @@ DiTileMap::DiTileMap(uint32_t screen_width, uint32_t screen_height,
 
   for (uint32_t row = 0; row < rows; row++) {
     for (uint32_t y = 0; y < height; y++) {
-      m_offsets[(row * height + y) * 2] = (uint32_t)(m_tiles + row * columns); // points to tile map row
+      m_offsets[(row * height + y) * 2] = (uint32_t)(m_tiles + row * m_words_per_row); // points to tile map row
       m_offsets[(row * height + y) * 2 + 1] = y * m_bytes_per_line; // offset to bitmap line
     }
   }
@@ -96,9 +97,11 @@ void DiTileMap::set_position(int32_t x, int32_t y) {
 }
 
 void DiTileMap::set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color) { 
+  uint8_t colors[4] = { 0x01, 0x04, 0x08, 0x3F };
   for (uint32_t pos = 0; pos < 4; pos++) {
     pixels(m_pixels)[bitmap * m_bytes_per_bitmap + pos * m_bytes_per_position + y * m_bytes_per_line + FIX_INDEX(pos + x)] =
-      (color & 0x3F) | SYNCS_OFF;
+    colors[pos]; // 01 04 08 10
+//      (color & 0x3F) | SYNCS_OFF;
   }
 }
 
