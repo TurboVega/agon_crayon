@@ -35,7 +35,7 @@
 #include "di_tile_map.h"
 #include "esp_heap_caps.h"
 
-#define DRAW_OPAQUE_BITMAP 1
+#define DRAW_OPAQUE_BITMAP 0
 #define DRAW_PIXELS 0
 #define DRAW_BACKGROUND 1
 
@@ -300,7 +300,7 @@ void init_stars() {
 #endif
 
 #if DRAW_BACKGROUND
-  gp_background = new(80,60,DiOpaqueBitmap::ScrollMode::NONE) DiOpaqueBitmap(80,60,DiOpaqueBitmap::ScrollMode::NONE);
+  gp_background = new(800,600,DiOpaqueBitmap::ScrollMode::NONE) DiOpaqueBitmap(800,600,DiOpaqueBitmap::ScrollMode::NONE);
 #endif
 
   /*gp_masked_bitmap4 = new(64,64) DiMaskedBitmap(64,64);
@@ -340,8 +340,8 @@ void init_stars() {
 #endif
 
 #if DRAW_BACKGROUND
-  for (int32_t y=0;y<60;y++) {
-    for (int32_t x=0;x<80;x++) {
+  for (int32_t y=0;y<600;y++) {
+    for (int32_t x=0;x<800;x++) {
       gp_background->set_opaque_pixel(x, y, gbugData[y*800+x]);
     }
   }
@@ -441,7 +441,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
   params->m_line8 = (uint8_t*)(m_act);
 
-  memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
+  //memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
 
 #if DRAW_TILE_MAP
   tile_map->set_position(tmx,tmy);
