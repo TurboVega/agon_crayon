@@ -39,20 +39,51 @@ IRAM_ATTR void DiMaskedBitmap_paint(void* this_ptr, const DiPaintParams *params)
 //IRAM_ATTR void DiTransparentBitmap_paint(void* this_ptr, const DiPaintParams *params);
 }
 
-DiOpaqueBitmap::DiOpaqueBitmap(uint32_t width, uint32_t height):
+DiOpaqueBitmap::DiOpaqueBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode):
   DiPrimitiveXYWH(0, 0, width, height) {
-  m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
-  m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
-  m_words_per_position = m_words_per_line * height;
-  m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
-  memset(m_pixels, 0, m_bytes_per_position * 4);
+  switch (scroll_mode) {
+    case NONE:
+    case VERTICAL:
+      m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+      m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
+      m_words_per_position = m_words_per_line * height;
+      m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
+      memset(m_pixels, 0, m_bytes_per_position);
+      break;
+
+    case HORIZONTAL:
+    case BOTH:
+      m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
+      m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
+      m_words_per_position = m_words_per_line * height;
+      m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
+      memset(m_pixels, 0, m_bytes_per_position * 4);
+      break;
+  }
 }
 
-void* DiOpaqueBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
-  uint32_t wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
-  uint32_t wpp = wpl * height;
-  uint32_t bpp = wpp * sizeof(uint32_t);
-  size_t new_size = (size_t)(sizeof(DiOpaqueBitmap) - sizeof(uint32_t) + (bpp * 4));
+void* DiOpaqueBitmap::operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode) {
+  size_t new_size;
+  uint32_t wpl;
+  uint32_t wpp;
+  uint32_t bpp;
+  switch (scroll_mode) {
+    case NONE:
+    case VERTICAL:
+      wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+      wpp = wpl * height;
+      bpp = wpp * sizeof(uint32_t);
+      new_size = (size_t)(sizeof(DiOpaqueBitmap) - sizeof(uint32_t) + (bpp));
+      break;
+
+    case HORIZONTAL:
+    case BOTH:
+      wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
+      wpp = wpl * height;
+      bpp = wpp * sizeof(uint32_t);
+      new_size = (size_t)(sizeof(DiOpaqueBitmap) - sizeof(uint32_t) + (bpp * 4));
+      break;
+  }
   void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_SPIRAM);
   return p;
 }
@@ -102,12 +133,12 @@ void IRAM_ATTR DiOpaqueBitmap::paint(const DiPaintParams *params) {
 
 //---------------------------------------------------------------------
 
- DiMaskedBitmap:: DiMaskedBitmap(uint32_t width, uint32_t height) :
-  DiOpaqueBitmap(width, height) {
+ DiMaskedBitmap:: DiMaskedBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode) :
+  DiOpaqueBitmap(width, height, scroll_mode) {
 }
 
-void* DiMaskedBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
-  return DiOpaqueBitmap::operator new(size, width, height);
+void* DiMaskedBitmap::operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode) {
+  return DiOpaqueBitmap::operator new(size, width, height, scroll_mode);
 }
 
 void DiMaskedBitmap::set_masked_pixel(int32_t x, int32_t y, uint8_t color) {
@@ -120,12 +151,12 @@ void IRAM_ATTR DiMaskedBitmap::paint(const DiPaintParams *params) {
 
 //---------------------------------------------------------------------
 
- DiTransparentBitmap:: DiTransparentBitmap(uint32_t width, uint32_t height) :
-  DiOpaqueBitmap(width, height) {
+ DiTransparentBitmap:: DiTransparentBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode) :
+  DiOpaqueBitmap(width, height, scroll_mode) {
 }
 
-void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t height) {
-  return DiOpaqueBitmap::operator new(size, width, height);
+void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode) {
+  return DiOpaqueBitmap::operator new(size, width, height, scroll_mode);
 }
 
 void DiTransparentBitmap::set_transparent_pixel(int32_t x, int32_t y, uint8_t color) { 

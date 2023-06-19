@@ -37,6 +37,7 @@
 
 #define DRAW_OPAQUE_BITMAP 1
 #define DRAW_PIXELS 0
+#define DRAW_BACKGROUND 1
 
 #define _COMPILE_HEX_DATA_
 #define __root /**/
@@ -59,6 +60,10 @@
 #include "samples\\plants\\eggplant\\eggplant_seq32.h"
 #include "samples\\plants\\mango\\mango_seq32.h"
 #include "samples\\plants\\pomegranate\\pomegranate_seq32.h"
+#endif
+
+#if DRAW_BACKGROUND
+#include "samples\\bug\\bug.h"
 #endif
 
 // dummy data for testing only
@@ -100,6 +105,11 @@ DiSetPixel g_y_pixel[5];
 #if DRAW_OPAQUE_BITMAP
 DiOpaqueBitmap* gp_opaque_bitmap[NC];
 #endif
+
+#if DRAW_BACKGROUND
+DiOpaqueBitmap* gp_background;
+#endif
+
 /*DiMaskedBitmap* gp_masked_bitmap4;
 DiMaskedBitmap* gp_masked_bitmap5;
 DiMaskedBitmap* gp_masked_bitmap6;
@@ -285,8 +295,12 @@ void init_stars() {
 */
 #if DRAW_OPAQUE_BITMAP
   for (uint32_t c = 0; c < NC; c++) {
-    gp_opaque_bitmap[c] = new(32,384) DiOpaqueBitmap(32,384);
+    gp_opaque_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
   }
+#endif
+
+#if DRAW_BACKGROUND
+  gp_background = new(80,60,DiOpaqueBitmap::ScrollMode::NONE) DiOpaqueBitmap(80,60,DiOpaqueBitmap::ScrollMode::NONE);
 #endif
 
   /*gp_masked_bitmap4 = new(64,64) DiMaskedBitmap(64,64);
@@ -324,6 +338,15 @@ void init_stars() {
     }
   }
 #endif
+
+#if DRAW_BACKGROUND
+  for (int32_t y=0;y<60;y++) {
+    for (int32_t x=0;x<80;x++) {
+      gp_background->set_opaque_pixel(x, y, gbugData[y*800+x]);
+    }
+  }
+#endif
+
 /*
   breakdown_value(heap_caps_get_free_size(MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL), gp_value_bitmap[0]);
   breakdown_value(heap_caps_get_largest_free_block(MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL), gp_value_bitmap[1]);
@@ -431,10 +454,15 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   p2.m_scrolled_y = p2.m_line_index;
 
   DiPaintParams p3;
+  p3.m_horiz_scroll = 0;
+  p3.m_vert_scroll = 0;
+  p3.m_scrolled_y = p3.m_line_index + p3.m_vert_scroll;
+
+#if DRAW_BACKGROUND
+  gp_background->paint(&p2);
+#else
   memcpy(&p3, params, sizeof(DiPaintParams));
-  //p3.m_horiz_scroll = 0;
-  //p3.m_vert_scroll = 0;
-  //p3.m_scrolled_y = p3.m_line_index + p3.m_vert_scroll;
+#endif
 
   /*if (params->m_line_index >= 100 && params->m_line_index < 140) {
     show_value(gp_value_bitmap[0], 100, &p2);
@@ -503,7 +531,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
       gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
-      gp_opaque_bitmap[c]->paint(&p3);
+      gp_opaque_bitmap[c]->paint(params);
     }
   }
 #endif

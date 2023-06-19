@@ -34,14 +34,21 @@
 
 class DiOpaqueBitmap: public DiPrimitiveXYWH {
   public:
+  typedef enum ScrollMode {
+    NONE,       // do not allow scrolling
+    HORIZONTAL, // allow horizontal, but not vertical
+    VERTICAL,   // allow vertical, but not horizontal
+    BOTH        // both horizontal and vertical
+  };
+
   uint32_t m_words_per_line;
   uint32_t m_bytes_per_line;
   uint32_t m_words_per_position;
   uint32_t m_bytes_per_position;
   uint32_t m_pixels[1];
 
-  DiOpaqueBitmap(uint32_t width, uint32_t height);
-  void* operator new(size_t size, uint32_t width, uint32_t height);
+  DiOpaqueBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
+  void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
   //void operator delete(void*);
   void set_position(int32_t x, int32_t y);
   void set_opaque_pixel(int32_t x, int32_t y, uint8_t color);
@@ -56,8 +63,8 @@ class DiOpaqueBitmap: public DiPrimitiveXYWH {
 
 class DiMaskedBitmap: public DiOpaqueBitmap {
   public:
-  DiMaskedBitmap(uint32_t width, uint32_t height);
-  void* operator new(size_t size, uint32_t width, uint32_t height);
+  DiMaskedBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
+  void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
   void set_masked_pixel(int32_t x, int32_t y, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
@@ -67,8 +74,8 @@ class DiMaskedBitmap: public DiOpaqueBitmap {
 
 class DiTransparentBitmap: public DiOpaqueBitmap {
   public:
-  DiTransparentBitmap(uint32_t width, uint32_t height);
-  void* operator new(size_t size, uint32_t width, uint32_t height);
+  DiTransparentBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
+  void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
   void set_transparent_pixel(int32_t x, int32_t y, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
