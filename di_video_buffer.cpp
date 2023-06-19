@@ -36,7 +36,7 @@
 #include "esp_heap_caps.h"
 
 #define DRAW_OPAQUE_BITMAP 1
-#define DRAW_PIXELS 1
+#define DRAW_PIXELS 0
 
 #define _COMPILE_HEX_DATA_
 #define __root /**/
@@ -51,9 +51,9 @@
 #include "samples\\TEST_BITMAP.h"
 #include "samples\\plants\\apple\\apple_seq32.h"
 #include "samples\\plants\\bananas\\bananas_seq32.h"
-#include "samples\\plants\\grapes\\grapes_seq32.h"
+#include "samples\\plants\\watermelon\\watermelon_seq32.h"
 #include "samples\\plants\\pumpkin\\pumpkin_seq32.h"
-#include "samples\\plants\\pineapple\\pineapple_seq32.h"
+#include "samples\\plants\\plum\\plum_seq32.h"
 #endif
 
 // dummy data for testing only
@@ -93,7 +93,7 @@ DiSetPixel g_y_pixel[5];
 #endif
 
 #if DRAW_OPAQUE_BITMAP
-DiOpaqueBitmap* gp_opaque_bitmap[1];
+DiOpaqueBitmap* gp_opaque_bitmap[NC];
 #endif
 /*DiMaskedBitmap* gp_masked_bitmap4;
 DiMaskedBitmap* gp_masked_bitmap5;
@@ -279,9 +279,9 @@ void init_stars() {
   }
 */
 #if DRAW_OPAQUE_BITMAP
-//  for (int32_t c = 0; c < NC; c++) {
-    gp_opaque_bitmap[0] = new(32,384) DiOpaqueBitmap(32,384);
-//  }
+  for (uint32_t c = 0; c < NC; c++) {
+    gp_opaque_bitmap[c] = new(32,384) DiOpaqueBitmap(32,384);
+  }
 #endif
 
   /*gp_masked_bitmap4 = new(64,64) DiMaskedBitmap(64,64);
@@ -300,14 +300,10 @@ void init_stars() {
   for (int32_t y=0;y<384;y++) {
     for (int32_t x=0;x<32;x++) {
       gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
-      //gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
-      //gp_opaque_bitmap[2]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
-      //gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
-      //gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
-      //gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
-      //gp_opaque_bitmap[2]->set_opaque_pixel(x, y, ggrapes_seq32Data[y*32+x]);
-      //gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
-      //gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gpineapple_seq32Data[y*32+x]);
+      gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
+      gp_opaque_bitmap[2]->set_opaque_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
+      gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
+      gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gplum_seq32Data[y*32+x]);
 
       /*gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
@@ -496,8 +492,8 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   // Draw a bitmap
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-      gp_opaque_bitmap[0]->set_position(c*100+100+c, r*100+100+r);
-      gp_opaque_bitmap[0]->paint(&p3);
+      gp_opaque_bitmap[c]->set_position(c*100+100+c, r*100+100+r);
+      gp_opaque_bitmap[c]->paint(&p3);
     }
   }
 #endif
