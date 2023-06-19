@@ -54,6 +54,11 @@
 #include "samples\\plants\\watermelon\\watermelon_seq32.h"
 #include "samples\\plants\\pumpkin\\pumpkin_seq32.h"
 #include "samples\\plants\\plum\\plum_seq32.h"
+#include "samples\\plants\\tomato\\tomato_seq32.h"
+#include "samples\\plants\\peas\\peas_seq32.h"
+#include "samples\\plants\\eggplant\\eggplant_seq32.h"
+#include "samples\\plants\\mango\\mango_seq32.h"
+#include "samples\\plants\\pomegranate\\pomegranate_seq32.h"
 #endif
 
 // dummy data for testing only
@@ -85,7 +90,7 @@ DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIA
 */
 
 #define NR 1
-#define NC 5
+#define NC 10
 
 #if DRAW_PIXELS
 DiSetPixel g_x_pixel[5];
@@ -304,6 +309,11 @@ void init_stars() {
       gp_opaque_bitmap[2]->set_opaque_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
       gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
       gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gplum_seq32Data[y*32+x]);
+      gp_opaque_bitmap[5]->set_opaque_pixel(x, y, gtomato_seq32Data[y*32+x]);
+      gp_opaque_bitmap[6]->set_opaque_pixel(x, y, gpeas_seq32Data[y*32+x]);
+      gp_opaque_bitmap[7]->set_opaque_pixel(x, y, geggplant_seq32Data[y*32+x]);
+      gp_opaque_bitmap[8]->set_opaque_pixel(x, y, gmango_seq32Data[y*32+x]);
+      gp_opaque_bitmap[9]->set_opaque_pixel(x, y, gpomegranate_seq32Data[y*32+x]);
 
       /*gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
@@ -492,7 +502,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   // Draw a bitmap
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-      gp_opaque_bitmap[c]->set_position(c*100+100+c, r*100+100+r);
+      gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
       gp_opaque_bitmap[c]->paint(&p3);
     }
   }
