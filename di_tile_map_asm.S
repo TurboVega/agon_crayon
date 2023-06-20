@@ -106,22 +106,27 @@ DiTileMap_paint:
   blt       a12,a14,within_tile // go if x is within tile width
 adjust_width:
   sub       a12,a12,a14       // a12 <-- x reduced by tile width
-  addi      a4,a4,4           // a4 <-- adjusted pointer to tile map row
+  addi      a4,a4,4           // a4 <-- advance tile map pointer by 1 column
   bge       a12,a14,adjust_width // go if x is at or beyond tile width
 within_tile:
 
   xor       a14,a14,a14       // a14 <-- assume offset based on position is zero
   l32i      a13,a2,100        // a13 <-- m_bytes_per_position
-  bbci      a12,1,not_2_or_3  // go if lower 2 bits (byte offset) less than 2
-  slli      a14,a13,2         // a14 <-- bitmap start + 2 more position
+  bbci      a12,1,not_2_or_3  // go if lower 2 bits less than 2
+  bbsi      a12,0,x_off_3     // go if lower 2 bits equal 3
+  slli      a14,a13,1         // a14 <-- bitmap start + 2 more position
+  bbci      a12,0,inc_done
 not_2_or_3:
-  bbci      a12,0,dont_inc    // go if lower bit is zero
+  bbci      a12,0,inc_done    // go if lower bit is zero
+  slli      a14,a13,1         // a14 <-- bitmap start + 2 more positions
+x_off_3:
   add       a14,a14,a13       // a14 <-- bitmap start + 1 more position
-dont_inc:
+inc_done:
 
-  movi      a13,0xFFFFFFFC    // a13 <-- mask to clear lower 2 bits
-  and       a9,a12,a13        // a9 <-- adjustment to offset to bitmap data word, based on m_x
-  add       a14,a14,a9        // a14 <-- adjusted offset to bitmap data word, based on m_x
+  //movi      a13,0xFFFFFFFC    // a13 <-- mask to clear lower 2 bits
+  //and       a9,a12,a13        // a9 <-- adjustment to offset to bitmap data word, based on m_x
+  //add       a14,a14,a9        // a14 <-- adjusted offset to bitmap data word, based on m_x
+
   l32i      a10,a2,104        // a10 <-- m_draw_words_per_line
   srli      a12,a12,2         // a12 <-- (reduced x) / 4
   sub       a10,a10,a12       // a10 <-- adjusted count of words in bitmap line
@@ -130,7 +135,7 @@ do_tiles:
   l32i      a7,a4,0           // a7 <-- points to bitmap for current tile
   add       a7,a7,a5          // a7 <-- points to bitmap line within current tile
   add       a7,a7,a14         // a7 <-- adjusted for m_x byte offset
-  xor       a14,a14,a14       // a14 <-- offset no longer needed
+  //xor       a14,a14,a14       // a14 <-- offset no longer needed
 
   loop      a10,end_loop      // loop to copy pixel data
   l32i      a9,a7,0           // a9 <-- 4 src pixels
