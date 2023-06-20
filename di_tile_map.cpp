@@ -102,9 +102,9 @@ void DiTileMap::set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color) {
     pixels(m_pixels)[bitmap * m_bytes_per_bitmap + pos * m_bytes_per_position + y * m_bytes_per_line + FIX_INDEX(pos + x)] =
       (color & 0x3F) | SYNCS_OFF;
     //colors[pos]; // 01 04 08 10
-    if (x == 0 || y==0) {
-      pixels(m_pixels)[bitmap * m_bytes_per_bitmap + pos * m_bytes_per_position + y * m_bytes_per_line + FIX_INDEX(x)] = 0x15;
-    }
+    //if (x == 0 || y==0) {
+    //  pixels(m_pixels)[bitmap * m_bytes_per_bitmap + pos * m_bytes_per_position + y * m_bytes_per_line + FIX_INDEX(x)] = 0x15;
+    //}
   }
 }
 

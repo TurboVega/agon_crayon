@@ -127,6 +127,7 @@ inc_done:
   and       a3,a12,a13        // a3 <-- adjustment to offset to bitmap data word, based on m_x
   l32i      a7,a4,0           // a7 <-- points to bitmap for current tile
   add       a7,a7,a3          // a7 <-- adjusted for top bits of m_x byte offset
+  xor       a3,a3,a3          // a3 <-- tail end of prior tile's bitmap data
 
   l32i      a10,a2,104        // a10 <-- m_draw_words_per_line
   srli      a12,a12,2         // a12 <-- (reduced x) / 4
@@ -138,11 +139,14 @@ do_tiles:
 
   loop      a10,end_loop      // loop to copy pixel data
   l32i      a9,a7,0           // a9 <-- 4 src pixels
+  or        a9,a9,a3          // a9 <-- src pixels across edge of 2 tiles
+  xor       a3,a3,a3          // a3 <-- clear prior pixel data
   s32i      a9,a8,0           // m_line32[] <-- src pixel data
   addi      a7,a7,4           // a7 <-- points to next src pixel
   addi      a8,a8,4           // a8 <-- points to next dst pixel
 end_loop:
 
+  l32i      a3,a7,0           // a3 <-- tail-end src pixels
   l32i      a10,a2,104        // a10 <-- m_draw_words_per_line
   addi      a4,a4,4           // a4 <-- points to next bitmap address
   l32i      a7,a4,0           // a7 <-- points to bitmap for current tile
