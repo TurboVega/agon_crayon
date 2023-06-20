@@ -130,12 +130,12 @@ inc_done:
   srli      a12,a12,2         // a12 <-- (reduced x) / 4
   sub       a10,a10,a12       // a10 <-- adjusted count of words in bitmap line
 
-do_tiles:
   l32i      a7,a4,0           // a7 <-- points to bitmap for current tile
+  add       a7,a7,a3          // a7 <-- adjusted for top bits of m_x byte offset
+
+do_tiles:
   add       a7,a7,a5          // a7 <-- points to bitmap line within current tile
   add       a7,a7,a14         // a7 <-- adjusted for bottom 2 bits of m_x byte offset
-  add       a7,a7,a3          // a7 <-- adjusted for top bits of m_x byte offset
-  xor       a3,a3,a3          // a9 <-- adjustment no longer needed
 
   loop      a10,end_loop      // loop to copy pixel data
   l32i      a9,a7,0           // a9 <-- 4 src pixels
@@ -146,6 +146,7 @@ end_loop:
 
   l32i      a10,a2,104        // a10 <-- m_draw_words_per_line
   addi      a4,a4,4           // a4 <-- points to next bitmap address
+  l32i      a7,a4,0           // a7 <-- points to bitmap for current tile
   sub       a6,a6,a11         // a6 <-- remaining number of columns
   bnez      a6,do_tiles       // go back if more tiles to do
   retw.n
