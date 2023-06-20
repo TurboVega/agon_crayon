@@ -376,7 +376,7 @@ void init_stars() {
     "                        "
     "  C              C      "
     "                        "
-    "                        "
+    "W                       "
     "     WW  WW  WW  WW     "
     "      WW WW  WW WW      "
     "    WWWWWWWWWWWWWWWW    "

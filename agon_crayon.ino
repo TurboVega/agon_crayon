@@ -253,7 +253,7 @@ IRAM_ATTR void loop() {
       }*/
 
       // do scrolling
-      if (delay_count >= 60*3) {
+      if (delay_count >= 60*5) {
         if (++scroll_count >= 120) {
           scroll_count = 0;
           if (++scroll_mode >= 9) {
