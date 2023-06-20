@@ -135,7 +135,6 @@ do_tiles:
   l32i      a7,a4,0           // a7 <-- points to bitmap for current tile
   add       a7,a7,a5          // a7 <-- points to bitmap line within current tile
   add       a7,a7,a14         // a7 <-- adjusted for m_x byte offset
-  //xor       a14,a14,a14       // a14 <-- offset no longer needed
 
   loop      a10,end_loop      // loop to copy pixel data
   l32i      a9,a7,0           // a9 <-- 4 src pixels

@@ -253,7 +253,7 @@ IRAM_ATTR void loop() {
       }*/
 
       // do scrolling
-      if (delay_count >= 60*5) {
+      if (delay_count >= 60*3) {
         if (++scroll_count >= 120) {
           scroll_count = 0;
           if (++scroll_mode >= 9) {
@@ -263,7 +263,7 @@ IRAM_ATTR void loop() {
         g_params.m_horiz_scroll += scroll_dx[scroll_mode];
         g_params.m_vert_scroll += scroll_dy[scroll_mode];
 
-        if (++tmc >= 60) {
+        if (++tmc >= 10) {
           tmc = 0;
           if (tmd > 0) {
             if (++tmx == 80-4) {
