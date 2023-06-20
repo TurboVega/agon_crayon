@@ -71,7 +71,7 @@ DiTileMap::DiTileMap(uint32_t screen_width, uint32_t screen_height,
   new_size = (size_t)(m_bytes_for_bitmaps);
   p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
   m_pixels = (uint32_t*)p;
-  memset(m_pixels, 0, m_bytes_for_bitmaps);
+  memset(m_pixels, 0x10, m_bytes_for_bitmaps);
 
   new_size = (size_t)(m_bytes_for_offsets);
   p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_INTERNAL);
