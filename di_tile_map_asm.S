@@ -133,15 +133,18 @@ inc_done:
   sub       a10,a10,a3        // a10 <-- adjusted count of words in bitmap line
 
   add       a5,a5,a14         // a5 <-- combine offsets to src pixels
+  xor       a14,a14,a14       // a14 <-- don't skip one output word
   bbsi      a12,0,do_inc      // go if not at position 0
   bbci      a12,1,dont_inc    // go if not at position 0
 do_inc:
   addi      a5,a5,4           // a5 <-- skips 1 src data word
+  addi      a14,a14,1         // a14 <-- do skip one output word
 dont_inc:
   xor       a3,a3,a3          // a3 <-- tail end of prior tile's bitmap data
 
 do_tiles:
   add       a7,a7,a5          // a7 <-- points to bitmap line within current tile
+  sub       a10,a10,a14       // a10 <-- adjusted count of words in bitmap line
 
   loop      a10,end_loop      // loop to copy pixel data
   l32i      a9,a7,0           // a9 <-- 4 src pixels
