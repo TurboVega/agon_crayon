@@ -205,7 +205,7 @@ int32_t scroll_dy[9] = {0, -1, 1, 1, 0, -1, -1, 0, 1};
 
 uint8_t scroll_count = 0;
 uint16_t delay_count = 0;
-int32_t tmx = 7;
+int32_t tmx = 1;
 int32_t tmy = 0;
 int32_t tmd = 1;
 int32_t tmc = 0;
