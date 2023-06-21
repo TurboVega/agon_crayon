@@ -110,7 +110,7 @@ adjust_width:
   bge       a12,a14,adjust_width // go if x is at or beyond tile width
 within_tile:
 
-  xor       a14,a14,a14       // a14 <-- assume offset based on position is zero
+  movi      a14,0             // a14 <-- assume offset based on position is zero
   l32i      a13,a2,100        // a13 <-- m_bytes_per_position
   bbci      a12,1,not_2_or_3  // go if lower 2 bits less than 2
   bbsi      a12,0,x_off_3     // go if lower 2 bits equal 3
@@ -133,32 +133,36 @@ inc_done:
   sub       a10,a10,a3        // a10 <-- adjusted count of words in bitmap line
 
   add       a5,a5,a14         // a5 <-- combine offsets to src pixels
-  xor       a14,a14,a14       // a14 <-- don't skip one output word
+  movi      a14,0             // a14 <-- don't skip one output word
   bbsi      a12,0,do_inc      // go if not at position 0
   bbci      a12,1,dont_inc    // go if not at position 0
 do_inc:
   addi      a5,a5,4           // a5 <-- skips 1 src data word
-  //addi      a14,a14,1         // a14 <-- do skip one output word
+  movi      a14,4             // a14 <-- do skip one output word
   sub       a10,a10,a11       // a10 <-- adjusted count of words in bitmap line
 dont_inc:
-  xor       a3,a3,a3          // a3 <-- tail end of prior tile's bitmap data
+  movi      a3,0              // a3 <-- tail end of prior tile's bitmap data
 
 do_tiles:
   add       a7,a7,a5          // a7 <-- points to bitmap line within current tile
 
-  loop      a10,end_loop      // loop to copy pixel data
+  loopnez   a10,end_loop      // loop to copy pixel data
   l32i      a9,a7,0           // a9 <-- 4 src pixels
   or        a9,a9,a3          // a9 <-- src pixels across edge of 2 tiles
-  xor       a3,a3,a3          // a3 <-- clear prior pixel data
+  movi      a3,0              // a3 <-- clear prior pixel data
   s32i      a9,a8,0           // m_line32[] <-- src pixel data
   addi      a7,a7,4           // a7 <-- points to next src pixel
   addi      a8,a8,4           // a8 <-- points to next dst pixel
 end_loop:
 
   l32i      a3,a7,0           // a3 <-- tail-end src pixels
+ // movi a3,0x01030103
   l32i      a10,a2,104        // a10 <-- m_draw_words_per_line
   addi      a4,a4,4           // a4 <-- points to next bitmap address
   l32i      a7,a4,0           // a7 <-- points to bitmap for current tile
   sub       a6,a6,a11         // a6 <-- remaining number of columns
+  sub       a5,a5,a14         // a5 <-- return extra adjustment to zero
+  movi      a14,0             // a14 <-- don't need to make correction next time
+  //bgei a6,16,do_tiles
   bnez      a6,do_tiles       // go back if more tiles to do
   retw.n
