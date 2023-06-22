@@ -95,8 +95,8 @@ DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMO
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 */
 
-#define NR 5
-#define NC 1
+#define NR 3
+#define NC 5
 
 #if DRAW_PIXELS
 DiSetPixel g_x_pixel[5];
@@ -321,10 +321,10 @@ void init_stars() {
   for (int32_t y=0;y<384;y++) {
     for (int32_t x=0;x<32;x++) {
       gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
-      /*gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
+      gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
       gp_opaque_bitmap[2]->set_opaque_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
       gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
-      gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gplum_seq32Data[y*32+x]);*/
+      gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gplum_seq32Data[y*32+x]);
       /*gp_opaque_bitmap[5]->set_opaque_pixel(x, y, gtomato_seq32Data[y*32+x]);
       gp_opaque_bitmap[6]->set_opaque_pixel(x, y, gpeas_seq32Data[y*32+x]);
       gp_opaque_bitmap[7]->set_opaque_pixel(x, y, geggplant_seq32Data[y*32+x]);
@@ -536,9 +536,10 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
       //gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
-      gp_opaque_bitmap[c]->set_position(c*100+100+c, r*100+100+r, frame_index*32, 32);
+      gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r, frame_index*32, 32);
+      //gp_opaque_bitmap[c]->set_position(c*100+100+c, r*100+100+r, frame_index*32, 32);
       //gp_opaque_bitmap[0]->set_position(c*100+100+c, r*100+100+r);
-      gp_opaque_bitmap[0]->paint(params);
+      gp_opaque_bitmap[c]->paint(params);
     }
   }
 #endif

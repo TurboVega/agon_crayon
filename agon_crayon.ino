@@ -280,7 +280,7 @@ IRAM_ATTR void loop() {
 
         if (++fc >= 3) {
           fc = 0;
-          if (++frame_index >= 8) {
+          if (++frame_index >= 12) {
             frame_index = 0;
           }
         }
