@@ -109,6 +109,9 @@ adjust_width:
   addi      a4,a4,4           // a4 <-- advance tile map pointer by 1 column
   bge       a12,a14,adjust_width // go if x is at or beyond tile width
 within_tile:
+  beqz      a12,no_extra_col  // go if not showing a partial tile column
+  addi      a6,a6,1           // a6 <-- display an extra tile column
+no_extra_col:
 
   movi      a14,0             // a14 <-- assume offset based on position is zero
   l32i      a13,a2,100        // a13 <-- m_bytes_per_position
@@ -156,13 +159,11 @@ do_tiles:
 end_loop:
 
   l32i      a3,a7,0           // a3 <-- tail-end src pixels
- // movi a3,0x01030103
   l32i      a10,a2,104        // a10 <-- m_draw_words_per_line
   addi      a4,a4,4           // a4 <-- points to next bitmap address
   l32i      a7,a4,0           // a7 <-- points to bitmap for current tile
   sub       a6,a6,a11         // a6 <-- remaining number of columns
   sub       a5,a5,a14         // a5 <-- return extra adjustment to zero
   movi      a14,0             // a14 <-- don't need to make correction next time
-  //bgei a6,16,do_tiles
   bnez      a6,do_tiles       // go back if more tiles to do
   retw.n

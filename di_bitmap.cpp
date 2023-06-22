@@ -84,7 +84,7 @@ void* DiOpaqueBitmap::operator new(size_t size, uint32_t width, uint32_t height,
       new_size = (size_t)(sizeof(DiOpaqueBitmap) - sizeof(uint32_t) + (bpp * 4));
       break;
   }
-  void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_SPIRAM);
+  void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
   return p;
 }
 

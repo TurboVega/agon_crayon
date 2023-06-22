@@ -35,10 +35,10 @@
 #include "di_tile_map.h"
 #include "esp_heap_caps.h"
 
-#define DRAW_OPAQUE_BITMAP 0
+#define DRAW_OPAQUE_BITMAP 1
 #define DRAW_PIXELS 0
 #define DRAW_BACKGROUND 0
-#define DRAW_TILE_MAP 1
+#define DRAW_TILE_MAP 0
 
 #define _COMPILE_HEX_DATA_
 #define __root /**/
@@ -95,8 +95,8 @@ DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMO
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 */
 
-#define NR 1
-#define NC 10
+#define NR 5
+#define NC 5
 
 #if DRAW_PIXELS
 DiSetPixel g_x_pixel[5];
@@ -104,7 +104,7 @@ DiSetPixel g_y_pixel[5];
 #endif
 
 #if DRAW_OPAQUE_BITMAP
-DiOpaqueBitmap* gp_opaque_bitmap[NC];
+DiOpaqueBitmap* gp_opaque_bitmap[1];
 #endif
 
 #if DRAW_BACKGROUND
@@ -295,9 +295,10 @@ void init_stars() {
   }
 */
 #if DRAW_OPAQUE_BITMAP
-  for (uint32_t c = 0; c < NC; c++) {
-    gp_opaque_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
-  }
+  //for (uint32_t c = 0; c < NC; c++) {
+    //gp_opaque_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
+    gp_opaque_bitmap[0] = new(64,64,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(64,64,DiOpaqueBitmap::ScrollMode::BOTH);
+  //}
 #endif
 
 #if DRAW_BACKGROUND
@@ -317,9 +318,9 @@ void init_stars() {
   //gp_masked_bitmap->set_position(500,200);
 
 #if DRAW_OPAQUE_BITMAP
-  for (int32_t y=0;y<384;y++) {
-    for (int32_t x=0;x<32;x++) {
-      gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
+  for (int32_t y=0;y<64;y++) {
+    for (int32_t x=0;x<64;x++) {
+      /*gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
       gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
       gp_opaque_bitmap[2]->set_opaque_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
       gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
@@ -328,7 +329,9 @@ void init_stars() {
       gp_opaque_bitmap[6]->set_opaque_pixel(x, y, gpeas_seq32Data[y*32+x]);
       gp_opaque_bitmap[7]->set_opaque_pixel(x, y, geggplant_seq32Data[y*32+x]);
       gp_opaque_bitmap[8]->set_opaque_pixel(x, y, gmango_seq32Data[y*32+x]);
-      gp_opaque_bitmap[9]->set_opaque_pixel(x, y, gpomegranate_seq32Data[y*32+x]);
+      gp_opaque_bitmap[9]->set_opaque_pixel(x, y, gpomegranate_seq32Data[y*32+x]);*/
+
+      gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
 
       /*gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
@@ -367,7 +370,7 @@ void init_stars() {
   }
 
   const char* tile_ids =
-    "                C       "
+    "C               C       "
     "     C     C       C    "
     "        C               "
     "            C  C        "
@@ -375,8 +378,8 @@ void init_stars() {
     "             C          "
     "                        "
     "  C              C      "
+    "         C              "
     "                        "
-    "W                       "
     "     WW  WW  WW  WW     "
     "      WW WW  WW WW      "
     "    WWWWWWWWWWWWWWWW    "
@@ -442,7 +445,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
   params->m_line8 = (uint8_t*)(m_act);
 
-  //memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
+  memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
 
 #if DRAW_TILE_MAP
   tile_map->set_position(tmx,tmy);
@@ -531,8 +534,9 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   // Draw a bitmap
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-      gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
-      gp_opaque_bitmap[c]->paint(params);
+//      gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
+      gp_opaque_bitmap[0]->set_position(c*100+100+c, r*100+100+r);
+      gp_opaque_bitmap[0]->paint(params);
     }
   }
 #endif
