@@ -209,6 +209,8 @@ int32_t tmx = 0;
 int32_t tmy = 0;
 int32_t tmd = 1;
 int32_t tmc = 0;
+uint32_t frame_index = 0;
+uint32_t fc = 0;
 
 IRAM_ATTR void loop() {
   bool eof = false;
@@ -273,6 +275,13 @@ IRAM_ATTR void loop() {
             if (--tmx == 4) {
               tmd = 1;
             }
+          }
+        }
+
+        if (++fc >= 3) {
+          fc = 0;
+          if (++frame_index >= 8) {
+            frame_index = 0;
           }
         }
       } else {

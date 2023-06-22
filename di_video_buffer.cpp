@@ -56,11 +56,11 @@
 #include "samples\\plants\\watermelon\\watermelon_seq32.h"
 #include "samples\\plants\\pumpkin\\pumpkin_seq32.h"
 #include "samples\\plants\\plum\\plum_seq32.h"
-#include "samples\\plants\\tomato\\tomato_seq32.h"
+/*#include "samples\\plants\\tomato\\tomato_seq32.h"
 #include "samples\\plants\\peas\\peas_seq32.h"
 #include "samples\\plants\\eggplant\\eggplant_seq32.h"
 #include "samples\\plants\\mango\\mango_seq32.h"
-#include "samples\\plants\\pomegranate\\pomegranate_seq32.h"
+#include "samples\\plants\\pomegranate\\pomegranate_seq32.h"*/
 #endif
 
 #if DRAW_BACKGROUND
@@ -96,7 +96,7 @@ DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIA
 */
 
 #define NR 5
-#define NC 5
+#define NC 1
 
 #if DRAW_PIXELS
 DiSetPixel g_x_pixel[5];
@@ -104,7 +104,7 @@ DiSetPixel g_y_pixel[5];
 #endif
 
 #if DRAW_OPAQUE_BITMAP
-DiOpaqueBitmap* gp_opaque_bitmap[1];
+DiOpaqueBitmap* gp_opaque_bitmap[NC];
 #endif
 
 #if DRAW_BACKGROUND
@@ -295,10 +295,10 @@ void init_stars() {
   }
 */
 #if DRAW_OPAQUE_BITMAP
-  //for (uint32_t c = 0; c < NC; c++) {
-    //gp_opaque_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
-    gp_opaque_bitmap[0] = new(64,64,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(64,64,DiOpaqueBitmap::ScrollMode::BOTH);
-  //}
+  for (uint32_t c = 0; c < NC; c++) {
+    gp_opaque_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
+    //gp_opaque_bitmap[0] = new(64,64,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(64,64,DiOpaqueBitmap::ScrollMode::BOTH);
+  }
 #endif
 
 #if DRAW_BACKGROUND
@@ -318,20 +318,20 @@ void init_stars() {
   //gp_masked_bitmap->set_position(500,200);
 
 #if DRAW_OPAQUE_BITMAP
-  for (int32_t y=0;y<64;y++) {
-    for (int32_t x=0;x<64;x++) {
-      /*gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
-      gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
+  for (int32_t y=0;y<384;y++) {
+    for (int32_t x=0;x<32;x++) {
+      gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
+      /*gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
       gp_opaque_bitmap[2]->set_opaque_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
       gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
-      gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gplum_seq32Data[y*32+x]);
-      gp_opaque_bitmap[5]->set_opaque_pixel(x, y, gtomato_seq32Data[y*32+x]);
+      gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gplum_seq32Data[y*32+x]);*/
+      /*gp_opaque_bitmap[5]->set_opaque_pixel(x, y, gtomato_seq32Data[y*32+x]);
       gp_opaque_bitmap[6]->set_opaque_pixel(x, y, gpeas_seq32Data[y*32+x]);
       gp_opaque_bitmap[7]->set_opaque_pixel(x, y, geggplant_seq32Data[y*32+x]);
       gp_opaque_bitmap[8]->set_opaque_pixel(x, y, gmango_seq32Data[y*32+x]);
       gp_opaque_bitmap[9]->set_opaque_pixel(x, y, gpomegranate_seq32Data[y*32+x]);*/
 
-      gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
+      //gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
 
       /*gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
       gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
@@ -440,6 +440,7 @@ void show_value(DiOpaqueBitmap** digits, uint32_t y, DiPaintParams *params) {
 
 extern int32_t tmx;
 extern int32_t tmy;
+extern uint32_t frame_index;
 
 void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
@@ -534,8 +535,9 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   // Draw a bitmap
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-//      gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
-      gp_opaque_bitmap[0]->set_position(c*100+100+c, r*100+100+r);
+      //gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
+      gp_opaque_bitmap[c]->set_position(c*100+100+c, r*100+100+r, frame_index*32, 32);
+      //gp_opaque_bitmap[0]->set_position(c*100+100+c, r*100+100+r);
       gp_opaque_bitmap[0]->paint(params);
     }
   }
