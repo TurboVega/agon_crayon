@@ -38,7 +38,7 @@
 #define DRAW_OPAQUE_BITMAP 1
 #define DRAW_PIXELS 0
 #define DRAW_BACKGROUND 0
-#define DRAW_TILE_MAP 0
+#define DRAW_TILE_MAP 1
 
 #define _COMPILE_HEX_DATA_
 #define __root /**/
