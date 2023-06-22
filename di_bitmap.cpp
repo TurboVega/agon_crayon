@@ -97,6 +97,15 @@ void DiOpaqueBitmap::set_position(int32_t x, int32_t y) {
   m_x_extent = m_x + m_width;
   m_y = y;
   m_y_extent = m_y + m_height;
+  m_visible_start = m_pixels;
+}
+
+void DiOpaqueBitmap::set_position(int32_t x, int32_t y, uint32_t start_line, uint32_t height) {
+  m_x = x;
+  m_x_extent = m_x + m_width;
+  m_y = y;
+  m_y_extent = m_y + height; // not m_height
+  m_visible_start = m_pixels + start_line * m_words_per_line;
 }
 
 void DiOpaqueBitmap::set_opaque_pixel(int32_t x, int32_t y, uint8_t color) {

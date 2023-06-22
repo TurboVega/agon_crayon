@@ -54,7 +54,8 @@
 //     [a2+32] m_bytes_per_line
 //     [a2+36] m_words_per_position;
 //     [a2+40] m_bytes_per_position;
-//     [a2+44] m_pixels[]
+//     [a2+44] m_visible_start
+//     [a2+48] m_pixels
 //
 // a3: const DiPaintParams *params
 //     [a3] m_line32
@@ -195,7 +196,7 @@ left_ok:
   mov       a8,a7         // a8 (right_hand_x) <-- m_screen_width
 right_ok:
 
-  addi      a7,a2,44      // a7 <-- start of m_pixels
+  l32i      a7,a2,44      // a14 <-- m_visible_start
   bgez      a3,dont_move  // don't move start if left_hand_x >= 0
   bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
   bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4

@@ -45,12 +45,14 @@ class DiOpaqueBitmap: public DiPrimitiveXYWH {
   uint32_t m_bytes_per_line;
   uint32_t m_words_per_position;
   uint32_t m_bytes_per_position;
+  uint32_t* m_visible_start;
   uint32_t m_pixels[1];
 
   DiOpaqueBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
   void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
   //void operator delete(void*);
   void set_position(int32_t x, int32_t y);
+  void set_position(int32_t x, int32_t y, uint32_t start_line, uint32_t height);
   void set_opaque_pixel(int32_t x, int32_t y, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
