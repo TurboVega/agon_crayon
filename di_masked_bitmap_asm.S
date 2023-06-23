@@ -258,7 +258,7 @@ so_0_dst_offset_1:
   // Physical B:bc-a.nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   DO_START_PIXELS 0x00FF0000
-  addi     a5,a5,3
+  //addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
   DO_END_PIXELS 0xFF00FFFF
@@ -275,7 +275,7 @@ so_0_dst_offset_2:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   DO_START_PIXELS 0xFFFF0000
-  addi     a5,a5,2
+  //addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FFFF
@@ -290,7 +290,7 @@ so_0_dst_offset_3:
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
   DO_START_PIXELS 0xFFFF00FF
-  addi     a5,a5,1
+  //addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FF00
@@ -321,7 +321,7 @@ so_1_dst_offset_1:
   // Physical A:cd-b.opmn.opmn.yzwx.----
   // a14 <-- pointer to source pixels (position A)
   DO_START_PIXELS 0x00FF0000
-  addi     a5,a5,3
+  //addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
   mov      a0,a15
@@ -336,7 +336,7 @@ so_1_dst_offset_2:
   // Physical B:bc--.nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   DO_START_PIXELS 0xFFFF0000
-  addi     a5,a5,2
+  //addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
   DO_END_PIXELS 0xFF00FFFF
@@ -350,7 +350,7 @@ so_1_dst_offset_3:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   DO_START_PIXELS 0xFFFF00FF
-  addi     a5,a5,1
+  //addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FFFF
@@ -382,7 +382,7 @@ so_2_dst_offset_1:
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
   DO_START_PIXELS 0x00FF0000
-  addi     a5,a5,3
+  //addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FF00
@@ -398,7 +398,7 @@ so_2_dst_offset_2:
   // Physical A:cd--.opmn.opmn.yzwx.----
   // a14 <-- pointer to source pixels (position A)
   DO_START_PIXELS 0xFFFF0000
-  addi     a5,a5,2
+  //addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
   mov      a0,a15
@@ -410,7 +410,7 @@ so_2_dst_offset_3:
   // Physical B:-c--.nodm.nopm.xypw.z---
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   DO_START_PIXELS 0xFFFF00FF
-  addi     a5,a5,1
+  //addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
   DO_END_PIXELS 0xFFFFFF00
@@ -428,7 +428,7 @@ so_3_dst_offset_0:
   // Logical  B:dmno.pmno.pwxy.z---
   // Physical B:nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
-  sub      a5,a5,a7
+  //sub      a5,a5,a7
   call0    do_middle_pixels
   DO_END_PIXELS 0xFF00FFFF
   mov      a0,a15
@@ -441,7 +441,7 @@ so_3_dst_offset_1:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   DO_START_PIXELS 0x00FF0000
-  addi     a5,a5,3
+  //addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FFFF
@@ -459,7 +459,7 @@ so_3_dst_offset_2:
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
   DO_START_PIXELS 0xFFFF0000
-  addi     a5,a5,2
+  //addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FF00
@@ -472,7 +472,7 @@ so_3_dst_offset_3:
   // Physical A:-d--.opmn.opmn.yzwx.----
   // a14 <-- pointer to source pixels (position A)
   DO_START_PIXELS 0xFFFF00FF
-  addi     a5,a5,1
+  //addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
   mov      a0,a15

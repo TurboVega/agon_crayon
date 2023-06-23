@@ -61,7 +61,7 @@ DiMaskedBitmap::DiMaskedBitmap(uint32_t width, uint32_t height, ScrollMode scrol
         uint32_t n = m_words_per_position * 4;
         for (uint32_t i = 0; i < n; i+=2) {
           *p++ = 0xFFFFFFFF; // inverted mask
-          *p++ = SYNCS_OFF_X4; // color
+          *p++ = 0x20;//SYNCS_OFF_X4; // color
         }
       }
       break;
