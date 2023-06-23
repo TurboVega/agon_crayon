@@ -1,4 +1,4 @@
-// di_bitmap_asm.S - Low-level assembler function for drawing opaque bitmaps 
+// di_transparent_bitmap_asm.S - Low-level assembler function for drawing opaque bitmaps 
 //
 // An opaque bitmap is a rectangle of fully opaque pixels of various colors.
 //
@@ -33,8 +33,6 @@
 // in a C source that calls it, using this declaration:
 //
 // extern "C" {
-// IRAM_ATTR void DiOpaqueBitmap_paint(void* this_ptr, const DiPaintParams *params);
-// IRAM_ATTR void DiMaskedBitmap_paint(void* this_ptr, const DiPaintParams *params);
 // IRAM_ATTR void DiTransparentBitmap_paint(void* this_ptr, const DiPaintParams *params);
 // }
 //
@@ -42,7 +40,7 @@
 //
 // a0: return address
 // a1: stack pointer
-// a2: DiOpaqueBitmap* pointer (i.e., 'this')
+// a2: DiTransparentBitmap* pointer (i.e., 'this')
 //     [a2] vtable pointer
 //     [a2+4] m_x
 //     [a2+8] m_y
@@ -87,10 +85,8 @@
 // 
 
   .section .iram1.text
-  .global   DiOpaqueBitmap_paint
-  .type     DiOpaqueBitmap_paint,@function
-  .global   DiMaskedBitmap_paint
-  .type     DiMaskedBitmap_paint,@function
+  .global   DiTransparentBitmap_paint
+  .type     DiTransparentBitmap_paint,@function
 
 // Assume that the logical pixels in one line of the original source bitmap are
 // arranged like this:
@@ -167,7 +163,7 @@
   .endm
 
   .align    4
-DiOpaqueBitmap_paint:
+DiTransparentBitmap:
   entry     sp,16
   l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
@@ -501,13 +497,3 @@ do_middle_pixels:
   add       a14,a14,a10   // a14 <-- points to next 4 src pixels
 end_loop:
   ret
-
-//----------------------------------------------------------------
-
-  .align    4
-DiMaskedBitmap_paint:
-  entry     sp,16
-  retw
-
-//----------------------------------------------------------------
-
