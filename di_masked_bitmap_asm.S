@@ -136,7 +136,9 @@
   .macro    DO_START_PIXELS mask
 
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,\mask     // a11 <-- mask for keeping dst pixels
+  l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
+  movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
+  or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
   and       a11,a11,a6    // a11 <-- keepable dst pixels
   l32i      a6,a14,4      // a6 <-- 4 src pixels
   or        a6,a6,a11     // a6 <-- new combined pixels
@@ -149,7 +151,9 @@
   .macro    DO_END_PIXELS mask
 
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,\mask     // a11 <-- mask for keeping dst pixels
+  l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
+  movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
+  or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
   and       a11,a11,a6    // a11 <-- keepable dst pixels
   l32i      a6,a14,4      // a6 <-- 4 src pixels
   or        a6,a6,a11     // a6 <-- new combined pixels
@@ -488,6 +492,10 @@ do_middle_pixels:
   srli      a11,a3,2      // a11 <-- number of full words left to copy
   loopnez   a11,end_loop  // loop to copy pixel data
   l32i      a9,a14,4      // a9 <-- 4 src pixels
+  l32i      a11,a14,0     // a11 <-- mask for keeping dst pixels
+  l32i      a5,a4,0       // a5 <-- 4 dst pixels
+  and       a5,a5,a11     // a5 <-- dst pixels retained
+  or        a9,a9,a5      // a9 <-- final mixed pixels
   s32i      a9,a4,0       // m_line32[] <-- src pixel data
   add       a4,a4,a10     // a4 <-- points to next 4 dst pixels
   addi      a14,a14,8     // a14 <-- skip masks & colors
