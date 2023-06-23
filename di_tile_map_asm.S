@@ -149,10 +149,21 @@ dont_inc:
 do_tiles:
   add       a7,a7,a5          // a7 <-- points to bitmap line within current tile
 
-  loopnez   a10,end_loop      // loop to copy pixel data
+// For speed in the loop, we remove the need to clear a3 on every loop,
+// by unrolling the first iteration into separate code.
+
+  beqz      a10,end_loop      // skip loop if nothing to do
   l32i      a9,a7,0           // a9 <-- 4 src pixels
   or        a9,a9,a3          // a9 <-- src pixels across edge of 2 tiles
-  movi      a3,0              // a3 <-- clear prior pixel data
+  s32i      a9,a8,0           // m_line32[] <-- src pixel data
+  addi      a7,a7,4           // a7 <-- points to next src pixel
+  addi      a8,a8,4           // a8 <-- points to next dst pixel
+  sub       a10,a10,a11       // a10 <-- first iteration is done
+
+// Here we have the remaining iterations, without using a3.
+
+  loopnez   a10,end_loop      // loop to copy pixel data
+  l32i      a9,a7,0           // a9 <-- 4 src pixels
   s32i      a9,a8,0           // m_line32[] <-- src pixel data
   addi      a7,a7,4           // a7 <-- points to next src pixel
   addi      a8,a8,4           // a8 <-- points to next dst pixel
@@ -166,4 +177,5 @@ end_loop:
   sub       a5,a5,a14         // a5 <-- return extra adjustment to zero
   movi      a14,0             // a14 <-- don't need to make correction next time
   bnez      a6,do_tiles       // go back if more tiles to do
+
   retw.n
