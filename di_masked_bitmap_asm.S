@@ -138,12 +138,11 @@
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
   movi      a11,\mask     // a11 <-- mask for keeping dst pixels
   and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  l32i      a6,a14,4      // a6 <-- 4 src pixels
   or        a6,a6,a11     // a6 <-- new combined pixels
   s32i      a6,a4,0       // m_line32[] <-- src pixel data
   add       a4,a4,a10     // a4 <-- points to next dst pixels
-  add       a14,a14,a10   // a14 <-- skip masks
-  add       a14,a14,a10   // a14 <-- skip colors
+  addi      a14,a14,8     // a14 <-- skip masks & colors
 
   .endm
 
@@ -152,7 +151,7 @@
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
   movi      a11,\mask     // a11 <-- mask for keeping dst pixels
   and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  l32i      a6,a14,4      // a6 <-- 4 src pixels
   or        a6,a6,a11     // a6 <-- new combined pixels
   s32i      a6,a4,0       // m_line32[] <-- src pixel data
 
@@ -488,11 +487,10 @@ so_3_dst_offset_3:
 do_middle_pixels:
   srli      a11,a3,2      // a11 <-- number of full words left to copy
   loopnez   a11,end_loop  // loop to copy pixel data
-  l32i      a9,a14,0      // a9 <-- 4 src pixels
+  l32i      a9,a14,4      // a9 <-- 4 src pixels
   s32i      a9,a4,0       // m_line32[] <-- src pixel data
   add       a4,a4,a10     // a4 <-- points to next 4 dst pixels
-  add       a14,a14,a10   // a14 <-- skip masks
-  add       a14,a14,a10   // a14 <-- skip pixels
+  addi      a14,a14,8     // a14 <-- skip masks & colors
 end_loop:
   ret
 

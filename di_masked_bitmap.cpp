@@ -122,8 +122,8 @@ void DiMaskedBitmap::set_masked_pixel(int32_t x, int32_t y, uint8_t color) {
 
 void DiMaskedBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) {
   for (uint32_t pos = 0; pos < 4; pos++) {
-    uint8_t* p = pixels(m_pixels + (pos * m_words_per_position + y * m_words_per_line + (x + pos) / 4) * 2);
-    int32_t index = FIX_INDEX((x + pos) & 3);
+    uint8_t* p = pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line + (x / 4) * 2);
+    int32_t index = FIX_INDEX(pos);
     p[index] = 0x00; // inverted mask
     p[index + 4] = color;
   }
