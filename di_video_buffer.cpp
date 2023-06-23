@@ -35,7 +35,9 @@
 #include "di_tile_map.h"
 #include "esp_heap_caps.h"
 
-#define DRAW_OPAQUE_BITMAP 1
+#define DRAW_OPAQUE_BITMAP 0
+#define DRAW_MASKED_BITMAP 1
+#define DRAW_TRANSPARENT_BITMAP 0
 #define DRAW_PIXELS 0
 #define DRAW_BACKGROUND 0
 #define DRAW_TILE_MAP 1
@@ -49,7 +51,7 @@
 #include "samples\\WALL.h"
 #endif
 
-#if DRAW_OPAQUE_BITMAP
+#if DRAW_OPAQUE_BITMAP | DRAW_MASKED_BITMAP | DRAW_TRANSPARENT_BITMAP
 #include "samples\\TEST_BITMAP.h"
 #include "samples\\plants\\apple\\apple_seq32.h"
 #include "samples\\plants\\bananas\\bananas_seq32.h"
@@ -95,8 +97,8 @@ DiDiagonalLeftLine g_diamond_nw(CENTER_X, CENTER_Y-HALF_DIAMOND_SIZE, HALF_DIAMO
 DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIAMOND_SIZE,  MASK_RGB(2,3,1));
 */
 
-#define NR 3
-#define NC 5
+#define NR 1
+#define NC 1
 
 #if DRAW_PIXELS
 DiSetPixel g_x_pixel[5];
@@ -107,19 +109,20 @@ DiSetPixel g_y_pixel[5];
 DiOpaqueBitmap* gp_opaque_bitmap[NC];
 #endif
 
+#if DRAW_MASKED_BITMAP
+DiMaskedBitmap* gp_masked_bitmap[NC];
+#endif
+
+#if DRAW_TRANSPARENT_BITMAP
+DiTransparentBitmap* gp_transparent_bitmap[NC];
+#endif
+
 #if DRAW_BACKGROUND
 DiOpaqueBitmap* gp_background;
 #endif
 
-/*DiMaskedBitmap* gp_masked_bitmap4;
-DiMaskedBitmap* gp_masked_bitmap5;
-DiMaskedBitmap* gp_masked_bitmap6;
-DiMaskedBitmap* gp_masked_bitmap7;*/
-
 /*DiOpaqueBitmap* gp_digit_bitmap[10];
 DiOpaqueBitmap* gp_value_bitmap[4][6];
-
-DiMaskedBitmap* gp_masked_bitmap = new(64,64) DiMaskedBitmap(64,64);
 
 static const char* digit_data =
 " *** "
@@ -294,10 +297,25 @@ void init_stars() {
     }
   }
 */
+
 #if DRAW_OPAQUE_BITMAP
   for (uint32_t c = 0; c < NC; c++) {
-    gp_opaque_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
-    //gp_opaque_bitmap[0] = new(64,64,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(64,64,DiOpaqueBitmap::ScrollMode::BOTH);
+    //gp_opaque_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
+    gp_opaque_bitmap[c] = new(32,32,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,32,DiOpaqueBitmap::ScrollMode::BOTH);
+  }
+#endif
+
+#if DRAW_MASKED_BITMAP
+  for (uint32_t c = 0; c < NC; c++) {
+    //gp_masked_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiMaskedBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
+    gp_masked_bitmap[c] = new(32,32,DiOpaqueBitmap::ScrollMode::BOTH) DiMaskedBitmap(32,32,DiOpaqueBitmap::ScrollMode::BOTH);
+  }
+#endif
+
+#if DRAW_TRANSPARENT_BITMAP
+  for (uint32_t c = 0; c < NC; c++) {
+    //gp_transparent_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiTransparentBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
+    gp_transparent_bitmap[c] = new(32,32,DiOpaqueBitmap::ScrollMode::BOTH) DiTransparentBitmap(32,32,DiOpaqueBitmap::ScrollMode::BOTH);
   }
 #endif
 
@@ -305,40 +323,53 @@ void init_stars() {
   gp_background = new(800,600,DiOpaqueBitmap::ScrollMode::NONE) DiOpaqueBitmap(800,600,DiOpaqueBitmap::ScrollMode::NONE);
 #endif
 
-  /*gp_masked_bitmap4 = new(64,64) DiMaskedBitmap(64,64);
-  gp_masked_bitmap5 = new(64,64) DiMaskedBitmap(64,64);
-  gp_masked_bitmap6 = new(64,64) DiMaskedBitmap(64,64);
-  gp_masked_bitmap7 = new(64,64) DiMaskedBitmap(64,64);*/
-
-  /*gp_masked_bitmap4->set_position(400,100);
-  gp_masked_bitmap5->set_position(501,201);
-  gp_masked_bitmap6->set_position(603,303);
-  gp_masked_bitmap7->set_position(703,403);*/
-
-  //gp_masked_bitmap->set_position(500,200);
-
 #if DRAW_OPAQUE_BITMAP
-  for (int32_t y=0;y<384;y++) {
+  for (int32_t y=0;y<32;y++) {
     for (int32_t x=0;x<32;x++) {
       gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gapple_seq32Data[y*32+x]);
-      gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
+      /*gp_opaque_bitmap[1]->set_opaque_pixel(x, y, gbananas_seq32Data[y*32+x]);
       gp_opaque_bitmap[2]->set_opaque_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
       gp_opaque_bitmap[3]->set_opaque_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
-      gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gplum_seq32Data[y*32+x]);
+      gp_opaque_bitmap[4]->set_opaque_pixel(x, y, gplum_seq32Data[y*32+x]);*/
       /*gp_opaque_bitmap[5]->set_opaque_pixel(x, y, gtomato_seq32Data[y*32+x]);
       gp_opaque_bitmap[6]->set_opaque_pixel(x, y, gpeas_seq32Data[y*32+x]);
       gp_opaque_bitmap[7]->set_opaque_pixel(x, y, geggplant_seq32Data[y*32+x]);
       gp_opaque_bitmap[8]->set_opaque_pixel(x, y, gmango_seq32Data[y*32+x]);
       gp_opaque_bitmap[9]->set_opaque_pixel(x, y, gpomegranate_seq32Data[y*32+x]);*/
+    }
+  }
+#endif
 
-      //gp_opaque_bitmap[0]->set_opaque_pixel(x, y, gtest_bitmapData[y*64+x]);
+#if DRAW_MASKED_BITMAP
+  for (int32_t y=0;y<32;y++) {
+    for (int32_t x=0;x<32;x++) {
+      gp_masked_bitmap[0]->set_masked_pixel(x, y, gapple_seq32Data[y*32+x]);
+      /*gp_masked_bitmap[1]->set_masked_pixel(x, y, gbananas_seq32Data[y*32+x]);
+      gp_masked_bitmap[2]->set_masked_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
+      gp_masked_bitmap[3]->set_masked_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
+      gp_masked_bitmap[4]->set_masked_pixel(x, y, gplum_seq32Data[y*32+x]);*/
+      /*gp_masked_bitmap[5]->set_masked_pixel(x, y, gtomato_seq32Data[y*32+x]);
+      gp_masked_bitmap[6]->set_masked_pixel(x, y, gpeas_seq32Data[y*32+x]);
+      gp_masked_bitmap[7]->set_masked_pixel(x, y, geggplant_seq32Data[y*32+x]);
+      gp_masked_bitmap[8]->set_masked_pixel(x, y, gmango_seq32Data[y*32+x]);
+      gp_masked_bitmap[9]->set_masked_pixel(x, y, gpomegranate_seq32Data[y*32+x]);*/
+    }
+  }
+#endif
 
-      /*gp_masked_bitmap4->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_masked_bitmap5->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_masked_bitmap6->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);
-      gp_masked_bitmap7->set_masked_pixel(x, y, gtest_bitmapData[y*64+x]);*/
-
-      //gp_masked_bitmap->set__masked_pixel(x, y, gtest_bitmapData[y*64+x]);
+#if DRAW_TRANSPARENT_BITMAP
+  for (int32_t y=0;y<32;y++) {
+    for (int32_t x=0;x<32;x++) {
+      gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gapple_seq32Data[y*32+x]);
+      /*gp_transparent_bitmap[1]->set_transparent_pixel(x, y, gbananas_seq32Data[y*32+x]);
+      gp_transparent_bitmap[2]->set_transparent_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
+      gp_transparent_bitmap[3]->set_transparent_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
+      gp_transparent_bitmap[4]->set_transparent_pixel(x, y, gplum_seq32Data[y*32+x]);*/
+      /*gp_transparent_bitmap[5]->set_transparent_pixel(x, y, gtomato_seq32Data[y*32+x]);
+      gp_transparent_bitmap[6]->set_transparent_pixel(x, y, gpeas_seq32Data[y*32+x]);
+      gp_transparent_bitmap[7]->set_transparent_pixel(x, y, geggplant_seq32Data[y*32+x]);
+      gp_transparent_bitmap[8]->set_transparent_pixel(x, y, gmango_seq32Data[y*32+x]);
+      gp_transparent_bitmap[9]->set_transparent_pixel(x, y, gpomegranate_seq32Data[y*32+x]);*/
     }
   }
 #endif
@@ -536,21 +567,39 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
       //gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
-      gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r, frame_index*32, 32);
+      //gp_opaque_bitmap[c]->set_position(c*80+20+c, r*100+100+r, frame_index*32, 32);
       //gp_opaque_bitmap[c]->set_position(c*100+100+c, r*100+100+r, frame_index*32, 32);
-      //gp_opaque_bitmap[0]->set_position(c*100+100+c, r*100+100+r);
+      gp_opaque_bitmap[c]->set_position(c*100+100+c, r*100+100+r);
       gp_opaque_bitmap[c]->paint(params);
     }
   }
 #endif
 
-  /*gp_masked_bitmap4->paint(&p2);
-  gp_masked_bitmap5->paint(&p2);
-  gp_masked_bitmap6->paint(&p2);
-  gp_masked_bitmap7->paint(&p2);*/
+#if DRAW_MASKED_BITMAP
+  // Draw a bitmap
+  for (uint32_t r = 0; r < NR; r++) {
+    for (uint32_t c = 0; c < NC; c++) {
+      //gp_masked_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
+      //gp_masked_bitmap[c]->set_position(c*80+20+c, r*100+100+r, frame_index*32, 32);
+      //gp_masked_bitmap[c]->set_position(c*100+100+c, r*100+100+r, frame_index*32, 32);
+      gp_masked_bitmap[c]->set_position(c*100+100+c, r*100+100+r);
+      gp_masked_bitmap[c]->paint(params);
+    }
+  }
+#endif
 
- // gp_masked_bitmap->paint(params);
-
+#if DRAW_TRANSPARENT_BITMAP
+  // Draw a bitmap
+  for (uint32_t r = 0; r < NR; r++) {
+    for (uint32_t c = 0; c < NC; c++) {
+      //gp_transparent_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
+      //gp_transparent_bitmap[c]->set_position(c*80+20+c, r*100+100+r, frame_index*32, 32);
+      //gp_transparent_bitmap[c]->set_position(c*100+100+c, r*100+100+r, frame_index*32, 32);
+      gp_transparent_bitmap[c]->set_position(c*100+100+c, r*100+100+r);
+      gp_transparent_bitmap[c]->paint(params);
+    }
+  }
+#endif
 }
 
 void DiVideoBuffer::init_to_black() {

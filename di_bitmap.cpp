@@ -36,7 +36,7 @@
 extern "C" {
 IRAM_ATTR void DiOpaqueBitmap_paint(void* this_ptr, const DiPaintParams *params);
 IRAM_ATTR void DiMaskedBitmap_paint(void* this_ptr, const DiPaintParams *params);
-//IRAM_ATTR void DiTransparentBitmap_paint(void* this_ptr, const DiPaintParams *params);
+IRAM_ATTR void DiTransparentBitmap_paint(void* this_ptr, const DiPaintParams *params);
 }
 
 DiOpaqueBitmap::DiOpaqueBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode):
@@ -151,7 +151,8 @@ void* DiMaskedBitmap::operator new(size_t size, uint32_t width, uint32_t height,
 }
 
 void DiMaskedBitmap::set_masked_pixel(int32_t x, int32_t y, uint8_t color) {
-  set_pixel(x, y, color);
+  set_pixel(x, y, (color & 0x3F) | SYNCS_OFF);
+  //set_pixel(x, y, color);
 }
 
 void IRAM_ATTR DiMaskedBitmap::paint(const DiPaintParams *params) {
@@ -169,9 +170,10 @@ void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t he
 }
 
 void DiTransparentBitmap::set_transparent_pixel(int32_t x, int32_t y, uint8_t color) { 
-  set_pixel(x, y, color);
+  set_pixel(x, y, (color & 0x3F) | SYNCS_OFF);
+  //set_pixel(x, y, color);
 }
 
 void IRAM_ATTR DiTransparentBitmap::paint(const DiPaintParams *params) {
-  //DiTransparentBitmap_paint((void*)this, params);
+  DiTransparentBitmap_paint((void*)this, params);
 }
