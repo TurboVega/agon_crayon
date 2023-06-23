@@ -37,20 +37,33 @@ DiMaskedBitmap::DiMaskedBitmap(uint32_t width, uint32_t height, ScrollMode scrol
   switch (scroll_mode) {
     case NONE:
     case VERTICAL:
-      m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+      m_words_per_line = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t)) * 2;
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
-      memset(m_pixels, SYNCS_OFF, m_bytes_per_position);
+      {
+        uint32_t* p = m_pixels;
+        for (uint32_t i = 0; i < m_words_per_position; i+=2) {
+          *p++ = 0xFFFFFFFF; // inverted mask
+          *p++ = SYNCS_OFF_X4; // color
+        }
+      }
       break;
 
     case HORIZONTAL:
     case BOTH:
-      m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
+      m_words_per_line = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2) * 2;
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
-      memset(m_pixels, SYNCS_OFF, m_bytes_per_position * 4);
+      {
+        uint32_t* p = m_pixels;
+        uint32_t n = m_words_per_position * 4;
+        for (uint32_t i = 0; i < n; i+=2) {
+          *p++ = 0xFFFFFFFF; // inverted mask
+          *p++ = SYNCS_OFF_X4; // color
+        }
+      }
       break;
   }
 }
@@ -63,7 +76,7 @@ void* DiMaskedBitmap::operator new(size_t size, uint32_t width, uint32_t height,
   switch (scroll_mode) {
     case NONE:
     case VERTICAL:
-      wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+      wpl = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t)) * 2;
       wpp = wpl * height;
       bpp = wpp * sizeof(uint32_t);
       new_size = (size_t)(sizeof(DiMaskedBitmap) - sizeof(uint32_t) + (bpp));
@@ -71,7 +84,7 @@ void* DiMaskedBitmap::operator new(size_t size, uint32_t width, uint32_t height,
 
     case HORIZONTAL:
     case BOTH:
-      wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
+      wpl = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2) * 2;
       wpp = wpl * height;
       bpp = wpp * sizeof(uint32_t);
       new_size = (size_t)(sizeof(DiMaskedBitmap) - sizeof(uint32_t) + (bpp * 4));
@@ -109,7 +122,10 @@ void DiMaskedBitmap::set_masked_pixel(int32_t x, int32_t y, uint8_t color) {
 
 void DiMaskedBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) {
   for (uint32_t pos = 0; pos < 4; pos++) {
-    pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line)[FIX_INDEX(pos + x)] = color;
+    uint8_t* p = pixels(m_pixels + (pos * m_words_per_position + y * m_words_per_line + (x + pos) / 4) * 2);
+    int32_t index = FIX_INDEX((x + pos) & 3);
+    p[index] = 0x00; // inverted mask
+    p[index + 4] = color;
   }
 }
 

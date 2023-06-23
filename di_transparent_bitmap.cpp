@@ -41,7 +41,13 @@ DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, Scroll
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
-      memset(m_pixels, SYNCS_OFF, m_bytes_per_position);
+      {
+        uint32_t* p = m_pixels;
+        for (uint32_t i = 0; i < m_words_per_position; i++) {
+          *p++ = 0; // mask
+          *p++ = SYNCS_OFF_X4; // color
+        }
+      }
       break;
 
     case HORIZONTAL:
@@ -50,7 +56,14 @@ DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, Scroll
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
-      memset(m_pixels, SYNCS_OFF, m_bytes_per_position * 4);
+      {
+        uint32_t* p = m_pixels;
+        uint32_t n = m_words_per_position * 4;
+        for (uint32_t i = 0; i < n; i++) {
+          *p++ = 0; // mask
+          *p++ = SYNCS_OFF_X4; // color
+        }
+      }
       break;
   }
 }
@@ -66,7 +79,7 @@ void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t he
       wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
       wpp = wpl * height;
       bpp = wpp * sizeof(uint32_t);
-      new_size = (size_t)(sizeof(DiTransparentBitmap) - sizeof(uint32_t) + (bpp));
+      new_size = (size_t)(sizeof(DiTransparentBitmap) - sizeof(uint32_t) + (bpp * 2));
       break;
 
     case HORIZONTAL:
@@ -74,7 +87,7 @@ void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t he
       wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
       wpp = wpl * height;
       bpp = wpp * sizeof(uint32_t);
-      new_size = (size_t)(sizeof(DiTransparentBitmap) - sizeof(uint32_t) + (bpp * 4));
+      new_size = (size_t)(sizeof(DiTransparentBitmap) - sizeof(uint32_t) + (bpp * 2 * 4));
       break;
   }
   void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_SPIRAM);

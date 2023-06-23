@@ -142,7 +142,8 @@
   or        a6,a6,a11     // a6 <-- new combined pixels
   s32i      a6,a4,0       // m_line32[] <-- src pixel data
   add       a4,a4,a10     // a4 <-- points to next dst pixels
-  add       a14,a14,a10   // a14 <-- pointer to next 4 source pixels
+  add       a14,a14,a10   // a14 <-- skip masks
+  add       a14,a14,a10   // a14 <-- skip colors
 
   .endm
 
@@ -192,7 +193,7 @@ right_ok:
   bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
   bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4
 move_start:
-  addi      a7,a7,4       // move start pixels address by one word
+  addi      a7,a7,8       // move start pixels address by 2 words (masks & colors)
 dont_move:
 
   sub       a3,a8,a5      // a3 <-- final line width
@@ -211,6 +212,7 @@ dont_move:
 
   movi      a2,0xFFFFFFFC // a2 <-- mask to remove lower 2 bits
   and       a6,a2,a13     // a6 <-- offset to word-aligned src pixels
+  slli      a6,a6,1       // a6 <-- offset covers masks & colors
   add       a14,a14,a6    // a14 <-- points to word-aligned src pixels
   and       a6,a2,a5      // a6 <-- offset to word-aligned dst pixels
   add       a4,a4,a6      // a4 <-- points to word-aligned dst pixels
@@ -489,7 +491,8 @@ do_middle_pixels:
   l32i      a9,a14,0      // a9 <-- 4 src pixels
   s32i      a9,a4,0       // m_line32[] <-- src pixel data
   add       a4,a4,a10     // a4 <-- points to next 4 dst pixels
-  add       a14,a14,a10   // a14 <-- points to next 4 src pixels
+  add       a14,a14,a10   // a14 <-- skip masks
+  add       a14,a14,a10   // a14 <-- skip pixels
 end_loop:
   ret
 
