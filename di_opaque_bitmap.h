@@ -1,12 +1,6 @@
-// di_bitmap.h - Function declarations for drawing rectangular bitmaps 
+// di_opaque_bitmap.h - Function declarations for drawing opaque bitmaps 
 //
 // An opaque bitmap is a rectangle of fully opaque pixels of various colors.
-//
-// A masked bitmap is a combination of fully opaque of various colors,and fully
-// transparent pixels.
-//
-// An transparent bitmap is a rectangle that is a combination of fully transparent pixels,
-// partially transparent pixels, and fully opaque pixels, of various colors. 
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -34,13 +28,6 @@
 
 class DiOpaqueBitmap: public DiPrimitiveXYWH {
   public:
-  typedef enum ScrollMode {
-    NONE,       // do not allow scrolling
-    HORIZONTAL, // allow horizontal, but not vertical
-    VERTICAL,   // allow vertical, but not horizontal
-    BOTH        // both horizontal and vertical
-  };
-
   uint32_t m_words_per_line;
   uint32_t m_bytes_per_line;
   uint32_t m_words_per_position;
@@ -60,26 +47,3 @@ class DiOpaqueBitmap: public DiPrimitiveXYWH {
   protected:
   void set_pixel(int32_t x, int32_t y, uint8_t color);
 };
-
-//---------------------------------------------------------------------
-
-class DiMaskedBitmap: public DiOpaqueBitmap {
-  public:
-  DiMaskedBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
-  void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
-  void set_masked_pixel(int32_t x, int32_t y, uint8_t color);
-
-  virtual void IRAM_ATTR paint(const DiPaintParams *params);
-};
-
-//---------------------------------------------------------------------
-
-class DiTransparentBitmap: public DiOpaqueBitmap {
-  public:
-  DiTransparentBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
-  void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
-  void set_transparent_pixel(int32_t x, int32_t y, uint8_t color);
-
-  virtual void IRAM_ATTR paint(const DiPaintParams *params);
-};
-

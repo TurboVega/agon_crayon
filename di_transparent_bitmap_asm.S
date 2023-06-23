@@ -1,11 +1,6 @@
-// di_transparent_bitmap_asm.S - Low-level assembler function for drawing opaque bitmaps 
+// di_transparent_bitmap_asm.S - Low-level assembler function for drawing transparent bitmaps 
 //
-// An opaque bitmap is a rectangle of fully opaque pixels of various colors.
-//
-// A masked bitmap is a combination of fully opaque of various colors,and fully
-// transparent pixels.
-//
-// An transparent bitmap is a rectangle that is a combination of fully transparent pixels,
+// A transparent bitmap is a rectangle that is a combination of fully transparent pixels,
 // partially transparent pixels, and fully opaque pixels, of various colors. 
 //
 // Copyright (c) 2023 Curtis Whitley
@@ -29,7 +24,7 @@
 // SOFTWARE.
 // 
 //
-// The functions defined in this source may be specified
+// The function defined in this source may be specified
 // in a C source that calls it, using this declaration:
 //
 // extern "C" {

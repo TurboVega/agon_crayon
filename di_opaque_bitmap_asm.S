@@ -2,12 +2,6 @@
 //
 // An opaque bitmap is a rectangle of fully opaque pixels of various colors.
 //
-// A masked bitmap is a combination of fully opaque of various colors,and fully
-// transparent pixels.
-//
-// An transparent bitmap is a rectangle that is a combination of fully transparent pixels,
-// partially transparent pixels, and fully opaque pixels, of various colors. 
-//
 // Copyright (c) 2023 Curtis Whitley
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -87,8 +81,6 @@
   .section .iram1.text
   .global   DiOpaqueBitmap_paint
   .type     DiOpaqueBitmap_paint,@function
-  .global   DiMaskedBitmap_paint
-  .type     DiMaskedBitmap_paint,@function
 
 // Assume that the logical pixels in one line of the original source bitmap are
 // arranged like this:

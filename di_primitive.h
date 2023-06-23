@@ -29,6 +29,13 @@
 #include "driver/gpio.h"
 #include "di_constants.h"
 
+typedef enum ScrollMode {
+  NONE,       // do not allow scrolling
+  HORIZONTAL, // allow horizontal, but not vertical
+  VERTICAL,   // allow vertical, but not horizontal
+  BOTH        // both horizontal and vertical
+};
+
 typedef struct {
   uint32_t* m_line32;
   uint8_t*  m_line8;

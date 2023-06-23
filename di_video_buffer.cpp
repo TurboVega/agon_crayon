@@ -31,7 +31,9 @@
 #include "di_horiz_line.h"
 #include "di_diag_right_line.h"
 #include "di_diag_left_line.h"
-#include "di_bitmap.h"
+#include "di_opaque_bitmap.h"
+#include "di_masked_bitmap.h"
+#include "di_transparent_bitmap.h"
 #include "di_tile_map.h"
 #include "esp_heap_caps.h"
 
@@ -300,27 +302,27 @@ void init_stars() {
 
 #if DRAW_OPAQUE_BITMAP
   for (uint32_t c = 0; c < NC; c++) {
-    //gp_opaque_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
-    gp_opaque_bitmap[c] = new(32,32,DiOpaqueBitmap::ScrollMode::BOTH) DiOpaqueBitmap(32,32,DiOpaqueBitmap::ScrollMode::BOTH);
+    //gp_opaque_bitmap[c] = new(32,384,ScrollMode::BOTH) DiOpaqueBitmap(32,384,ScrollMode::BOTH);
+    gp_opaque_bitmap[c] = new(32,32,ScrollMode::BOTH) DiOpaqueBitmap(32,32,ScrollMode::BOTH);
   }
 #endif
 
 #if DRAW_MASKED_BITMAP
   for (uint32_t c = 0; c < NC; c++) {
-    //gp_masked_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiMaskedBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
-    gp_masked_bitmap[c] = new(32,32,DiOpaqueBitmap::ScrollMode::BOTH) DiMaskedBitmap(32,32,DiOpaqueBitmap::ScrollMode::BOTH);
+    //gp_masked_bitmap[c] = new(32,384,ScrollMode::BOTH) DiMaskedBitmap(32,384,ScrollMode::BOTH);
+    gp_masked_bitmap[c] = new(32,32,ScrollMode::BOTH) DiMaskedBitmap(32,32,ScrollMode::BOTH);
   }
 #endif
 
 #if DRAW_TRANSPARENT_BITMAP
   for (uint32_t c = 0; c < NC; c++) {
-    //gp_transparent_bitmap[c] = new(32,384,DiOpaqueBitmap::ScrollMode::BOTH) DiTransparentBitmap(32,384,DiOpaqueBitmap::ScrollMode::BOTH);
-    gp_transparent_bitmap[c] = new(32,32,DiOpaqueBitmap::ScrollMode::BOTH) DiTransparentBitmap(32,32,DiOpaqueBitmap::ScrollMode::BOTH);
+    //gp_transparent_bitmap[c] = new(32,384,ScrollMode::BOTH) DiTransparentBitmap(32,384,ScrollMode::BOTH);
+    gp_transparent_bitmap[c] = new(32,32,ScrollMode::BOTH) DiTransparentBitmap(32,32,ScrollMode::BOTH);
   }
 #endif
 
 #if DRAW_BACKGROUND
-  gp_background = new(800,600,DiOpaqueBitmap::ScrollMode::NONE) DiOpaqueBitmap(800,600,DiOpaqueBitmap::ScrollMode::NONE);
+  gp_background = new(800,600,ScrollMode::NONE) DiOpaqueBitmap(800,600,ScrollMode::NONE);
 #endif
 
 #if DRAW_OPAQUE_BITMAP
