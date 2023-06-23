@@ -61,7 +61,7 @@ DiMaskedBitmap::DiMaskedBitmap(uint32_t width, uint32_t height, ScrollMode scrol
         uint32_t n = m_words_per_position * 4;
         for (uint32_t i = 0; i < n; i+=2) {
           *p++ = 0xFFFFFFFF; // inverted mask
-          *p++ = 0x20;//SYNCS_OFF_X4; // color
+          *p++ = SYNCS_OFF_X4; // color
         }
       }
       break;
@@ -122,8 +122,8 @@ void DiMaskedBitmap::set_masked_pixel(int32_t x, int32_t y, uint8_t color) {
 
 void DiMaskedBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) {
   for (uint32_t pos = 0; pos < 4; pos++) {
-    uint8_t* p = pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line + (x / 4) * 2);
-    int32_t index = FIX_INDEX(pos);
+    uint8_t* p = pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line + ((pos+x) / 4) * 2);
+    int32_t index = FIX_INDEX((pos+x)&3);
     p[index] = 0x00; // inverted mask
     p[index + 4] = color;
   }

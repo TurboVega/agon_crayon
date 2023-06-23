@@ -37,8 +37,8 @@
 #include "di_tile_map.h"
 #include "esp_heap_caps.h"
 
-#define DRAW_OPAQUE_BITMAP 1
-#define DRAW_MASKED_BITMAP 0
+#define DRAW_OPAQUE_BITMAP 0
+#define DRAW_MASKED_BITMAP 1
 #define DRAW_TRANSPARENT_BITMAP 0
 #define DRAW_PIXELS 0
 #define DRAW_BACKGROUND 0
