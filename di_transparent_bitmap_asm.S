@@ -496,24 +496,32 @@ do_middle_pixels:
 
   l8ui      a9,a14,0      // read 1st src pixel
   slli      a9,a9,6       // make room for background color bits
+  l8ui      a5,a4,0       // a5 <-- read 1st dst pixel
+  or        a9,a9,a5      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,0       // write 1st dst pixel
 
   l8ui      a9,a14,1      // read 2nd src pixel
   slli      a9,a9,6       // make room for background color bits
+  l8ui      a5,a4,0       // a5 <-- read 2nd dst pixel
+  or        a9,a9,a5      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,1       // write 2nd dst pixel
 
   l8ui      a9,a14,2      // read 3rd src pixel
   slli      a9,a9,6       // make room for background color bits
+  l8ui      a5,a4,0       // a5 <-- read 3rd dst pixel
+  or        a9,a9,a5      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,2       // write 3rd dst pixel
 
   l8ui      a9,a14,3      // read 4th src pixel
   slli      a9,a9,6       // make room for background color bits
+  l8ui      a5,a4,0       // a5 <-- read 4th dst pixel
+  or        a9,a9,a5      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,3       // write 4th dst pixel
