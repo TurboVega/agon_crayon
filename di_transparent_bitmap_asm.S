@@ -141,7 +141,7 @@
   movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
   or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
   and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,4      // a6 <-- 4 src pixels
+  l32i      a6,a14,0      // a6 <-- 4 src pixels
   or        a6,a6,a11     // a6 <-- new combined pixels
   s32i      a6,a4,0       // m_line32[] <-- src pixel data
   add       a4,a4,a10     // a4 <-- points to next dst pixels
@@ -156,7 +156,7 @@
   movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
   or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
   and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,4      // a6 <-- 4 src pixels
+  l32i      a6,a14,0      // a6 <-- 4 src pixels
   or        a6,a6,a11     // a6 <-- new combined pixels
   s32i      a6,a4,0       // m_line32[] <-- src pixel data
 
@@ -197,7 +197,7 @@ right_ok:
   bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
   bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4
 move_start:
-  addi      a7,a7,8       // move start pixels address by 2 words (masks & colors)
+  addi      a7,a7,4       // move start pixels address by 1 word
 dont_move:
 
   sub       a3,a8,a5      // a3 <-- final line width
@@ -215,12 +215,12 @@ dont_move:
 
   movi      a15,0xFFFFFFFC // a15 <-- mask to remove lower 2 bits
   and       a6,a15,a13    // a6 <-- offset to word-aligned src pixels
-  slli      a6,a6,1       // a6 <-- offset covers masks & colors
   add       a14,a14,a6    // a14 <-- points to word-aligned src pixels
   and       a6,a15,a5     // a6 <-- offset to word-aligned dst pixels
   add       a4,a4,a6      // a4 <-- points to word-aligned dst pixels
 
   mov       a15,a0        // a15 <-- save return address
+  l32i      a2,a2,48      // a2 <-- m_mixed_colors
 
 //.......................................
 // Determine the alignment of the source and destination pixels.
@@ -494,14 +494,38 @@ do_middle_pixels:
   srli      a11,a3,2      // a11 <-- number of full words left to copy
   loopnez   a11,end_loop  // loop to copy pixel data
 
-  l32i      a9,a14,4      // a9 <-- 4 src pixels
-  l32i      a11,a14,0     // a11 <-- mask for keeping dst pixels (00=use src; FF=use dst)
-  l32i      a5,a4,0       // a5 <-- 4 dst pixels
-  and       a5,a5,a11     // a5 <-- dst pixels retained
-  or        a9,a9,a5      // a9 <-- final mixed pixels
+  l8ui      a9,a14,0      // read 1st src pixel
+  slli      a9,a9,6       // make room for background color bits
+  add       a9,a9,a2      // point to mixed color
+  l8ui      a9,a9,0       // load mixed color
+  s8i       a9,a4,0       // write 1st dst pixel
 
-  s32i      a9,a4,0       // m_line32[] <-- src pixel data
+  l8ui      a9,a14,1      // read 2nd src pixel
+  slli      a9,a9,6       // make room for background color bits
+  add       a9,a9,a2      // point to mixed color
+  l8ui      a9,a9,0       // load mixed color
+  s8i       a9,a4,1       // write 2nd dst pixel
+
+  l8ui      a9,a14,2      // read 3rd src pixel
+  slli      a9,a9,6       // make room for background color bits
+  add       a9,a9,a2      // point to mixed color
+  l8ui      a9,a9,0       // load mixed color
+  s8i       a9,a4,2       // write 3rd dst pixel
+
+  l8ui      a9,a14,3      // read 4th src pixel
+  slli      a9,a9,6       // make room for background color bits
+  add       a9,a9,a2      // point to mixed color
+  l8ui      a9,a9,0       // load mixed color
+  s8i       a9,a4,3       // write 4th dst pixel
+
+//  l32i      a9,a14,0      // a9 <-- 4 src pixels
+//  l32i      a11,a14,0     // a11 <-- mask for keeping dst pixels (00=use src; FF=use dst)
+//  l32i      a5,a4,0       // a5 <-- 4 dst pixels
+//  and       a5,a5,a11     // a5 <-- dst pixels retained
+//  or        a9,a9,a5      // a9 <-- final mixed pixels
+//  s32i      a9,a4,0       // m_line32[] <-- src pixel data
+
   add       a4,a4,a10     // a4 <-- points to next 4 dst pixels
-  addi      a14,a14,8     // a14 <-- skip masks & colors
+  addi      a14,a14,4     // a14 <-- points to next 4 src pixels
 end_loop:
   ret

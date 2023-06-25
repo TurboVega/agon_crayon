@@ -39,7 +39,7 @@ DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, Scroll
   switch (scroll_mode) {
     case NONE:
     case VERTICAL:
-      m_words_per_line = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t)) * 2;
+      m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
@@ -54,7 +54,7 @@ DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, Scroll
 
     case HORIZONTAL:
     case BOTH:
-      m_words_per_line = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2) * 2;
+      m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
@@ -79,7 +79,7 @@ void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t he
   switch (scroll_mode) {
     case NONE:
     case VERTICAL:
-      wpl = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t)) * 2;
+      wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
       wpp = wpl * height;
       bpp = wpp * sizeof(uint32_t);
       new_size = (size_t)(sizeof(DiTransparentBitmap) - sizeof(uint32_t) + (bpp));
@@ -87,7 +87,7 @@ void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t he
 
     case HORIZONTAL:
     case BOTH:
-      wpl = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2) * 2;
+      wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
       wpp = wpl * height;
       bpp = wpp * sizeof(uint32_t);
       new_size = (size_t)(sizeof(DiTransparentBitmap) - sizeof(uint32_t) + (bpp * 4));
@@ -118,17 +118,12 @@ void DiTransparentBitmap::set_position(int32_t x, int32_t y, uint32_t start_line
 }
 
 void DiTransparentBitmap::set_transparent_pixel(int32_t x, int32_t y, uint8_t color) {
-  if (color & 0xC0) {
-    set_pixel(x, y, (color & 0x3F) | SYNCS_OFF);
-  }
+  set_pixel(x, y, color);
 }
 
 void DiTransparentBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) {
   for (uint32_t pos = 0; pos < 4; pos++) {
-    uint8_t* p = pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line + ((pos+x) / 4) * 2);
-    int32_t index = FIX_INDEX((pos+x)&3);
-    p[index] = 0x00; // inverted mask
-    p[index + 4] = color;
+    pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line)[FIX_INDEX(pos + x)] = color;
   }
 }
 
