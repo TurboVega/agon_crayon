@@ -501,4 +501,3 @@ do_middle_pixels:
   addi      a14,a14,8     // a14 <-- skip masks & colors
 end_loop:
   ret
-

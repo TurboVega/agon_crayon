@@ -136,22 +136,26 @@
   .macro    DO_START_PIXELS mask
 
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,\mask     // a11 <-- mask for keeping dst pixels
+  l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
+  movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
+  or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
   and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  l32i      a6,a14,4      // a6 <-- 4 src pixels
   or        a6,a6,a11     // a6 <-- new combined pixels
   s32i      a6,a4,0       // m_line32[] <-- src pixel data
   add       a4,a4,a10     // a4 <-- points to next dst pixels
-  add       a14,a14,a10   // a14 <-- pointer to next 4 source pixels
+  addi      a14,a14,8     // a14 <-- skip masks & colors
 
   .endm
 
   .macro    DO_END_PIXELS mask
 
   l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  movi      a11,\mask     // a11 <-- mask for keeping dst pixels
+  l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
+  movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
+  or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
   and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
+  l32i      a6,a14,4      // a6 <-- 4 src pixels
   or        a6,a6,a11     // a6 <-- new combined pixels
   s32i      a6,a4,0       // m_line32[] <-- src pixel data
 
@@ -192,7 +196,7 @@ right_ok:
   bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
   bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4
 move_start:
-  addi      a7,a7,4       // move start pixels address by one word
+  addi      a7,a7,8       // move start pixels address by 2 words (masks & colors)
 dont_move:
 
   sub       a3,a8,a5      // a3 <-- final line width
@@ -211,6 +215,7 @@ dont_move:
 
   movi      a2,0xFFFFFFFC // a2 <-- mask to remove lower 2 bits
   and       a6,a2,a13     // a6 <-- offset to word-aligned src pixels
+  slli      a6,a6,1       // a6 <-- offset covers masks & colors
   add       a14,a14,a6    // a14 <-- points to word-aligned src pixels
   and       a6,a2,a5      // a6 <-- offset to word-aligned dst pixels
   add       a4,a4,a6      // a4 <-- points to word-aligned dst pixels
@@ -257,7 +262,7 @@ so_0_dst_offset_1:
   // Physical B:bc-a.nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   DO_START_PIXELS 0x00FF0000
-  addi     a5,a5,3
+  //addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
   DO_END_PIXELS 0xFF00FFFF
@@ -274,7 +279,7 @@ so_0_dst_offset_2:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   DO_START_PIXELS 0xFFFF0000
-  addi     a5,a5,2
+  //addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FFFF
@@ -289,7 +294,7 @@ so_0_dst_offset_3:
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
   DO_START_PIXELS 0xFFFF00FF
-  addi     a5,a5,1
+  //addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FF00
@@ -320,7 +325,7 @@ so_1_dst_offset_1:
   // Physical A:cd-b.opmn.opmn.yzwx.----
   // a14 <-- pointer to source pixels (position A)
   DO_START_PIXELS 0x00FF0000
-  addi     a5,a5,3
+  //addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
   mov      a0,a15
@@ -335,7 +340,7 @@ so_1_dst_offset_2:
   // Physical B:bc--.nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   DO_START_PIXELS 0xFFFF0000
-  addi     a5,a5,2
+  //addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
   DO_END_PIXELS 0xFF00FFFF
@@ -349,7 +354,7 @@ so_1_dst_offset_3:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   DO_START_PIXELS 0xFFFF00FF
-  addi     a5,a5,1
+  //addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FFFF
@@ -381,7 +386,7 @@ so_2_dst_offset_1:
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
   DO_START_PIXELS 0x00FF0000
-  addi     a5,a5,3
+  //addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FF00
@@ -397,7 +402,7 @@ so_2_dst_offset_2:
   // Physical A:cd--.opmn.opmn.yzwx.----
   // a14 <-- pointer to source pixels (position A)
   DO_START_PIXELS 0xFFFF0000
-  addi     a5,a5,2
+  //addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
   mov      a0,a15
@@ -409,7 +414,7 @@ so_2_dst_offset_3:
   // Physical B:-c--.nodm.nopm.xypw.z---
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   DO_START_PIXELS 0xFFFF00FF
-  addi     a5,a5,1
+  //addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
   DO_END_PIXELS 0xFFFFFF00
@@ -427,7 +432,7 @@ so_3_dst_offset_0:
   // Logical  B:dmno.pmno.pwxy.z---
   // Physical B:nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
-  sub      a5,a5,a7
+  //sub      a5,a5,a7
   call0    do_middle_pixels
   DO_END_PIXELS 0xFF00FFFF
   mov      a0,a15
@@ -440,7 +445,7 @@ so_3_dst_offset_1:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   DO_START_PIXELS 0x00FF0000
-  addi     a5,a5,3
+  //addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FFFF
@@ -458,7 +463,7 @@ so_3_dst_offset_2:
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
   DO_START_PIXELS 0xFFFF0000
-  addi     a5,a5,2
+  //addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
   DO_END_PIXELS 0x0000FF00
@@ -471,7 +476,7 @@ so_3_dst_offset_3:
   // Physical A:-d--.opmn.opmn.yzwx.----
   // a14 <-- pointer to source pixels (position A)
   DO_START_PIXELS 0xFFFF00FF
-  addi     a5,a5,1
+  //addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
   mov      a0,a15
@@ -486,9 +491,13 @@ so_3_dst_offset_3:
 do_middle_pixels:
   srli      a11,a3,2      // a11 <-- number of full words left to copy
   loopnez   a11,end_loop  // loop to copy pixel data
-  l32i      a9,a14,0      // a9 <-- 4 src pixels
+  l32i      a9,a14,4      // a9 <-- 4 src pixels
+  l32i      a11,a14,0     // a11 <-- mask for keeping dst pixels
+  l32i      a5,a4,0       // a5 <-- 4 dst pixels
+  and       a5,a5,a11     // a5 <-- dst pixels retained
+  or        a9,a9,a5      // a9 <-- final mixed pixels
   s32i      a9,a4,0       // m_line32[] <-- src pixel data
   add       a4,a4,a10     // a4 <-- points to next 4 dst pixels
-  add       a14,a14,a10   // a14 <-- points to next 4 src pixels
+  addi      a14,a14,8     // a14 <-- skip masks & colors
 end_loop:
   ret
