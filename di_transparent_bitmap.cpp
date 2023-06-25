@@ -32,6 +32,8 @@ extern "C" {
 IRAM_ATTR void DiTransparentBitmap_paint(void* this_ptr, const DiPaintParams *params);
 }
 
+uint8_t* DiTransparentBitmap::m_mix_table = NULL;
+
 DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode):
   DiPrimitiveXYWH(0, 0, width, height) {
   switch (scroll_mode) {
@@ -66,6 +68,7 @@ DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, Scroll
       }
       break;
   }
+  m_mixed_colors = init_mix_table();
 }
 
 void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode) {
@@ -131,4 +134,35 @@ void DiTransparentBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) {
 
 void IRAM_ATTR DiTransparentBitmap::paint(const DiPaintParams *params) {
   DiTransparentBitmap_paint((void*)this, params);
+}
+
+uint8_t DiTransparentBitmap::mix(uint8_t fg, uint8_t fa, uint8_t bg) {
+  return (fg * fa + bg * (3 - fa)) / 3;
+}
+
+uint8_t* DiTransparentBitmap::init_mix_table() {
+  if (!m_mix_table) {
+    uint32_t new_size = 4 * 64 * 64;
+    m_mix_table = (uint8_t*) heap_caps_malloc(new_size, MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
+    uint8_t* p = m_mix_table;
+    for (uint8_t fa = 0; fa < 4; fa++) {
+      for (uint8_t fg_b = 0; fg_b < 4; fg_b++) {
+        for (uint8_t fg_g = 0; fg_g < 4; fg_g++) {
+          for (uint8_t fg_r = 0; fg_r < 4; fg_r++) {
+            for (uint8_t bg_b = 0; bg_b < 4; bg_b++) {
+              for (uint8_t bg_g = 0; bg_g < 4; bg_g++) {
+                for (uint8_t bg_r = 0; bg_r < 4; bg_r++) {
+                  uint8_t mb = mix(fg_b, fa, bg_b);
+                  uint8_t mg = mix(fg_g, fa, bg_g);
+                  uint8_t mr = mix(fg_r, fa, bg_r);
+                  *p++ = ((mb<<4)|(mg<<2)|(mr)|SYNCS_OFF);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return m_mix_table;
 }
