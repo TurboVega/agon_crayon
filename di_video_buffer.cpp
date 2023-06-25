@@ -598,7 +598,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
       //gp_transparent_bitmap[c]->set_position(c*80+20+c, r*100+100+r, frame_index*32, 32);
       //gp_transparent_bitmap[c]->set_position(c*100+100+c, r*100+100+r, frame_index*32, 32);
       gp_transparent_bitmap[c]->set_position(c*100+100+c, r*100+100+r);
-      gp_transparent_bitmap[c]->paint(params);
+      gp_transparent_bitmap[c]->paint(&p2);
     }
   }
 #endif
