@@ -472,6 +472,8 @@ do_middle_pixels:
   l32i      a10,a14,0     // a10 <-- read 4 src pixels
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
 
+  // xxxx xxxx xxxx xxxx xxxx xxxx TTBB GGRR
+  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
   slli      a9,a10,6      // a9 <-- make room for background color bits
   and       a9,a9,a13     // a9 <-- keep only src pixel bits
   and       a3,a11,a5     // a3 <-- keep only dst pixel bits
@@ -480,6 +482,8 @@ do_middle_pixels:
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,0       // write 1st dst pixel
 
+  // xxxx xxxx xxxx xxxx TTBB GGRR xxxx xxxx
+  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
   srli      a9,a10,2      // a9 <-- make room for background color bits
   srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
   and       a9,a9,a13     // a9 <-- keep only src pixel bits
@@ -489,7 +493,9 @@ do_middle_pixels:
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,1       // write 2nd dst pixel
 
-  slli      a9,a10,10     // a9 <-- make room for background color bits
+  // xxxx xxxx TTBB GGRR xxxx xxxx xxxx xxxx
+  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
+  srli      a9,a10,10     // a9 <-- make room for background color bits
   srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
   and       a9,a9,a13     // a9 <-- keep only src pixel bits
   and       a3,a11,a5     // a3 <-- keep only dst pixel bits
@@ -498,7 +504,9 @@ do_middle_pixels:
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,2       // write 3rd dst pixel
 
-  slli      a9,a10,18     // a9 <-- make room for background color bits
+  // TTBB GGRR xxxx xxxx xxxx xxxx xxxx xxxx
+  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
+  srli      a9,a10,18     // a9 <-- make room for background color bits
   srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
   and       a9,a9,a13     // a9 <-- keep only src pixel bits
   and       a3,a11,a5     // a3 <-- keep only dst pixel bits
