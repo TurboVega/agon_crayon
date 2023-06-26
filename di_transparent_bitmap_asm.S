@@ -136,29 +136,29 @@
 
   .macro    DO_START_PIXELS mask
 
-  l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
-  movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
-  or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
-  and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
-  or        a6,a6,a11     // a6 <-- new combined pixels
-  s32i      a6,a4,0       // m_line32[] <-- src pixel data
-  add       a4,a4,a10     // a4 <-- points to next dst pixels
-  addi      a14,a14,8     // a14 <-- skip masks & colors
+  //l32i      a6,a4,0       // a6 <-- 4 dst pixels
+  //l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
+  //movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
+  //or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
+  //and       a11,a11,a6    // a11 <-- keepable dst pixels
+  //l32i      a6,a14,0      // a6 <-- 4 src pixels
+  //or        a6,a6,a11     // a6 <-- new combined pixels
+  //s32i      a6,a4,0       // m_line32[] <-- src pixel data
+  //add       a4,a4,a10     // a4 <-- points to next dst pixels
+  //addi      a14,a14,8     // a14 <-- skip masks & colors
 
   .endm
 
   .macro    DO_END_PIXELS mask
 
-  l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
-  movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
-  or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
-  and       a11,a11,a6    // a11 <-- keepable dst pixels
-  l32i      a6,a14,0      // a6 <-- 4 src pixels
-  or        a6,a6,a11     // a6 <-- new combined pixels
-  s32i      a6,a4,0       // m_line32[] <-- src pixel data
+  //l32i      a6,a4,0       // a6 <-- 4 dst pixels
+  //l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
+  //movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
+  //or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
+  //and       a11,a11,a6    // a11 <-- keepable dst pixels
+  //l32i      a6,a14,0      // a6 <-- 4 src pixels
+  //or        a6,a6,a11     // a6 <-- new combined pixels
+  //s32i      a6,a4,0       // m_line32[] <-- src pixel data
 
   .endm
 
@@ -197,7 +197,7 @@ right_ok:
   bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
   bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4
 move_start:
-  addi      a7,a7,4       // move start pixels address by 1 word
+  //addi      a7,a7,4       // move start pixels address by 1 word
 dont_move:
 
   sub       a3,a8,a5      // a3 <-- final line width

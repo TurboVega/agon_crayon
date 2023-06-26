@@ -46,6 +46,7 @@
 
 #define _COMPILE_HEX_DATA_
 #define __root /**/
+
 #if DRAW_TILE_MAP
 #include "samples\\SKY.h"
 #include "samples\\CLOUD.h"
@@ -54,12 +55,13 @@
 #endif
 
 #if DRAW_OPAQUE_BITMAP | DRAW_MASKED_BITMAP | DRAW_TRANSPARENT_BITMAP
-#include "samples\\TEST_BITMAP.h"
-#include "samples\\plants\\apple\\apple_seq32.h"
+#include "samples\\BRUSH_STROKES.h"
+//#include "samples\\TEST_BITMAP.h"
+/*#include "samples\\plants\\apple\\apple_seq32.h"
 #include "samples\\plants\\bananas\\bananas_seq32.h"
 #include "samples\\plants\\watermelon\\watermelon_seq32.h"
 #include "samples\\plants\\pumpkin\\pumpkin_seq32.h"
-#include "samples\\plants\\plum\\plum_seq32.h"
+#include "samples\\plants\\plum\\plum_seq32.h"*/
 /*#include "samples\\plants\\tomato\\tomato_seq32.h"
 #include "samples\\plants\\peas\\peas_seq32.h"
 #include "samples\\plants\\eggplant\\eggplant_seq32.h"
@@ -317,7 +319,7 @@ void init_stars() {
 #if DRAW_TRANSPARENT_BITMAP
   for (uint32_t c = 0; c < NC; c++) {
     //gp_transparent_bitmap[c] = new(32,384,ScrollMode::BOTH) DiTransparentBitmap(32,384,ScrollMode::BOTH);
-    gp_transparent_bitmap[c] = new(32,32,ScrollMode::BOTH) DiTransparentBitmap(32,32,ScrollMode::BOTH);
+    gp_transparent_bitmap[c] = new(400,100,ScrollMode::BOTH) DiTransparentBitmap(400,100,ScrollMode::BOTH);
   }
 #endif
 
@@ -360,10 +362,11 @@ void init_stars() {
 #endif
 
 #if DRAW_TRANSPARENT_BITMAP
-  for (int32_t y=0;y<32;y++) {
-    for (int32_t x=0;x<32;x++) {
-      gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gapple_seq32Data[y*32+x]);
-      /*gp_transparent_bitmap[1]->set_transparent_pixel(x, y, gbananas_seq32Data[y*32+x]);
+  for (int32_t y=0;y<100;y++) {
+    for (int32_t x=0;x<400;x++) {
+      gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gbrush_strokesData[y*400+x]);
+      /*gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gapple_seq32Data[y*32+x]);
+      gp_transparent_bitmap[1]->set_transparent_pixel(x, y, gbananas_seq32Data[y*32+x]);
       gp_transparent_bitmap[2]->set_transparent_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
       gp_transparent_bitmap[3]->set_transparent_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
       gp_transparent_bitmap[4]->set_transparent_pixel(x, y, gplum_seq32Data[y*32+x]);*/
@@ -597,7 +600,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
       //gp_transparent_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
       //gp_transparent_bitmap[c]->set_position(c*80+20+c, r*100+100+r, frame_index*32, 32);
       //gp_transparent_bitmap[c]->set_position(c*100+100+c, r*100+100+r, frame_index*32, 32);
-      gp_transparent_bitmap[c]->set_position(c*100+100+c, r*100+100+r);
+      gp_transparent_bitmap[c]->set_position(200, 250);
       gp_transparent_bitmap[c]->paint(&p2);
     }
   }
