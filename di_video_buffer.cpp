@@ -55,7 +55,7 @@
 #endif
 
 #if DRAW_OPAQUE_BITMAP | DRAW_MASKED_BITMAP | DRAW_TRANSPARENT_BITMAP
-#include "samples\\BRUSH_STROKES.h"
+#include "samples\\BRUSH_STROKES2.h"
 //#include "samples\\TEST_BITMAP.h"
 /*#include "samples\\plants\\apple\\apple_seq32.h"
 #include "samples\\plants\\bananas\\bananas_seq32.h"
@@ -364,7 +364,7 @@ void init_stars() {
 #if DRAW_TRANSPARENT_BITMAP
   for (int32_t y=0;y<100;y++) {
     for (int32_t x=0;x<400;x++) {
-      gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gbrush_strokesData[y*400+x]);
+      gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gbrush_strokes2Data[y*400+x]);
       /*gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gapple_seq32Data[y*32+x]);
       gp_transparent_bitmap[1]->set_transparent_pixel(x, y, gbananas_seq32Data[y*32+x]);
       gp_transparent_bitmap[2]->set_transparent_pixel(x, y, gwatermelon_seq32Data[y*32+x]);

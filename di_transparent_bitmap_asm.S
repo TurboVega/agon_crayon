@@ -461,9 +461,10 @@ so_3_dst_offset_3:
 // a3 <-- number of bytes left to copy, then scratch
 // a4 <-- m_line8 (or m_line32)
 // a14 <-- pointer to bitmap data line
-// a3, a5, a9, a10, a11, a13 <-- scratch
+// a3, a5, a6, a9, a10, a11, a13 <-- scratch
 
 do_middle_pixels:
+  ssai      8             // sar <-- will shift in 8 bits via 'src', below
   movi      a13,0x00003FC0 // a13 <-- mask to separate src pixel bits
   movi      a5,0x0000003F // a5 <-- mask to separate dst pixel bits
   srli      a3,a3,2       // a3 <-- number of full words left to copy
@@ -480,7 +481,7 @@ do_middle_pixels:
   or        a9,a9,a3      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
-  s8i       a9,a4,0       // write 1st dst pixel
+  src       a6,a9,a6      // a6 <-- shifts in 1 more new pixel (8 bits)
 
   // xxxx xxxx xxxx xxxx TTBB GGRR xxxx xxxx
   // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
@@ -491,7 +492,7 @@ do_middle_pixels:
   or        a9,a9,a3      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
-  s8i       a9,a4,1       // write 2nd dst pixel
+  src       a6,a9,a6      // a6 <-- shifts in 1 more new pixel (8 bits)
 
   // xxxx xxxx TTBB GGRR xxxx xxxx xxxx xxxx
   // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
@@ -502,7 +503,7 @@ do_middle_pixels:
   or        a9,a9,a3      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
-  s8i       a9,a4,2       // write 3rd dst pixel
+  src       a6,a9,a6      // a6 <-- shifts in 1 more new pixel (8 bits)
 
   // TTBB GGRR xxxx xxxx xxxx xxxx xxxx xxxx
   // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
@@ -513,9 +514,9 @@ do_middle_pixels:
   or        a9,a9,a3      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
-  s8i       a9,a4,3       // write 3rd dst pixel
+  src       a6,a9,a6      // a6 <-- shifts in 1 more new pixel (8 bits)
 
-//  s32i      a9,a4,0       // write 4 dst pixels
+  s32i      a6,a4,0       // write 4 dst pixels
   addi      a4,a4,4       // a4 <-- points to next 4 dst pixels
   addi      a14,a14,4     // a14 <-- points to next 4 src pixels
 end_loop:
