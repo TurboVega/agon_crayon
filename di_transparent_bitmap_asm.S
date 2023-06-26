@@ -134,34 +134,6 @@
 //                 B:nodm.nopm.xypw.--z-   C:mn-d.mnop.wxop.--yz.----  D:dm--.pmno.pwno.z-xy.----  A:-d--.opmn.opmn.yzwx.----
 //
 
-  .macro    DO_START_PIXELS mask
-
-  //l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  //l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
-  //movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
-  //or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
-  //and       a11,a11,a6    // a11 <-- keepable dst pixels
-  //l32i      a6,a14,0      // a6 <-- 4 src pixels
-  //or        a6,a6,a11     // a6 <-- new combined pixels
-  //s32i      a6,a4,0       // m_line32[] <-- src pixel data
-  //add       a4,a4,a10     // a4 <-- points to next dst pixels
-  //addi      a14,a14,8     // a14 <-- skip masks & colors
-
-  .endm
-
-  .macro    DO_END_PIXELS mask
-
-  //l32i      a6,a4,0       // a6 <-- 4 dst pixels
-  //l32i      a5,a14,0      // a5 <-- mask for discarding src pixels
-  //movi      a11,\mask     // a11 <-- partial mask for keeping dst pixels
-  //or        a11,a11,a5    // a11 <-- final mask for keeping dst pixels
-  //and       a11,a11,a6    // a11 <-- keepable dst pixels
-  //l32i      a6,a14,0      // a6 <-- 4 src pixels
-  //or        a6,a6,a11     // a6 <-- new combined pixels
-  //s32i      a6,a4,0       // m_line32[] <-- src pixel data
-
-  .endm
-
   .align    4
 DiTransparentBitmap_paint:
   entry     sp,16
@@ -193,12 +165,12 @@ left_ok:
 right_ok:
 
   l32i      a7,a2,44      // a14 <-- m_visible_start
-  bgez      a3,dont_move  // don't move start if left_hand_x >= 0
-  bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
-  bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4
-move_start:
-  //addi      a7,a7,4       // move start pixels address by 1 word
-dont_move:
+//  bgez      a3,dont_move  // don't move start if left_hand_x >= 0
+//  bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
+//  bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4
+//move_start:
+//  //addi      a7,a7,4       // move start pixels address by 1 word
+//dont_move:
 
   sub       a3,a8,a5      // a3 <-- final line width
   beqz      a3,skip2      // skip if nothing to draw
@@ -263,11 +235,11 @@ so_0_dst_offset_1:
   // Logical  B:-abc.dmno.pmno.pwxy.z---
   // Physical B:bc-a.nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
-  DO_START_PIXELS 0x00FF0000
-  //addi     a5,a5,3
+  //DO_START_PIXELS 0x00FF0000
+  addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
-  DO_END_PIXELS 0xFF00FFFF
+  //DO_START_PIXELS 0xFF00FFFF
   mov      a0,a15
   retw
 
@@ -280,11 +252,11 @@ so_0_dst_offset_2:
   // Physical C:ab--.mncd.mnop.wxop.--yz
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
-  DO_START_PIXELS 0xFFFF0000
-  //addi     a5,a5,2
+  //DO_START_PIXELS 0xFFFF0000
+  addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
-  DO_END_PIXELS 0x0000FFFF
+  //DO_START_PIXELS 0x0000FFFF
   mov      a0,a15
   retw
 
@@ -295,11 +267,11 @@ so_0_dst_offset_3:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
-  DO_START_PIXELS 0xFFFF00FF
-  //addi     a5,a5,1
+  //DO_START_PIXELS 0xFFFF00FF
+  addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
-  DO_END_PIXELS 0x0000FF00
+  //DO_START_PIXELS 0x0000FF00
   mov      a0,a15
   retw
 
@@ -317,7 +289,7 @@ so_1_dst_offset_0:
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
   call0    do_middle_pixels
-  DO_END_PIXELS 0x0000FF00
+  //DO_START_PIXELS 0x0000FF00
   mov      a0,a15
   retw
 
@@ -326,8 +298,8 @@ so_1_dst_offset_1:
   // Logical  A:-bcd.mnop.mnop.wxyz.----
   // Physical A:cd-b.opmn.opmn.yzwx.----
   // a14 <-- pointer to source pixels (position A)
-  DO_START_PIXELS 0x00FF0000
-  //addi     a5,a5,3
+  //DO_START_PIXELS 0x00FF0000
+  addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
   mov      a0,a15
@@ -341,11 +313,11 @@ so_1_dst_offset_2:
   // Logical  B:--bc.dmno.pmno.pwxy.z---
   // Physical B:bc--.nodm.nopm.xypw.--z-
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
-  DO_START_PIXELS 0xFFFF0000
-  //addi     a5,a5,2
+  //DO_START_PIXELS 0xFFFF0000
+  addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
-  DO_END_PIXELS 0xFF00FFFF
+  //DO_START_PIXELS 0xFF00FFFF
   mov      a0,a15
   retw
 
@@ -355,11 +327,11 @@ so_1_dst_offset_3:
   // Physical C:-b--.mncd.mnop.wxop.--yz
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
-  DO_START_PIXELS 0xFFFF00FF
-  //addi     a5,a5,1
+  //DO_START_PIXELS 0xFFFF00FF
+  addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
-  DO_END_PIXELS 0x0000FFFF
+  //DO_START_PIXELS 0x0000FFFF
   mov      a0,a15
   retw
 
@@ -376,7 +348,7 @@ so_2_dst_offset_0:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   call0    do_middle_pixels
-  DO_END_PIXELS 0x0000FFFF
+  //DO_START_PIXELS 0x0000FFFF
   mov      a0,a15
   retw
 
@@ -387,11 +359,11 @@ so_2_dst_offset_1:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
-  DO_START_PIXELS 0x00FF0000
-  //addi     a5,a5,3
+  //DO_START_PIXELS 0x00FF0000
+  addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
-  DO_END_PIXELS 0x0000FF00
+  //DO_START_PIXELS 0x0000FF00
   mov      a0,a15
   retw
 
@@ -403,8 +375,8 @@ so_2_dst_offset_2:
   // Logical  A:--cd.mnop.mnop.wxyz.----
   // Physical A:cd--.opmn.opmn.yzwx.----
   // a14 <-- pointer to source pixels (position A)
-  DO_START_PIXELS 0xFFFF0000
-  //addi     a5,a5,2
+  //DO_START_PIXELS 0xFFFF0000
+  addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
   mov      a0,a15
@@ -415,11 +387,11 @@ so_2_dst_offset_3:
   // Logical  B:---c.dmno.pmno.pwxy.z---
   // Physical B:-c--.nodm.nopm.xypw.z---
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
-  DO_START_PIXELS 0xFFFF00FF
-  //addi     a5,a5,1
+  //DO_START_PIXELS 0xFFFF00FF
+  addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
-  DO_END_PIXELS 0xFFFFFF00
+  //DO_START_PIXELS 0xFFFFFF00
   mov      a0,a15
   retw
 
@@ -436,7 +408,7 @@ so_3_dst_offset_0:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   //sub      a5,a5,a7
   call0    do_middle_pixels
-  DO_END_PIXELS 0xFF00FFFF
+  //DO_START_PIXELS 0xFF00FFFF
   mov      a0,a15
   retw
 
@@ -446,11 +418,11 @@ so_3_dst_offset_1:
   // Physical C:mn-d.mnop.wxop.--yz.----
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
-  DO_START_PIXELS 0x00FF0000
-  //addi     a5,a5,3
+  //DO_START_PIXELS 0x00FF0000
+  addi     a5,a5,3
   sub      a3,a3,a9
   call0    do_middle_pixels
-  DO_END_PIXELS 0x0000FFFF
+  //DO_START_PIXELS 0x0000FFFF
   mov      a0,a15
   retw
 
@@ -464,11 +436,11 @@ so_3_dst_offset_2:
   add      a14,a14,a11                  // a14 <-- pointer to source pixels (position B)
   add      a14,a14,a11                  // (position C)
   add      a14,a14,a11                  // (position D)
-  DO_START_PIXELS 0xFFFF0000
-  //addi     a5,a5,2
+  //DO_START_PIXELS 0xFFFF0000
+  addi     a5,a5,2
   sub      a3,a3,a8
   call0    do_middle_pixels
-  DO_END_PIXELS 0x0000FF00
+  //DO_END_PIXELS 0x0000FF00
   mov      a0,a15
   retw
 
@@ -477,63 +449,66 @@ so_3_dst_offset_3:
   // Logical  A:---d.mnop.mnop.wxyz.----
   // Physical A:-d--.opmn.opmn.yzwx.----
   // a14 <-- pointer to source pixels (position A)
-  DO_START_PIXELS 0xFFFF00FF
-  //addi     a5,a5,1
+  //DO_START_PIXELS 0xFFFF00FF
+  addi     a5,a5,1
   sub      a3,a3,a7
   call0    do_middle_pixels
   mov      a0,a15
   retw
 
 //.......................................
+// a2 <-- points to mixed color table
+// a3 <-- number of bytes left to copy, then scratch
 // a4 <-- m_line8 (or m_line32)
-// a5 <-- final start x
-// a13 <-- offset to first visible source pixel
 // a14 <-- pointer to bitmap data line
+// a3, a5, a9, a10, a11, a13 <-- scratch
 
 do_middle_pixels:
-  srli      a11,a3,2      // a11 <-- number of full words left to copy
-  loopnez   a11,end_loop  // loop to copy pixel data
+  movi      a13,0x00003FC0 // a13 <-- mask to separate src pixel bits
+  movi      a5,0x0000003F // a5 <-- mask to separate dst pixel bits
+  srli      a3,a3,2       // a3 <-- number of full words left to copy
+  loopnez   a3,end_loop   // loop to copy pixel data
 
-  l8ui      a9,a14,0      // read 1st src pixel
-  slli      a9,a9,6       // make room for background color bits
-  l8ui      a5,a4,0       // a5 <-- read 1st dst pixel
-  or        a9,a9,a5      // a9 <--  complete table index
+  l32i      a10,a14,0     // a10 <-- read 4 src pixels
+  l32i      a11,a4,0      // a11 <-- read 4 dst pixels
+
+  slli      a9,a10,6      // a9 <-- make room for background color bits
+  and       a9,a9,a13     // a9 <-- keep only src pixel bits
+  and       a3,a11,a5     // a3 <-- keep only dst pixel bits
+  or        a9,a9,a3      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,0       // write 1st dst pixel
 
-  l8ui      a9,a14,1      // read 2nd src pixel
-  slli      a9,a9,6       // make room for background color bits
-  l8ui      a5,a4,0       // a5 <-- read 2nd dst pixel
-  or        a9,a9,a5      // a9 <--  complete table index
+  srli      a9,a10,2      // a9 <-- make room for background color bits
+  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
+  and       a9,a9,a13     // a9 <-- keep only src pixel bits
+  and       a3,a11,a5     // a3 <-- keep only dst pixel bits
+  or        a9,a9,a3      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,1       // write 2nd dst pixel
 
-  l8ui      a9,a14,2      // read 3rd src pixel
-  slli      a9,a9,6       // make room for background color bits
-  l8ui      a5,a4,0       // a5 <-- read 3rd dst pixel
-  or        a9,a9,a5      // a9 <--  complete table index
+  slli      a9,a10,10     // a9 <-- make room for background color bits
+  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
+  and       a9,a9,a13     // a9 <-- keep only src pixel bits
+  and       a3,a11,a5     // a3 <-- keep only dst pixel bits
+  or        a9,a9,a3      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
   s8i       a9,a4,2       // write 3rd dst pixel
 
-  l8ui      a9,a14,3      // read 4th src pixel
-  slli      a9,a9,6       // make room for background color bits
-  l8ui      a5,a4,0       // a5 <-- read 4th dst pixel
-  or        a9,a9,a5      // a9 <--  complete table index
+  slli      a9,a10,18     // a9 <-- make room for background color bits
+  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
+  and       a9,a9,a13     // a9 <-- keep only src pixel bits
+  and       a3,a11,a5     // a3 <-- keep only dst pixel bits
+  or        a9,a9,a3      // a9 <--  complete table index
   add       a9,a9,a2      // point to mixed color
   l8ui      a9,a9,0       // load mixed color
-  s8i       a9,a4,3       // write 4th dst pixel
+  s8i       a9,a4,3       // write 3rd dst pixel
 
-//  l32i      a9,a14,0      // a9 <-- 4 src pixels
-//  l32i      a11,a14,0     // a11 <-- mask for keeping dst pixels (00=use src; FF=use dst)
-//  l32i      a5,a4,0       // a5 <-- 4 dst pixels
-//  and       a5,a5,a11     // a5 <-- dst pixels retained
-//  or        a9,a9,a5      // a9 <-- final mixed pixels
-//  s32i      a9,a4,0       // m_line32[] <-- src pixel data
-
-  add       a4,a4,a10     // a4 <-- points to next 4 dst pixels
+//  s32i      a9,a4,0       // write 4 dst pixels
+  addi      a4,a4,4       // a4 <-- points to next 4 dst pixels
   addi      a14,a14,4     // a14 <-- points to next 4 src pixels
 end_loop:
   ret

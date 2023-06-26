@@ -319,7 +319,7 @@ void init_stars() {
 #if DRAW_TRANSPARENT_BITMAP
   for (uint32_t c = 0; c < NC; c++) {
     //gp_transparent_bitmap[c] = new(32,384,ScrollMode::BOTH) DiTransparentBitmap(32,384,ScrollMode::BOTH);
-    gp_transparent_bitmap[c] = new(400,100,ScrollMode::BOTH) DiTransparentBitmap(400,100,ScrollMode::BOTH);
+    gp_transparent_bitmap[c] = new(400,100,ScrollMode::NONE) DiTransparentBitmap(400,100,ScrollMode::NONE);
   }
 #endif
 
@@ -482,7 +482,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   params->m_line32 = (uint32_t*)(m_act);
   params->m_line8 = (uint8_t*)(m_act);
 
-  memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
+  //memset(params->m_line8, SYNCS_OFF, ACT_PIXELS);
 
 #if DRAW_TILE_MAP
   tile_map->set_position(tmx,tmy);
@@ -501,8 +501,6 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
 #if DRAW_BACKGROUND
   gp_background->paint(&p2);
-#else
-  memcpy(&p3, params, sizeof(DiPaintParams));
 #endif
 
   /*if (params->m_line_index >= 100 && params->m_line_index < 140) {
