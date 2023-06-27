@@ -318,8 +318,7 @@ void init_stars() {
 
 #if DRAW_TRANSPARENT_BITMAP
   for (uint32_t c = 0; c < NC; c++) {
-    //gp_transparent_bitmap[c] = new(32,384,ScrollMode::BOTH) DiTransparentBitmap(32,384,ScrollMode::BOTH);
-    gp_transparent_bitmap[c] = new(400,100,ScrollMode::NONE) DiTransparentBitmap(400,100,ScrollMode::NONE);
+    gp_transparent_bitmap[c] = new(100,100,ScrollMode::NONE) DiTransparentBitmap(100,100,ScrollMode::NONE);
   }
 #endif
 
@@ -363,18 +362,10 @@ void init_stars() {
 
 #if DRAW_TRANSPARENT_BITMAP
   for (int32_t y=0;y<100;y++) {
-    for (int32_t x=0;x<400;x++) {
-      gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gbrush_strokes2Data[y*400+x]);
-      /*gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gapple_seq32Data[y*32+x]);
-      gp_transparent_bitmap[1]->set_transparent_pixel(x, y, gbananas_seq32Data[y*32+x]);
-      gp_transparent_bitmap[2]->set_transparent_pixel(x, y, gwatermelon_seq32Data[y*32+x]);
-      gp_transparent_bitmap[3]->set_transparent_pixel(x, y, gpumpkin_seq32Data[y*32+x]);
-      gp_transparent_bitmap[4]->set_transparent_pixel(x, y, gplum_seq32Data[y*32+x]);*/
-      /*gp_transparent_bitmap[5]->set_transparent_pixel(x, y, gtomato_seq32Data[y*32+x]);
-      gp_transparent_bitmap[6]->set_transparent_pixel(x, y, gpeas_seq32Data[y*32+x]);
-      gp_transparent_bitmap[7]->set_transparent_pixel(x, y, geggplant_seq32Data[y*32+x]);
-      gp_transparent_bitmap[8]->set_transparent_pixel(x, y, gmango_seq32Data[y*32+x]);
-      gp_transparent_bitmap[9]->set_transparent_pixel(x, y, gpomegranate_seq32Data[y*32+x]);*/
+    for (int32_t x=0;x<100;x++) {
+      for (int32_t c=0;c<NC;c++) {
+        gp_transparent_bitmap[c]->set_transparent_pixel(x, y, gbrush_strokes2Data[y*400+c*100+x]);
+      }
     }
   }
 #endif
@@ -595,10 +586,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   // Draw a bitmap
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-      //gp_transparent_bitmap[c]->set_position(c*80+20+c, r*100+100+r);
-      //gp_transparent_bitmap[c]->set_position(c*80+20+c, r*100+100+r, frame_index*32, 32);
-      //gp_transparent_bitmap[c]->set_position(c*100+100+c, r*100+100+r, frame_index*32, 32);
-      gp_transparent_bitmap[c]->set_position(200, 250);
+      gp_transparent_bitmap[c]->set_position(200+100*c, 250+100*c);
       gp_transparent_bitmap[c]->paint(&p2);
     }
   }

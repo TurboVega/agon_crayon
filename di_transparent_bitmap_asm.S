@@ -48,8 +48,7 @@
 //     [a2+36] m_words_per_position;
 //     [a2+40] m_bytes_per_position;
 //     [a2+44] m_visible_start
-//     [a2+48] m_mixed_colors
-//     [a2+52] m_pixels
+//     [a2+48] m_pixels
 //
 // a3: const DiPaintParams *params
 //     [a3] m_line32
@@ -183,7 +182,6 @@ right_ok:
   movi      a7,1          // a7 <-- value of 1 for adjusting
   movi      a8,2          // a8 <-- value of 2 for adjusting
   movi      a9,3          // a9 <-- value of 3 for adjusting
-  movi      a10,4         // a10 <-- value of 4 for adjusting
 
   movi      a15,0xFFFFFFFC // a15 <-- mask to remove lower 2 bits
   and       a6,a15,a13    // a6 <-- offset to word-aligned src pixels
@@ -192,7 +190,6 @@ right_ok:
   add       a4,a4,a6      // a4 <-- points to word-aligned dst pixels
 
   mov       a15,a0        // a15 <-- save return address
-  l32i      a2,a2,48      // a2 <-- m_mixed_colors
 
 //.......................................
 // Determine the alignment of the source and destination pixels.

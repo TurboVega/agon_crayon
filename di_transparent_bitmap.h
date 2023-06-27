@@ -34,9 +34,7 @@ class DiTransparentBitmap: public DiPrimitiveXYWH {
   uint32_t m_words_per_position;
   uint32_t m_bytes_per_position;
   uint32_t* m_visible_start;
-  uint8_t* m_mixed_colors;
   uint32_t m_pixels[1];
-  static uint8_t* m_mix_table;
 
   DiTransparentBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
   void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
@@ -49,6 +47,4 @@ class DiTransparentBitmap: public DiPrimitiveXYWH {
 
   protected:
   void set_pixel(int32_t x, int32_t y, uint8_t color);
-  uint8_t mix(uint8_t fg, uint8_t fa, uint8_t bg);
-  uint8_t* init_mix_table();
 };
