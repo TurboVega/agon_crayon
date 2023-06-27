@@ -461,16 +461,25 @@ so_3_dst_offset_3:
 // a3 <-- number of bytes left to copy, then scratch
 // a4 <-- m_line8 (or m_line32)
 // a14 <-- pointer to bitmap data line
-// a3, a5, a6, a9, a10, a11, a13 <-- scratch
+// a3, a5, a6, a7, a9, a10, a11, a13 <-- scratch
 
 do_middle_pixels:
   movi      a5,0x33333333 // a5 <-- mask to isolate blue & red, removing green
   movi      a6,0x0C0C0C0C // a6 <-- mask to isolate green, removing red & blue
+  movi      a7,0xC0C0C0C0 // a7 <-- mask to isolate transparency bits
 
   srli      a3,a3,2       // a3 <-- number of full words left to copy
   loopnez   a3,end_loop   // loop to copy pixel data
 
   l32i      a10,a14,0     // a10 <-- read 4 src pixels
+  and       a11,a10,a7    // a11 <-- src transparency bits only (no color)
+  beqz      a11,transparent // go if src word is 4 transparent pixels
+  bne       a11,a7,must_mix // go if src word is not 4 opaque pixels
+  xor       a10,a10,a7    // get rid of the transparency bits, leaving color
+  beq       a11,a7,opaque // go store the 4 src pixels to dst
+
+  // We must do mixing
+must_mix:
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
 
   and       a9,a10,a5     // a9 <-- src blue & red (no green)
@@ -485,8 +494,12 @@ do_middle_pixels:
   srli      a11,a11,1     // a11 <-- averages of mixed blue & mixed red, in 3 bits each
   and       a11,a11,a6    // a11 <-- averages in 2 bits each
 
-  or        a6,a13,a11    // a6 <-- 4 mixed pixels
-  s32i      a6,a4,0       // write 4 dst pixels
+  or        a10,a13,a11   // a10 <-- 4 mixed pixels
+
+opaque: // no mixing is needed; copy src to dst directly
+  s32i      a10,a4,0      // write 4 dst pixels
+
+transparent: // nothing to do; src is fully transparent
   addi      a4,a4,4       // a4 <-- points to next 4 dst pixels
   addi      a14,a14,4     // a14 <-- points to next 4 src pixels
 end_loop:
