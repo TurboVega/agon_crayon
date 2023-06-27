@@ -464,58 +464,28 @@ so_3_dst_offset_3:
 // a3, a5, a6, a9, a10, a11, a13 <-- scratch
 
 do_middle_pixels:
-  ssai      8             // sar <-- will shift in 8 bits via 'src', below
-  movi      a13,0x00003FC0 // a13 <-- mask to separate src pixel bits
-  movi      a5,0x0000003F // a5 <-- mask to separate dst pixel bits
+  movi      a5,0x33333333 // a5 <-- mask to isolate blue & red, removing green
+  movi      a6,0x0C0C0C0C // a6 <-- mask to isolate green, removing red & blue
+
   srli      a3,a3,2       // a3 <-- number of full words left to copy
   loopnez   a3,end_loop   // loop to copy pixel data
 
   l32i      a10,a14,0     // a10 <-- read 4 src pixels
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
 
-  // xxxx xxxx xxxx xxxx xxxx xxxx TTBB GGRR
-  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
-  slli      a9,a10,6      // a9 <-- make room for background color bits
-  and       a9,a9,a13     // a9 <-- keep only src pixel bits
-  and       a3,a11,a5     // a3 <-- keep only dst pixel bits
-  or        a9,a9,a3      // a9 <--  complete table index
-  add       a9,a9,a2      // point to mixed color
-  l8ui      a9,a9,0       // load mixed color
-  src       a6,a9,a6      // a6 <-- shifts in 1 more new pixel (8 bits)
+  and       a9,a10,a5     // a9 <-- src blue & red (no green)
+  and       a13,a11,a5    // a13 <-- dst blue & red (no green)
+  add       a13,a13,a9    // a13 <-- sum of blue & sum of red
+  srli      a13,a13,1     // a13 <-- averages of mixed blue & mixed red, in 3 bits each
+  and       a13,a13,a5    // a13 <-- averages in 2 bits each
 
-  // xxxx xxxx xxxx xxxx TTBB GGRR xxxx xxxx
-  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
-  srli      a9,a10,2      // a9 <-- make room for background color bits
-  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
-  and       a9,a9,a13     // a9 <-- keep only src pixel bits
-  and       a3,a11,a5     // a3 <-- keep only dst pixel bits
-  or        a9,a9,a3      // a9 <--  complete table index
-  add       a9,a9,a2      // point to mixed color
-  l8ui      a9,a9,0       // load mixed color
-  src       a6,a9,a6      // a6 <-- shifts in 1 more new pixel (8 bits)
+  and       a10,a10,a6    // a10 <-- src green (no red or blue)
+  and       a11,a11,a6    // a11 <-- dst green (no red or blue)
+  add       a11,a11,a10   // a11 <-- sum of blue & sum of red
+  srli      a11,a11,1     // a11 <-- averages of mixed blue & mixed red, in 3 bits each
+  and       a11,a11,a6    // a11 <-- averages in 2 bits each
 
-  // xxxx xxxx TTBB GGRR xxxx xxxx xxxx xxxx
-  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
-  srli      a9,a10,10     // a9 <-- make room for background color bits
-  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
-  and       a9,a9,a13     // a9 <-- keep only src pixel bits
-  and       a3,a11,a5     // a3 <-- keep only dst pixel bits
-  or        a9,a9,a3      // a9 <--  complete table index
-  add       a9,a9,a2      // point to mixed color
-  l8ui      a9,a9,0       // load mixed color
-  src       a6,a9,a6      // a6 <-- shifts in 1 more new pixel (8 bits)
-
-  // TTBB GGRR xxxx xxxx xxxx xxxx xxxx xxxx
-  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
-  srli      a9,a10,18     // a9 <-- make room for background color bits
-  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
-  and       a9,a9,a13     // a9 <-- keep only src pixel bits
-  and       a3,a11,a5     // a3 <-- keep only dst pixel bits
-  or        a9,a9,a3      // a9 <--  complete table index
-  add       a9,a9,a2      // point to mixed color
-  l8ui      a9,a9,0       // load mixed color
-  src       a6,a9,a6      // a6 <-- shifts in 1 more new pixel (8 bits)
-
+  or        a6,a13,a11    // a6 <-- 4 mixed pixels
   s32i      a6,a4,0       // write 4 dst pixels
   addi      a4,a4,4       // a4 <-- points to next 4 dst pixels
   addi      a14,a14,4     // a14 <-- points to next 4 src pixels
