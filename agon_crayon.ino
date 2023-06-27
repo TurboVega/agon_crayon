@@ -212,81 +212,109 @@ int32_t tmc = 0;
 uint32_t frame_index = 0;
 uint32_t fc = 0;
 
+IRAM_ATTR void on_vertical_blank() {
+  // move diamonds
+  /*for (int d = 0; d < 10; d++) {
+    if (xdir[d] > 0) {
+      if (++sdx[d] >= 750) {
+        xdir[d] = -1;
+      }
+    } else {
+      if (--sdx[d] <= 40) {
+        xdir[d] = 1;
+      }
+    }
+
+    if (ydir[d] > 0) {
+      if (++sdy[d] >= 550) {
+        ydir[d] = -1;
+      }
+    } else {
+      if (--sdy[d] <= 40) {
+        ydir[d] = 1;
+      }
+    }
+  }*/
+
+  // do scrolling
+  if (delay_count >= 60*5) {
+    if (++scroll_count >= 120) {
+      scroll_count = 0;
+      if (++scroll_mode >= 9) {
+        scroll_mode = 0;
+      }
+    }
+    g_params.m_horiz_scroll += scroll_dx[scroll_mode];
+    g_params.m_vert_scroll += scroll_dy[scroll_mode];
+
+    if (++tmc >= 1) {
+      tmc = 0;
+      if (tmd > 0) {
+        if (++tmx == 80-8) {
+          tmd = -1;
+        }
+      } else {
+        if (--tmx == 4) {
+          tmd = 1;
+        }
+      }
+    }
+
+    if (++fc >= 3) {
+      fc = 0;
+      if (++frame_index >= 12) {
+        frame_index = 0;
+      }
+    }
+  } else {
+    delay_count++;
+  }
+}
+
 IRAM_ATTR void loop() {
-  bool eof = false;
   g_params.m_horiz_scroll = 0;
   g_params.m_vert_scroll = 0;
   g_params.m_screen_width = ACT_PIXELS;
   g_params.m_screen_height = ACT_LINES;
+  g_params.m_line_index = 0;
+  g_params.m_scrolled_y = 0;
+  uint32_t current_line_index = NUM_ACTIVE_BUFFERS * NUM_LINES_PER_BUFFER;
+  uint32_t current_buffer_index = 0;
+  bool end_of_frame = false;
+ 
   while (true) {
-    uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;;
+    uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;
     uint32_t descr_index = (descr_addr - (uint32_t) dma_descriptor) / sizeof(lldesc_t);
     if (descr_index < ACT_LINES/NUM_LINES_PER_BUFFER) {
-      // Active scan line (not end of frame)
-      eof = false;
-      g_params.m_line_index = descr_index * NUM_LINES_PER_BUFFER;
-      g_params.m_scrolled_y = g_params.m_line_index + g_params.m_vert_scroll;
-      g_video_buffer[descr_index & (NUM_ACTIVE_BUFFERS-1)].paint(&g_params);
-    } else if (!eof) {
-      // End of frame (vertical blanking area)
-      eof = true;
+      uint32_t dma_line_index = descr_index * NUM_LINES_PER_BUFFER;
+      uint32_t dma_buffer_index = descr_index & (NUM_ACTIVE_BUFFERS-1);
 
-      // move diamonds
-      /*for (int d = 0; d < 10; d++) {
-        if (xdir[d] > 0) {
-          if (++sdx[d] >= 750) {
-            xdir[d] = -1;
-          }
-        } else {
-          if (--sdx[d] <= 40) {
-            xdir[d] = 1;
-          }
+      // Draw enough lines to stay ahead of DMA.
+      while (current_line_index < ACT_LINES && current_buffer_index != dma_buffer_index) {
+        g_params.m_line_index = current_line_index;
+        g_params.m_scrolled_y = current_line_index + g_params.m_vert_scroll;
+        g_video_buffer[current_buffer_index].paint(&g_params);
+        current_line_index += NUM_LINES_PER_BUFFER;
+        if (++current_buffer_index >= NUM_ACTIVE_BUFFERS) {
+          current_buffer_index = 0;
         }
-
-        if (ydir[d] > 0) {
-          if (++sdy[d] >= 550) {
-            ydir[d] = -1;
-          }
-        } else {
-          if (--sdy[d] <= 40) {
-            ydir[d] = 1;
-          }
-        }
-      }*/
-
-      // do scrolling
-      if (delay_count >= 60*5) {
-        if (++scroll_count >= 120) {
-          scroll_count = 0;
-          if (++scroll_mode >= 9) {
-            scroll_mode = 0;
-          }
-        }
-        g_params.m_horiz_scroll += scroll_dx[scroll_mode];
-        g_params.m_vert_scroll += scroll_dy[scroll_mode];
-
-        if (++tmc >= 1) {
-          tmc = 0;
-          if (tmd > 0) {
-            if (++tmx == 80-8) {
-              tmd = -1;
-            }
-          } else {
-            if (--tmx == 4) {
-              tmd = 1;
-            }
-          }
-        }
-
-        if (++fc >= 3) {
-          fc = 0;
-          if (++frame_index >= 12) {
-            frame_index = 0;
-          }
-        }
-      } else {
-        delay_count++;
       }
-   }
+      end_of_frame = false;
+    } else if (!end_of_frame) {
+      // Handle modifying primitives before the next frame starts.
+      on_vertical_blank();
+
+      // Prepare the start of the next frame.
+      for (current_line_index = 0, current_buffer_index = 0;
+            current_buffer_index < NUM_ACTIVE_BUFFERS;
+            current_line_index += NUM_LINES_PER_BUFFER, current_buffer_index++) {
+        g_params.m_line_index = current_line_index;
+        g_params.m_scrolled_y = current_line_index + g_params.m_vert_scroll;
+        g_video_buffer[current_buffer_index].paint(&g_params);
+      }
+      end_of_frame = true;
+      current_line_index = 0;
+      current_buffer_index = 0;
+    }
   }
 }
