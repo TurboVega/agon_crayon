@@ -479,6 +479,7 @@ do_middle_pixels:
   beq       a11,a12,pct_25  // go if using all 25% opaquness
 
 // The transparency bits are dissimilar among the source pixels.
+  l32i      a11,a4,0      // a11 <-- read 4 dst pixels
   movi      a3,0 //TEMPORARY
   j         write_pix     // go write the resulting dst pixels
 
@@ -489,6 +490,8 @@ pct_100:
 
 // All 4 src pixels are 50% opaque.
 pct_50:
+  l32i      a11,a4,0      // a11 <-- read 4 dst pixels
+
   and       a9,a10,a5     // a9 <-- src blue & red (no green)
   and       a13,a11,a5    // a13 <-- dst blue & red (no green)
   add       a13,a13,a9    // a13 <-- sum of blue & sum of red
@@ -497,8 +500,8 @@ pct_50:
 
   and       a10,a10,a6    // a10 <-- src green (no red or blue)
   and       a11,a11,a6    // a11 <-- dst green (no red or blue)
-  add       a11,a11,a10   // a11 <-- sum of blue & sum of red
-  srli      a11,a11,1     // a11 <-- averages of mixed blue & mixed red, in 3 bits each
+  add       a11,a11,a10   // a11 <-- sum of green
+  srli      a11,a11,1     // a11 <-- averages of mixed green, in 3 bits each
   and       a11,a11,a6    // a11 <-- averages in 2 bits each
 
   or        a3,a13,a11    // a3 <-- 4 mixed pixels
@@ -506,7 +509,23 @@ pct_50:
 
 // All 4 src pixels are 25% opaque.
 pct_25:
-  movi      a3,0x08 //TEMPORARY
+  l32i      a11,a4,0      // a11 <-- read 4 dst pixels
+
+  and       a9,a10,a5     // a9 <-- src blue & red (no green)
+  and       a13,a11,a5    // a13 <-- dst blue & red (no green)
+  slli      a13,a13,1     // a13 <-- double the dst color values
+  add       a13,a13,a9    // a13 <-- sum of blue & sum of red
+  srli      a13,a13,1     // a13 <-- averages of mixed blue & mixed red, in 4 bits each
+  and       a13,a13,a5    // a13 <-- averages in 2 bits each
+
+  and       a10,a10,a6    // a10 <-- src green (no red or blue)
+  and       a11,a11,a6    // a11 <-- dst green (no red or blue)
+  slli      a11,a11,1     // a11 <-- double the dst color values
+  add       a11,a11,a10   // a11 <-- sum of green
+  srli      a11,a11,1     // a11 <-- averages of mixed blue & mixed red, in 3 bits each
+  and       a11,a11,a6    // a11 <-- averages in 2 bits each
+
+  or        a3,a13,a11    // a3 <-- 4 mixed pixels
   j         write_pix     // go write the resulting dst pixels
 
 write_pix:
