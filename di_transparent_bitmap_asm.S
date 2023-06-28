@@ -473,7 +473,7 @@ do_middle_pixels:
   and       a11,a10,a7    // a11 <-- src transparency bits only (no color)
   beqz      a11,transparent // go if src word is 4 transparent pixels
   bne       a11,a7,must_mix // go if src word is not 4 opaque pixels
-  xor       a10,a10,a7    // get rid of the transparency bits, leaving color
+  xor       a3,a10,a7     // a3 <-- get rid of the transparency bits, leaving color
   beq       a11,a7,opaque // go store the 4 src pixels to dst
 
   // We must do mixing
@@ -492,10 +492,10 @@ must_mix:
   srli      a11,a11,1     // a11 <-- averages of mixed blue & mixed red, in 3 bits each
   and       a11,a11,a6    // a11 <-- averages in 2 bits each
 
-  or        a10,a13,a11   // a10 <-- 4 mixed pixels
+  or        a3,a13,a11    // a3 <-- 4 mixed pixels
 
 opaque: // no mixing is needed; copy src to dst directly
-  s32i      a10,a4,0      // write 4 dst pixels
+  s32i      a3,a4,0       // write 4 dst pixels
 
 transparent: // nothing to do; src is fully transparent
   addi      a4,a4,4       // a4 <-- points to next 4 dst pixels
