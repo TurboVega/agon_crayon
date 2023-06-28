@@ -48,7 +48,8 @@
 //     [a2+36] m_words_per_position;
 //     [a2+40] m_bytes_per_position;
 //     [a2+44] m_visible_start
-//     [a2+48] m_pixels
+//     [a2+48] m_scroll_mode
+//     [a2+52] m_pixels
 //
 // a3: const DiPaintParams *params
 //     [a3] m_line32

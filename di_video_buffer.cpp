@@ -102,7 +102,7 @@ DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIA
 */
 
 #define NR 1
-#define NC 1
+#define NC 2
 
 #if DRAW_PIXELS
 DiSetPixel g_x_pixel[5];

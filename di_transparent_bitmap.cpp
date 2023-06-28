@@ -34,6 +34,7 @@ IRAM_ATTR void DiTransparentBitmap_paint(void* this_ptr, const DiPaintParams *pa
 
 DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode):
   DiPrimitiveXYWH(0, 0, width, height) {
+  m_scroll_mode = (uint32_t)scroll_mode;
   switch (scroll_mode) {
     case NONE:
     case VERTICAL:
@@ -41,12 +42,13 @@ DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, Scroll
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
-      {
+      memset(m_pixels, 0x00, m_bytes_per_position);
+      /*{
         uint32_t* p = m_pixels;
         for (uint32_t i = 0; i < m_words_per_position; i+=2) {
-          *p++ = SYNCS_OFF_X4; // color
+          *p++ = 0x00; // color
         }
-      }
+      }*/
       break;
 
     case HORIZONTAL:
@@ -55,13 +57,14 @@ DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, Scroll
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
-      {
+      memset(m_pixels, 0x00, m_bytes_per_position * 4);
+      /*{
         uint32_t* p = m_pixels;
         uint32_t n = m_words_per_position * 4;
         for (uint32_t i = 0; i < n; i+=2) {
-          *p++ = SYNCS_OFF_X4; // color
+          *p++ = 0x00; // color
         }
-      }
+      }*/
       break;
   }
 }
@@ -117,8 +120,18 @@ void DiTransparentBitmap::set_transparent_pixel(int32_t x, int32_t y, uint8_t co
 }
 
 void DiTransparentBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) {
-  for (uint32_t pos = 0; pos < 4; pos++) {
-    pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line)[FIX_INDEX(pos + x)] = color;
+  switch ((ScrollMode)m_scroll_mode) {
+    case NONE:
+    case VERTICAL:
+      pixels(m_pixels + y * m_words_per_line)[FIX_INDEX(x)] = color;
+      break;
+
+    case HORIZONTAL:
+    case BOTH:
+      for (uint32_t pos = 0; pos < 4; pos++) {
+        pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line)[FIX_INDEX(pos + x)] = color;
+      }
+      break;
   }
 }
 

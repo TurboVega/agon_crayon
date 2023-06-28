@@ -34,6 +34,7 @@ class DiTransparentBitmap: public DiPrimitiveXYWH {
   uint32_t m_words_per_position;
   uint32_t m_bytes_per_position;
   uint32_t* m_visible_start;
+  uint32_t m_scroll_mode;
   uint32_t m_pixels[1];
 
   DiTransparentBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
