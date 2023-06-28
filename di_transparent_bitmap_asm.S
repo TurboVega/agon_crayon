@@ -459,45 +459,47 @@ so_3_dst_offset_3:
 // a3 <-- number of bytes left to copy, then scratch
 // a4 <-- m_line8 (or m_line32)
 // a14 <-- pointer to bitmap data line
-// a3, a5, a6, a7, a9, a10, a11, a13 <-- scratch
+// a3, a5, a6, a7, a8, a9, a10, a11, a12, a13 <-- scratch
 
 do_middle_pixels:
   movi      a5,0x33333333 // a5 <-- mask to isolate blue & red, removing green
   movi      a6,0x0C0C0C0C // a6 <-- mask to isolate green, removing red & blue
   movi      a7,0xC0C0C0C0 // a7 <-- mask to isolate transparency bits
+  movi      a8,0x80808080 // a8 <-- mask to isolate upper transparency bit
+  movi      a12,0x40404040 // a12 <-- mask to isolate lower transparency bit
 
   srli      a3,a3,2       // a3 <-- number of full words left to copy
   loopnez   a3,end_loop   // loop to copy pixel data
 
-  l32i      a10,a14,0     // a10 <-- read 4 src pixels
-  and       a11,a10,a7    // a11 <-- src transparency bits only (no color)
-  beqz      a11,transparent // go if src word is 4 transparent pixels
-  bne       a11,a7,must_mix // go if src word is not 4 opaque pixels
-  xor       a3,a10,a7     // a3 <-- get rid of the transparency bits, leaving color
-  beq       a11,a7,opaque // go store the 4 src pixels to dst
+  l32i      a10,a14,0       // a10 <-- read 4 src pixels
+  and       a11,a10,a7      // a11 <-- src transparency bits only (no color)
+  beq       a11,a7,pct_100  // go if using all 100% opaquness
+  beqz      a11,pct_0       // go if using all 0% opaquness
+  beq       a11,a8,pct_50   // go if using all 50% opaquness
+  beq       a11,a12,pct_25  // go if using all 25% opaquness
 
-  // We must do mixing
-must_mix:
-  l32i      a11,a4,0      // a11 <-- read 4 dst pixels
+// The transparency bits are dissimilar among the source pixels.
+  movi      a3,0 //TEMPORARY
+  j         write_pix     // go write the resulting dst pixels
 
-  and       a9,a10,a5     // a9 <-- src blue & red (no green)
-  and       a13,a11,a5    // a13 <-- dst blue & red (no green)
-  add       a13,a13,a9    // a13 <-- sum of blue & sum of red
-  srli      a13,a13,1     // a13 <-- averages of mixed blue & mixed red, in 3 bits each
-  and       a13,a13,a5    // a13 <-- averages in 2 bits each
+// All 4 src pixels are 100% opaque.
+pct_100:
+  xor       a3,a10,a7       // a3 <-- get rid of the transparency bits, leaving color
+  j         write_pix     // go write the resulting dst pixels
 
-  and       a10,a10,a6    // a10 <-- src green (no red or blue)
-  and       a11,a11,a6    // a11 <-- dst green (no red or blue)
-  add       a11,a11,a10   // a11 <-- sum of blue & sum of red
-  srli      a11,a11,1     // a11 <-- averages of mixed blue & mixed red, in 3 bits each
-  and       a11,a11,a6    // a11 <-- averages in 2 bits each
+// All 4 src pixels are 50% opaque.
+pct_50:
+  movi      a3,0x20 //TEMPORARY
+  j         write_pix     // go write the resulting dst pixels
 
-  or        a3,a13,a11    // a3 <-- 4 mixed pixels
+// All 4 src pixels are 25% opaque.
+pct_25:
+  movi      a3,0x08 //TEMPORARY
+  j         write_pix     // go write the resulting dst pixels
 
-opaque: // no mixing is needed; copy src to dst directly
+write_pix:
   s32i      a3,a4,0       // write 4 dst pixels
-
-transparent: // nothing to do; src is fully transparent
+pct_0:
   addi      a4,a4,4       // a4 <-- points to next 4 dst pixels
   addi      a14,a14,4     // a14 <-- points to next 4 src pixels
 end_loop:
