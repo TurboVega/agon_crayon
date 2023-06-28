@@ -455,11 +455,10 @@ so_3_dst_offset_3:
   retw
 
 //.......................................
-// a2 <-- points to mixed color table
 // a3 <-- number of bytes left to copy, then scratch
 // a4 <-- m_line8 (or m_line32)
 // a14 <-- pointer to bitmap data line
-// a3, a5, a6, a7, a8, a9, a10, a11, a12, a13 <-- scratch
+// a2, a3, a5, a6, a7, a8, a9, a10, a11, a12, a13 <-- scratch
 
 do_middle_pixels:
   movi      a5,0x33333333 // a5 <-- mask to isolate blue & red, removing green
@@ -479,13 +478,25 @@ do_middle_pixels:
   beq       a11,a12,pct_25  // go if using all 25% opaquness
 
 // The transparency bits are dissimilar among the source pixels.
+// We must handle the 4 opaquness cases separately.
+
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
-  movi      a3,0 //TEMPORARY
+  movi      a3,0          // a3 <-- output begins as 4 black pixels
+
+// Handle the 100% opaque pixels (if any)
+  xor       
+
+// Handle the 50% opaque pixels (if any)
+
+// Handle the 25% opaque pixels (if any)
+
+// Handle the 0% opaque pixels (if any)
+
   j         write_pix     // go write the resulting dst pixels
 
 // All 4 src pixels are 100% opaque.
 pct_100:
-  xor       a3,a10,a7       // a3 <-- get rid of the transparency bits, leaving color
+  xor       a3,a10,a7     // a3 <-- get rid of the transparency bits, leaving color
   j         write_pix     // go write the resulting dst pixels
 
 // All 4 src pixels are 50% opaque.
