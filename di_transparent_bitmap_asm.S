@@ -536,7 +536,7 @@ do_middle_pixels:
   l32i      a10,a14,0       // a10 <-- read 4 src pixels
   and       a11,a10,a7      // a11 <-- src transparency bits only (no color)
   beq       a11,a7,pct_100  // go if using all 100% opaquness
-  beqz      a11,pct_0       // go if using all 33% or 0% opaquness
+  beqz      a11,pct_33      // go if using all 33% or 0% opaquness
   beq       a11,a8,pct_66   // go if using all 66% opaquness
   beq       a11,a12,pct_50  // go if using all 50% opaquness
 
@@ -578,7 +578,7 @@ pct_50:
 // All 4 src pixels are 33% opaque.
 pct_33:
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
-  movi a3,0x11111111 // TEMP
+  mov a3,a10 // TEMP
 
   j         write_pix     // go write the resulting dst pixels
 
