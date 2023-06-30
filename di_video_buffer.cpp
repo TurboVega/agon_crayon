@@ -55,7 +55,12 @@
 #endif
 
 #if DRAW_OPAQUE_BITMAP | DRAW_MASKED_BITMAP | DRAW_TRANSPARENT_BITMAP
-#include "samples\\COLORS_MERGED.h"
+#include "samples\\pct0.h"
+#include "samples\\pct33.h"
+#include "samples\\pct50.h"
+#include "samples\\pct66.h"
+#include "samples\\pct100.h"
+//#include "samples\\COLORS_MERGED.h"
 //#include "samples\\BRUSH_STROKES2.h"
 //#include "samples\\TEST_BITMAP.h"
 /*#include "samples\\plants\\apple\\apple_seq32.h"
@@ -104,6 +109,7 @@ DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIA
 
 #define NR 1
 #define NC 1
+#define NT 5
 
 #if DRAW_PIXELS
 DiSetPixel g_x_pixel[5];
@@ -119,7 +125,7 @@ DiMaskedBitmap* gp_masked_bitmap[NC];
 #endif
 
 #if DRAW_TRANSPARENT_BITMAP
-DiTransparentBitmap* gp_transparent_bitmap[NC];
+DiTransparentBitmap* gp_transparent_bitmap[NT];
 #endif
 
 #if DRAW_BACKGROUND
@@ -318,8 +324,8 @@ void init_stars() {
 #endif
 
 #if DRAW_TRANSPARENT_BITMAP
-  for (uint32_t c = 0; c < NC; c++) {
-    gp_transparent_bitmap[c] = new(150,150,ScrollMode::NONE) DiTransparentBitmap(150,150,ScrollMode::NONE);
+  for (uint32_t c = 0; c < NT; c++) {
+    gp_transparent_bitmap[c] = new(192,64,ScrollMode::NONE) DiTransparentBitmap(192,64,ScrollMode::NONE);
   }
 #endif
 
@@ -362,11 +368,13 @@ void init_stars() {
 #endif
 
 #if DRAW_TRANSPARENT_BITMAP
-  for (int32_t y=0;y<150;y++) {
-    for (int32_t x=0;x<150;x++) {
-      for (int32_t c=0;c<NC;c++) {
-        gp_transparent_bitmap[c]->set_transparent_pixel(x, y, gColors_MergedData[y*150+x]);
-      }
+  for (int32_t y=0;y<64;y++) {
+    for (int32_t x=0;x<192;x++) {
+      gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gPct0Data[y*192+x]);
+      gp_transparent_bitmap[1]->set_transparent_pixel(x, y, gPct33Data[y*192+x]);
+      gp_transparent_bitmap[2]->set_transparent_pixel(x, y, gPct50Data[y*192+x]);
+      gp_transparent_bitmap[3]->set_transparent_pixel(x, y, gPct66Data[y*192+x]);
+      gp_transparent_bitmap[4]->set_transparent_pixel(x, y, gPct100Data[y*192+x]);
     }
   }
 #endif
@@ -585,11 +593,9 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 
 #if DRAW_TRANSPARENT_BITMAP
   // Draw a bitmap
-  for (uint32_t r = 0; r < NR; r++) {
-    for (uint32_t c = 0; c < NC; c++) {
-      gp_transparent_bitmap[c]->set_position(300+100*c, 280+100*c);
-      gp_transparent_bitmap[c]->paint(&p2);
-    }
+  for (uint32_t c = 0; c < NT; c++) {
+    gp_transparent_bitmap[c]->set_position(200+75*c, 220+70*c);
+    gp_transparent_bitmap[c]->paint(&p2);
   }
 #endif
 }

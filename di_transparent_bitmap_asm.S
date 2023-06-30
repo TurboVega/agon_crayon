@@ -545,10 +545,10 @@ do_middle_pixels:
 
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
   movi      a3,0          // a3 <-- output begins as 4 black pixels
-  MIX_COLOR_BYTE 7,6,5,4,3,2,1,0          // mix byte # of the pixel word
-  MIX_COLOR_BYTE 15,14,13,12,11,10,9,8    // mix byte #1 of the pixel word
-  MIX_COLOR_BYTE 23,22,21,20,19,18,17,16  // mix byte #2 of the pixel word
-  MIX_COLOR_BYTE 31,30,29,28,27,26,25,24  // mix byte #3 of the pixel word
+  //MIX_COLOR_BYTE 7,6,5,4,3,2,1,0          // mix byte # of the pixel word
+  //MIX_COLOR_BYTE 15,14,13,12,11,10,9,8    // mix byte #1 of the pixel word
+  //MIX_COLOR_BYTE 23,22,21,20,19,18,17,16  // mix byte #2 of the pixel word
+  //MIX_COLOR_BYTE 31,30,29,28,27,26,25,24  // mix byte #3 of the pixel word
   j         write_pix     // go write the resulting dst pixels
 
 // All 4 src pixels are 100% opaque.
