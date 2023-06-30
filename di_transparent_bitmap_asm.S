@@ -134,6 +134,69 @@
 //                 B:nodm.nopm.xypw.--z-   C:mn-d.mnop.wxop.--yz.----  D:dm--.pmno.pwno.z-xy.----  A:-d--.opmn.opmn.yzwx.----
 //
 
+  .macro    LOOKUP_MIXED_COLOR c1 c0
+
+  mov       a9,a2           // a9 <-- color lookup table
+  bbci      a10,\c1,la\@    // go if FG upper bit is 0
+  srli      a9,a9,16        // a9 <-- use upper half of table
+  la\@:
+  bbci      a10,\c0,lb\@    // go if FG lower bit is 0
+  srli      a9,a9,8         // a9 <-- use upper quarter (half of chosen half)
+  lb\@:
+  bbci      a11,\c1,lc\@    // go if BG upper bit is 0
+  srli      a9,a9,4         // a9 <-- use upper eighth (half of chosen quarter)
+  lc\@:
+  bbci      a11,\c0,ld\@    // go if BG lower bit is 0
+  srli      a9,a9,2         // a9 <-- use upper sixteenth (half of chosen eighth)
+  ld\@:
+  src       a3,a9,a3        // a3 <-- slide 2 result color bits into holding register
+
+  .endm
+
+  .macro    MIX_COLOR_BYTE  alpha1 alpha0 b1 b0 g1 g0 r1 r0
+
+  bbci      a10,\alpha1,le\@  // go if Alpha upper bit is 0
+  bbci      a10,\alpha0,lf\@  // go if Alpha lower bit is 0
+
+  // Alpha is 11 (3), meaning 100% opaque
+  movi a9,0x3F
+  ssai 8
+  src  a3,a9,a3
+  j         mix_done\@
+
+  // Alpha is 10 (2), meaning 66% opaque
+lf\@:
+  movi      a2,0xEAA55440     // a2 <-- color lookup table (11101010101001010101010001000000)
+  ssai      2                 // sar <-- setup to shift by 2 bits
+  LOOKUP_MIXED_COLOR \r1,\r0  // mix the red color component
+  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
+  LOOKUP_MIXED_COLOR \g1,\g0  // mix the green color component
+  src       a3,a9,a3          // include 2 bits for VS & HS
+  j         mix_done\@
+
+le\@:
+  bbci      a10,\alpha0,lg\@  // go if Alpha lower bit is 0
+
+  // Alpha is 01 (1), meaning 50% opaque
+  movi      a2,0xE9A59450     // a2 <-- color lookup table (11101001101001011001010001010000)
+  LOOKUP_MIXED_COLOR \r1,\r0  // mix the red color component
+  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
+  LOOKUP_MIXED_COLOR \g1,\g0  // mix the green color component
+  src       a3,a9,a3          // include 2 bits for VS & HS
+  j         mix_done\@
+
+  // Alpha is 00 (0), meaning 33% or 0% opaque
+lg\@:
+  movi      a2,0xE5A49490     // a2 <-- color lookup table (11100101101001001001010010010000)
+  LOOKUP_MIXED_COLOR \r1,\r0  // mix the red color component
+  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
+  LOOKUP_MIXED_COLOR \g1,\g0  // mix the green color component
+  src       a3,a9,a3          // include 2 bits for VS & HS
+
+mix_done\@:
+
+  .endm
+
   .align    4
 DiTransparentBitmap_paint:
   entry     sp,16
@@ -473,25 +536,19 @@ do_middle_pixels:
   l32i      a10,a14,0       // a10 <-- read 4 src pixels
   and       a11,a10,a7      // a11 <-- src transparency bits only (no color)
   beq       a11,a7,pct_100  // go if using all 100% opaquness
-  beqz      a11,pct_0       // go if using all 0% opaquness
-  beq       a11,a8,pct_50   // go if using all 50% opaquness
-  beq       a11,a12,pct_25  // go if using all 25% opaquness
+  beqz      a11,pct_0       // go if using all 33% or 0% opaquness
+  beq       a11,a8,pct_66   // go if using all 66% opaquness
+  beq       a11,a12,pct_50  // go if using all 50% opaquness
 
 // The transparency bits are dissimilar among the source pixels.
 // We must handle the 4 opaquness cases separately.
 
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
   movi      a3,0          // a3 <-- output begins as 4 black pixels
-
-// Handle the 100% opaque pixels (if any)
-  xor       
-
-// Handle the 50% opaque pixels (if any)
-
-// Handle the 25% opaque pixels (if any)
-
-// Handle the 0% opaque pixels (if any)
-
+  MIX_COLOR_BYTE 7,6,5,4,3,2,1,0          // mix byte # of the pixel word
+  MIX_COLOR_BYTE 15,14,13,12,11,10,9,8    // mix byte #1 of the pixel word
+  MIX_COLOR_BYTE 23,22,21,20,19,18,17,16  // mix byte #2 of the pixel word
+  MIX_COLOR_BYTE 31,30,29,28,27,26,25,24  // mix byte #3 of the pixel word
   j         write_pix     // go write the resulting dst pixels
 
 // All 4 src pixels are 100% opaque.
@@ -518,25 +575,18 @@ pct_50:
   or        a3,a13,a11    // a3 <-- 4 mixed pixels
   j         write_pix     // go write the resulting dst pixels
 
-// All 4 src pixels are 25% opaque.
-pct_25:
+// All 4 src pixels are 33% opaque.
+pct_33:
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
+  movi a3,0x11111111 // TEMP
 
-  and       a9,a10,a5     // a9 <-- src blue & red (no green)
-  and       a13,a11,a5    // a13 <-- dst blue & red (no green)
-  slli      a13,a13,1     // a13 <-- double the dst color values
-  add       a13,a13,a9    // a13 <-- sum of blue & sum of red
-  srli      a13,a13,1     // a13 <-- averages of mixed blue & mixed red, in 4 bits each
-  and       a13,a13,a5    // a13 <-- averages in 2 bits each
+  j         write_pix     // go write the resulting dst pixels
 
-  and       a10,a10,a6    // a10 <-- src green (no red or blue)
-  and       a11,a11,a6    // a11 <-- dst green (no red or blue)
-  slli      a11,a11,1     // a11 <-- double the dst color values
-  add       a11,a11,a10   // a11 <-- sum of green
-  srli      a11,a11,1     // a11 <-- averages of mixed blue & mixed red, in 3 bits each
-  and       a11,a11,a6    // a11 <-- averages in 2 bits each
+// All 4 src pixels are 66% opaque.
+pct_66:
+  l32i      a11,a4,0      // a11 <-- read 4 dst pixels
+  movi a3,0x22222222 // TEMP
 
-  or        a3,a13,a11    // a3 <-- 4 mixed pixels
   j         write_pix     // go write the resulting dst pixels
 
 write_pix:

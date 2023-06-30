@@ -55,7 +55,8 @@
 #endif
 
 #if DRAW_OPAQUE_BITMAP | DRAW_MASKED_BITMAP | DRAW_TRANSPARENT_BITMAP
-#include "samples\\BRUSH_STROKES2.h"
+#include "samples\\COLORS_MERGED.h"
+//#include "samples\\BRUSH_STROKES2.h"
 //#include "samples\\TEST_BITMAP.h"
 /*#include "samples\\plants\\apple\\apple_seq32.h"
 #include "samples\\plants\\bananas\\bananas_seq32.h"
@@ -102,7 +103,7 @@ DiDiagonalLeftLine g_diamond_se(CENTER_X+HALF_DIAMOND_SIZE-1, CENTER_Y, HALF_DIA
 */
 
 #define NR 1
-#define NC 2
+#define NC 1
 
 #if DRAW_PIXELS
 DiSetPixel g_x_pixel[5];
@@ -318,7 +319,7 @@ void init_stars() {
 
 #if DRAW_TRANSPARENT_BITMAP
   for (uint32_t c = 0; c < NC; c++) {
-    gp_transparent_bitmap[c] = new(100,100,ScrollMode::NONE) DiTransparentBitmap(100,100,ScrollMode::NONE);
+    gp_transparent_bitmap[c] = new(150,150,ScrollMode::NONE) DiTransparentBitmap(150,150,ScrollMode::NONE);
   }
 #endif
 
@@ -361,10 +362,10 @@ void init_stars() {
 #endif
 
 #if DRAW_TRANSPARENT_BITMAP
-  for (int32_t y=0;y<100;y++) {
-    for (int32_t x=0;x<100;x++) {
+  for (int32_t y=0;y<150;y++) {
+    for (int32_t x=0;x<150;x++) {
       for (int32_t c=0;c<NC;c++) {
-        gp_transparent_bitmap[c]->set_transparent_pixel(x, y, gbrush_strokes2Data[y*400+c*100+x]);
+        gp_transparent_bitmap[c]->set_transparent_pixel(x, y, gColors_MergedData[y*150+x]);
       }
     }
   }
@@ -586,7 +587,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
   // Draw a bitmap
   for (uint32_t r = 0; r < NR; r++) {
     for (uint32_t c = 0; c < NC; c++) {
-      gp_transparent_bitmap[c]->set_position(200+100*c, 250+100*c);
+      gp_transparent_bitmap[c]->set_position(300+100*c, 280+100*c);
       gp_transparent_bitmap[c]->paint(&p2);
     }
   }
