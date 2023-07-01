@@ -169,9 +169,9 @@ lf\@:
   movi      a2,0xEAA55440     // a2 <-- color lookup table (11101010101001010101010001000000)
   ssai      2                 // sar <-- setup to shift by 2 bits
   LOOKUP_MIXED_COLOR \r1,\r0  // mix the red color component
-  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
   LOOKUP_MIXED_COLOR \g1,\g0  // mix the green color component
-  src       a3,a9,a3          // include 2 bits for VS & HS
+  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
+  srli      a3,a3,2           // include 2 bits for VS & HS
   j         mix_done\@
 
 le\@:
@@ -179,19 +179,21 @@ le\@:
 
   // Alpha is 01 (1), meaning 50% opaque
   movi      a2,0xE9A59450     // a2 <-- color lookup table (11101001101001011001010001010000)
+  ssai      2                 // sar <-- setup to shift by 2 bits
   LOOKUP_MIXED_COLOR \r1,\r0  // mix the red color component
-  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
   LOOKUP_MIXED_COLOR \g1,\g0  // mix the green color component
-  src       a3,a9,a3          // include 2 bits for VS & HS
+  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
+  srli      a3,a3,2           // include 2 bits for VS & HS
   j         mix_done\@
 
   // Alpha is 00 (0), meaning 33% or 0% opaque
 lg\@:
   movi      a2,0xE5A49490     // a2 <-- color lookup table (11100101101001001001010010010000)
+  ssai      2                 // sar <-- setup to shift by 2 bits
   LOOKUP_MIXED_COLOR \r1,\r0  // mix the red color component
-  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
   LOOKUP_MIXED_COLOR \g1,\g0  // mix the green color component
-  src       a3,a9,a3          // include 2 bits for VS & HS
+  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
+  srli      a3,a3,2           // include 2 bits for VS & HS
 
 mix_done\@:
 
@@ -537,18 +539,18 @@ do_middle_pixels:
   and       a11,a10,a7      // a11 <-- src transparency bits only (no color)
   beq       a11,a7,pct_100  // go if using all 100% opaquness
   beqz      a11,pct_33      // go if using all 33% or 0% opaquness
-  beq       a11,a8,pct_66   // go if using all 66% opaquness
   beq       a11,a12,pct_50  // go if using all 50% opaquness
 
-// The transparency bits are dissimilar among the source pixels.
-// We must handle the 4 opaquness cases separately.
-
+// The transparency bits are dissimilar among the source pixels,
+// or all pixels are either 33% or 66% opaque.
+// We must handle the 4 pixels separately.
+pct_oddball:
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
   movi      a3,0          // a3 <-- output begins as 4 black pixels
-  //MIX_COLOR_BYTE 7,6,5,4,3,2,1,0          // mix byte # of the pixel word
-  //MIX_COLOR_BYTE 15,14,13,12,11,10,9,8    // mix byte #1 of the pixel word
-  //MIX_COLOR_BYTE 23,22,21,20,19,18,17,16  // mix byte #2 of the pixel word
-  //MIX_COLOR_BYTE 31,30,29,28,27,26,25,24  // mix byte #3 of the pixel word
+  MIX_COLOR_BYTE 7,6,5,4,3,2,1,0          // mix byte # of the pixel word
+  MIX_COLOR_BYTE 15,14,13,12,11,10,9,8    // mix byte #1 of the pixel word
+  MIX_COLOR_BYTE 23,22,21,20,19,18,17,16  // mix byte #2 of the pixel word
+  MIX_COLOR_BYTE 31,30,29,28,27,26,25,24  // mix byte #3 of the pixel word
   j         write_pix     // go write the resulting dst pixels
 
 // All 4 src pixels are 100% opaque.
@@ -575,18 +577,10 @@ pct_50:
   or        a3,a13,a11    // a3 <-- 4 mixed pixels
   j         write_pix     // go write the resulting dst pixels
 
-// All 4 src pixels are 33% opaque.
+// All 4 src pixels are 0% or 33% opaque.
 pct_33:
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
   mov a3,a10 // TEMP
-
-  j         write_pix     // go write the resulting dst pixels
-
-// All 4 src pixels are 66% opaque.
-pct_66:
-  l32i      a11,a4,0      // a11 <-- read 4 dst pixels
-  movi a3,0x22222222 // TEMP
-
   j         write_pix     // go write the resulting dst pixels
 
 write_pix:
