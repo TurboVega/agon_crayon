@@ -229,7 +229,7 @@ left_ok:
   mov       a8,a7         // a8 (right_hand_x) <-- m_screen_width
 right_ok:
 
-  l32i      a7,a2,44      // a14 <-- m_visible_start
+  l32i      a7,a2,44      // a7 <-- m_visible_start
 //  bgez      a3,dont_move  // don't move start if left_hand_x >= 0
 //  bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
 //  bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4
@@ -526,8 +526,6 @@ so_3_dst_offset_3:
 // a2, a3, a5, a6, a7, a8, a9, a10, a11, a12, a13 <-- scratch
 
 do_middle_pixels:
-  movi      a5,0x33333333 // a5 <-- mask to isolate blue & red, removing green
-  movi      a6,0x0C0C0C0C // a6 <-- mask to isolate green, removing red & blue
   movi      a7,0xC0C0C0C0 // a7 <-- mask to isolate transparency bits
   movi      a8,0x80808080 // a8 <-- mask to isolate upper transparency bit
   movi      a12,0x40404040 // a12 <-- mask to isolate lower transparency bit
@@ -535,7 +533,9 @@ do_middle_pixels:
   srli      a3,a3,2       // a3 <-- number of full words left to copy
   loopnez   a3,end_loop   // loop to copy pixel data
 
-  l32i      a10,a14,0       // a10 <-- read 4 src pixels
+movi a3,0x01040506
+j write_pix
+  l32i      a10,a14,0     // a10 <-- read 4 src pixels
   and       a11,a10,a7      // a11 <-- src transparency bits only (no color)
   beq       a11,a7,pct_100  // go if using all 100% opaquness
   beqz      a11,pct_33      // go if using all 33% or 0% opaquness
@@ -547,10 +547,51 @@ do_middle_pixels:
 pct_oddball:
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
   movi      a3,0          // a3 <-- output begins as 4 black pixels
-  MIX_COLOR_BYTE 7,6,5,4,3,2,1,0          // mix byte # of the pixel word
-  MIX_COLOR_BYTE 15,14,13,12,11,10,9,8    // mix byte #1 of the pixel word
-  MIX_COLOR_BYTE 23,22,21,20,19,18,17,16  // mix byte #2 of the pixel word
-  MIX_COLOR_BYTE 31,30,29,28,27,26,25,24  // mix byte #3 of the pixel word
+  ssai      8             // sar <-- will shift in 8 bits via 'src', below
+  movi      a3,0x20          // a3 <-- output begins as 4 black pixels
+  j         write_pix     // go write the resulting dst pixels
+
+  //MIX_COLOR_BYTE 7,6,5,4,3,2,1,0          // mix byte # of the pixel word
+  //MIX_COLOR_BYTE 15,14,13,12,11,10,9,8    // mix byte #1 of the pixel word
+  //MIX_COLOR_BYTE 23,22,21,20,19,18,17,16  // mix byte #2 of the pixel word
+  //MIX_COLOR_BYTE 31,30,29,28,27,26,25,24  // mix byte #3 of the pixel word
+
+  // xxxx xxxx xxxx xxxx xxxx xxxx TTBB GGRR
+  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
+  movi      a5,0x0000003F // a5 <-- mask to separate dst pixel bits
+  and       a6,a11,a5     // a6 <-- keep only dst pixel bits
+  l32i      a9,a14,4      // a9 <-- points to mixed color table
+  add       a9,a9,a6      // a9 <-- compute address of table element
+  l8ui      a9,a9,0       // a9 <-- load mixed color value
+  src       a3,a9,a3      // a3 <-- shifts in 1st new pixel (8 bits)
+
+  // xxxx xxxx xxxx xxxx TTBB GGRR xxxx xxxx
+  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
+  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
+  and       a6,a11,a5     // a6 <-- keep only dst pixel bits
+  l32i      a9,a14,8      // a9 <-- points to mixed color table
+  add       a9,a9,a6      // a9 <-- compute address of table element
+  l8ui      a9,a9,0       // a9 <-- load mixed color value
+  src       a3,a9,a3      // a3 <-- shifts in 2nd new pixel (8 bits)
+
+  // xxxx xxxx TTBB GGRR xxxx xxxx xxxx xxxx
+  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
+  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
+  and       a6,a11,a5     // a6 <-- keep only dst pixel bits
+  l32i      a9,a14,12     // a9 <-- points to mixed color table
+  add       a9,a9,a6      // a9 <-- compute address of table element
+  l8ui      a9,a9,0       // a9 <-- load mixed color value
+  src       a3,a9,a3      // a3 <-- shifts in 3rd new pixel (8 bits)
+
+  // TTBB GGRR xxxx xxxx xxxx xxxx xxxx xxxx
+  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
+  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
+  and       a6,a11,a5     // a6 <-- keep only dst pixel bits
+  l32i      a9,a14,16     // a9 <-- points to mixed color table
+  add       a9,a9,a6      // a9 <-- compute address of table element
+  l8ui      a9,a9,0       // a9 <-- load mixed color value
+  src       a3,a9,a3      // a3 <-- shifts in 4th new pixel (8 bits)
+
   j         write_pix     // go write the resulting dst pixels
 
 // All 4 src pixels are 100% opaque.
@@ -560,14 +601,18 @@ pct_100:
 
 // All 4 src pixels are 50% opaque.
 pct_50:
+ movi a3,0x14
+ j         write_pix     // go write the resulting dst pixels
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
 
+  movi      a5,0x33333333 // a5 <-- mask to isolate blue & red, removing green
   and       a9,a10,a5     // a9 <-- src blue & red (no green)
   and       a13,a11,a5    // a13 <-- dst blue & red (no green)
   add       a13,a13,a9    // a13 <-- sum of blue & sum of red
   srli      a13,a13,1     // a13 <-- averages of mixed blue & mixed red, in 3 bits each
   and       a13,a13,a5    // a13 <-- averages in 2 bits each
 
+  movi      a6,0x0C0C0C0C // a6 <-- mask to isolate green, removing red & blue
   and       a10,a10,a6    // a10 <-- src green (no red or blue)
   and       a11,a11,a6    // a11 <-- dst green (no red or blue)
   add       a11,a11,a10   // a11 <-- sum of green
@@ -580,13 +625,13 @@ pct_50:
 // All 4 src pixels are 0% or 33% opaque.
 pct_33:
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
-  mov a3,a10 // TEMP
+  movi a3,0x22 // TEMP
   j         write_pix     // go write the resulting dst pixels
 
 write_pix:
   s32i      a3,a4,0       // write 4 dst pixels
 pct_0:
   addi      a4,a4,4       // a4 <-- points to next 4 dst pixels
-  addi      a14,a14,4     // a14 <-- points to next 4 src pixels
+  addi      a14,a14,20    // a14 <-- points to next 4 src pixels
 end_loop:
   ret

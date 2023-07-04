@@ -191,7 +191,7 @@ left_ok:
   mov       a8,a7         // a8 (right_hand_x) <-- m_screen_width
 right_ok:
 
-  l32i      a7,a2,44      // a14 <-- m_visible_start
+  l32i      a7,a2,44      // a7 <-- m_visible_start
   bgez      a3,dont_move  // don't move start if left_hand_x >= 0
   bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
   bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4

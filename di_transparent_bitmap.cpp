@@ -32,40 +32,106 @@ extern "C" {
 IRAM_ATTR void DiTransparentBitmap_paint(void* this_ptr, const DiPaintParams *params);
 }
 
+uint8_t* gp_mixed_color_table;
+
 DiTransparentBitmap::DiTransparentBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode):
   DiPrimitiveXYWH(0, 0, width, height) {
   m_scroll_mode = (uint32_t)scroll_mode;
   switch (scroll_mode) {
     case NONE:
     case VERTICAL:
-      m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+      m_words_per_line = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t)) * 5;
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
       memset(m_pixels, 0x00, m_bytes_per_position);
-      /*{
-        uint32_t* p = m_pixels;
-        for (uint32_t i = 0; i < m_words_per_position; i+=2) {
-          *p++ = 0x00; // color
-        }
-      }*/
       break;
 
     case HORIZONTAL:
     case BOTH:
-      m_words_per_line = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
+      m_words_per_line = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2) * 5;
       m_bytes_per_line = m_words_per_line * sizeof(uint32_t);
       m_words_per_position = m_words_per_line * height;
       m_bytes_per_position = m_words_per_position * sizeof(uint32_t);
       memset(m_pixels, 0x00, m_bytes_per_position * 4);
-      /*{
-        uint32_t* p = m_pixels;
-        uint32_t n = m_words_per_position * 4;
-        for (uint32_t i = 0; i < n; i+=2) {
-          *p++ = 0x00; // color
-        }
-      }*/
       break;
+  }
+  if (!gp_mixed_color_table) {
+    uint32_t new_size = 4 * 64 * 64;
+    gp_mixed_color_table = (uint8_t*) heap_caps_malloc(new_size, MALLOC_CAP_8BIT|MALLOC_CAP_INTERNAL);
+    uint8_t* p = gp_mixed_color_table;
+
+    // Initialize 33% opaquness section.
+    for (uint8_t fg_b = 0; fg_b < 4; fg_b++) {
+      for (uint8_t fg_g = 0; fg_g < 4; fg_g++) {
+        for (uint8_t fg_r = 0; fg_r < 4; fg_r++) {
+          for (uint8_t bg_b = 0; bg_b < 4; bg_b++) {
+            for (uint8_t bg_g = 0; bg_g < 4; bg_g++) {
+              for (uint8_t bg_r = 0; bg_r < 4; bg_r++) {
+                uint8_t mb = (fg_b + bg_b*2) / 3;
+                uint8_t mg = (fg_g + bg_g*2) / 3;
+                uint8_t mr = (fg_r + bg_r*2) / 3;
+                *p++ = ((mb<<4)|(mg<<2)|(mr)|SYNCS_OFF);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Initialize 50% opaquness section.
+    for (uint8_t fg_b = 0; fg_b < 4; fg_b++) {
+      for (uint8_t fg_g = 0; fg_g < 4; fg_g++) {
+        for (uint8_t fg_r = 0; fg_r < 4; fg_r++) {
+          for (uint8_t bg_b = 0; bg_b < 4; bg_b++) {
+            for (uint8_t bg_g = 0; bg_g < 4; bg_g++) {
+              for (uint8_t bg_r = 0; bg_r < 4; bg_r++) {
+                uint8_t mb = (fg_b + bg_b) / 2;
+                uint8_t mg = (fg_g + bg_g) / 2;
+                uint8_t mr = (fg_r + bg_r) / 2;
+                *p++ = ((mb<<4)|(mg<<2)|(mr)|SYNCS_OFF);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Initialize 66% opaquness section.
+    for (uint8_t fg_b = 0; fg_b < 4; fg_b++) {
+      for (uint8_t fg_g = 0; fg_g < 4; fg_g++) {
+        for (uint8_t fg_r = 0; fg_r < 4; fg_r++) {
+          for (uint8_t bg_b = 0; bg_b < 4; bg_b++) {
+            for (uint8_t bg_g = 0; bg_g < 4; bg_g++) {
+              for (uint8_t bg_r = 0; bg_r < 4; bg_r++) {
+                uint8_t mb = (fg_b*2 + bg_b) / 3;
+                uint8_t mg = (fg_g*2 + bg_g) / 3;
+                uint8_t mr = (fg_r*2 + bg_r) / 3;
+                *p++ = ((mb<<4)|(mg<<2)|(mr)|SYNCS_OFF);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Initialize 100% opaquness section.
+    for (uint8_t fg_b = 0; fg_b < 4; fg_b++) {
+      for (uint8_t fg_g = 0; fg_g < 4; fg_g++) {
+        for (uint8_t fg_r = 0; fg_r < 4; fg_r++) {
+          for (uint8_t bg_b = 0; bg_b < 4; bg_b++) {
+            for (uint8_t bg_g = 0; bg_g < 4; bg_g++) {
+              for (uint8_t bg_r = 0; bg_r < 4; bg_r++) {
+                uint8_t mb = fg_b;
+                uint8_t mg = fg_g;
+                uint8_t mr = fg_r;
+                *p++ = ((mb<<4)|(mg<<2)|(mr)|SYNCS_OFF);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -77,7 +143,7 @@ void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t he
   switch (scroll_mode) {
     case NONE:
     case VERTICAL:
-      wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t);
+      wpl = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t)) * 5;
       wpp = wpl * height;
       bpp = wpp * sizeof(uint32_t);
       new_size = (size_t)(sizeof(DiTransparentBitmap) - sizeof(uint32_t) + (bpp));
@@ -85,7 +151,7 @@ void* DiTransparentBitmap::operator new(size_t size, uint32_t width, uint32_t he
 
     case HORIZONTAL:
     case BOTH:
-      wpl = (width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2;
+      wpl = ((width + sizeof(uint32_t) - 1) / sizeof(uint32_t) + 2) * 5;
       wpp = wpl * height;
       bpp = wpp * sizeof(uint32_t);
       new_size = (size_t)(sizeof(DiTransparentBitmap) - sizeof(uint32_t) + (bpp * 4));
@@ -120,16 +186,25 @@ void DiTransparentBitmap::set_transparent_pixel(int32_t x, int32_t y, uint8_t co
 }
 
 void DiTransparentBitmap::set_pixel(int32_t x, int32_t y, uint8_t color) {
+  uint32_t* p;
+  int32_t index;
+
   switch ((ScrollMode)m_scroll_mode) {
     case NONE:
     case VERTICAL:
-      pixels(m_pixels + y * m_words_per_line)[FIX_INDEX(x)] = color;
+      p = m_pixels + y * m_words_per_line + (x / 4) * 5;
+      index = FIX_INDEX(x&3);
+      pixels(p)[index] = color;
+      p[index+1] = (uint32_t)(gp_mixed_color_table + ((uint32_t)(color >> 6))*64*64 + ((uint32_t)(color & 0x3F))*64);
       break;
 
     case HORIZONTAL:
     case BOTH:
       for (uint32_t pos = 0; pos < 4; pos++) {
-        pixels(m_pixels + pos * m_words_per_position + y * m_words_per_line)[FIX_INDEX(pos + x)] = color;
+        p = m_pixels + pos * m_words_per_position + y * m_words_per_line + ((pos+x) / 4) * 5;
+        index = FIX_INDEX((pos+x)&3);
+        pixels(p)[index] = color;
+        p[index+1] = (uint32_t)(gp_mixed_color_table + ((uint32_t)(color >> 6))*64*64 + ((uint32_t)(color & 0x3F))*64);
       }
       break;
   }
