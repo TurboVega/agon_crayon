@@ -533,9 +533,9 @@ do_middle_pixels:
   srli      a3,a3,2       // a3 <-- number of full words left to copy
   loopnez   a3,end_loop   // loop to copy pixel data
 
-movi a3,0x01040506
-j write_pix
   l32i      a10,a14,0     // a10 <-- read 4 src pixels
+ movi a3,0x01040506
+ j write_pix
   and       a11,a10,a7      // a11 <-- src transparency bits only (no color)
   beq       a11,a7,pct_100  // go if using all 100% opaquness
   beqz      a11,pct_33      // go if using all 33% or 0% opaquness
@@ -545,6 +545,8 @@ j write_pix
 // or all pixels are either 33% or 66% opaque.
 // We must handle the 4 pixels separately.
 pct_oddball:
+ movi a3,0x01040506
+ j write_pix
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
   movi      a3,0          // a3 <-- output begins as 4 black pixels
   ssai      8             // sar <-- will shift in 8 bits via 'src', below
@@ -596,13 +598,15 @@ pct_oddball:
 
 // All 4 src pixels are 100% opaque.
 pct_100:
+ movi a3,0x01040506
+ j write_pix
   xor       a3,a10,a7     // a3 <-- get rid of the transparency bits, leaving color
   j         write_pix     // go write the resulting dst pixels
 
 // All 4 src pixels are 50% opaque.
 pct_50:
- movi a3,0x14
- j         write_pix     // go write the resulting dst pixels
+ movi a3,0x01040506
+ j write_pix
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
 
   movi      a5,0x33333333 // a5 <-- mask to isolate blue & red, removing green
@@ -624,6 +628,8 @@ pct_50:
 
 // All 4 src pixels are 0% or 33% opaque.
 pct_33:
+ movi a3,0x01040506
+ j write_pix
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
   movi a3,0x22 // TEMP
   j         write_pix     // go write the resulting dst pixels
