@@ -595,7 +595,7 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
 #if DRAW_TRANSPARENT_BITMAP
   // Draw a bitmap
   for (uint32_t c = 0; c < NT; c++) {
-    gp_transparent_bitmap[c]->set_position(100+100*c, 200+70*c);
+    gp_transparent_bitmap[c]->set_position(100+100*c, 200+50*c);
     gp_transparent_bitmap[c]->paint(&p2);
   }
 #endif
