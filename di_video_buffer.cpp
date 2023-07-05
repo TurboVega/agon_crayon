@@ -55,11 +55,11 @@
 #endif
 
 #if DRAW_OPAQUE_BITMAP | DRAW_MASKED_BITMAP | DRAW_TRANSPARENT_BITMAP
-#include "samples\\pct0.h"
-#include "samples\\pct33.h"
-#include "samples\\pct50.h"
-#include "samples\\pct66.h"
-#include "samples\\pct100.h"
+#include "samples\\pct0_merged.h"
+#include "samples\\pct25_merged.h"
+#include "samples\\pct50_merged.h"
+#include "samples\\pct75_merged.h"
+#include "samples\\pct100_merged.h"
 //#include "samples\\COLORS_MERGED.h"
 //#include "samples\\BRUSH_STROKES2.h"
 //#include "samples\\TEST_BITMAP.h"
@@ -371,11 +371,11 @@ void init_stars() {
 #if DRAW_TRANSPARENT_BITMAP
   for (int32_t y=0;y<64;y++) {
     for (int32_t x=0;x<192;x++) {
-      gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gPct0Data[y*192+x]);
-      gp_transparent_bitmap[1]->set_transparent_pixel(x, y, gPct33Data[y*192+x]);
-      gp_transparent_bitmap[2]->set_transparent_pixel(x, y, gPct50Data[y*192+x]);
-      gp_transparent_bitmap[3]->set_transparent_pixel(x, y, gPct66Data[y*192+x]);
-      gp_transparent_bitmap[4]->set_transparent_pixel(x, y, gPct100Data[y*192+x]);
+      gp_transparent_bitmap[0]->set_transparent_pixel(x, y, gPct0_MergedData[y*192+x]);
+      gp_transparent_bitmap[1]->set_transparent_pixel(x, y, gPct25_MergedData[y*192+x]);
+      gp_transparent_bitmap[2]->set_transparent_pixel(x, y, gPct50_MergedData[y*192+x]);
+      gp_transparent_bitmap[3]->set_transparent_pixel(x, y, gPct75_MergedData[y*192+x]);
+      gp_transparent_bitmap[4]->set_transparent_pixel(x, y, gPct100_MergedData[y*192+x]);
     }
   }
 #endif

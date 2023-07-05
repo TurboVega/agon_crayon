@@ -477,9 +477,9 @@ do_middle_pixels:
   beq       a10,a2,pct_0    // go if using all 0% opaquness (100% transparency)
   and       a11,a10,a7      // a11 <-- src transparency bits only (no color)
   beq       a11,a7,pct_100  // go if using all 100% opaquness (0% transparency)
-  beq       a11,a8,pct_50   // go if using all 50% opaquness (50% transparency)
+  beq       a11,a12,pct_50  // go if using all 50% opaquness (50% transparency)
   beqz      a11,pct_25      // go if using all 25% opaquness (75% transparency)
-  beq       a11,a12,pct_75  // go if using all 75% opaquness (25% transparency)
+  beq       a11,a8,pct_75   // go if using all 75% opaquness (25% transparency)
 
 // The transparency bits are dissimilar among the source pixels.
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
