@@ -326,6 +326,7 @@ void init_stars() {
 #if DRAW_TRANSPARENT_BITMAP
   for (uint32_t c = 0; c < NT; c++) {
     gp_transparent_bitmap[c] = new(192,64,ScrollMode::NONE) DiTransparentBitmap(192,64,ScrollMode::NONE);
+    gp_transparent_bitmap[c]->set_transparent_color(0xDB);
   }
 #endif
 

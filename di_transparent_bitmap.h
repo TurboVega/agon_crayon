@@ -35,6 +35,7 @@ class DiTransparentBitmap: public DiPrimitiveXYWH {
   uint32_t m_bytes_per_position;
   uint32_t* m_visible_start;
   uint32_t m_scroll_mode;
+  uint32_t m_transparent_color;
   uint32_t m_pixels[1];
 
   DiTransparentBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
@@ -43,6 +44,7 @@ class DiTransparentBitmap: public DiPrimitiveXYWH {
   void set_position(int32_t x, int32_t y);
   void set_position(int32_t x, int32_t y, uint32_t start_line, uint32_t height);
   void set_transparent_pixel(int32_t x, int32_t y, uint8_t color);
+  void set_transparent_color(uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 

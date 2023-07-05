@@ -49,7 +49,8 @@
 //     [a2+40] m_bytes_per_position;
 //     [a2+44] m_visible_start
 //     [a2+48] m_scroll_mode
-//     [a2+52] m_pixels
+//     [a2+52] m_transparent_color
+//     [a2+56] m_pixels
 //
 // a3: const DiPaintParams *params
 //     [a3] m_line32
@@ -134,71 +135,6 @@
 //                 B:nodm.nopm.xypw.--z-   C:mn-d.mnop.wxop.--yz.----  D:dm--.pmno.pwno.z-xy.----  A:-d--.opmn.opmn.yzwx.----
 //
 
-  .macro    LOOKUP_MIXED_COLOR c1 c0
-
-  mov       a9,a2           // a9 <-- color lookup table
-  bbci      a10,\c1,la\@    // go if FG upper bit is 0
-  srli      a9,a9,16        // a9 <-- use upper half of table
-  la\@:
-  bbci      a10,\c0,lb\@    // go if FG lower bit is 0
-  srli      a9,a9,8         // a9 <-- use upper quarter (half of chosen half)
-  lb\@:
-  bbci      a11,\c1,lc\@    // go if BG upper bit is 0
-  srli      a9,a9,4         // a9 <-- use upper eighth (half of chosen quarter)
-  lc\@:
-  bbci      a11,\c0,ld\@    // go if BG lower bit is 0
-  srli      a9,a9,2         // a9 <-- use upper sixteenth (half of chosen eighth)
-  ld\@:
-  src       a3,a9,a3        // a3 <-- slide 2 result color bits into holding register
-
-  .endm
-
-  .macro    MIX_COLOR_BYTE  alpha1 alpha0 b1 b0 g1 g0 r1 r0
-
-  bbci      a10,\alpha1,le\@  // go if Alpha upper bit is 0
-  bbci      a10,\alpha0,lf\@  // go if Alpha lower bit is 0
-
-  // Alpha is 11 (3), meaning 100% opaque
-  movi a9,0x3F
-  ssai 8
-  src  a3,a9,a3
-  j         mix_done\@
-
-  // Alpha is 10 (2), meaning 66% opaque
-lf\@:
-  movi      a2,0xEAA55440     // a2 <-- color lookup table (11101010101001010101010001000000)
-  ssai      2                 // sar <-- setup to shift by 2 bits
-  LOOKUP_MIXED_COLOR \r1,\r0  // mix the red color component
-  LOOKUP_MIXED_COLOR \g1,\g0  // mix the green color component
-  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
-  srli      a3,a3,2           // include 2 bits for VS & HS
-  j         mix_done\@
-
-le\@:
-  bbci      a10,\alpha0,lg\@  // go if Alpha lower bit is 0
-
-  // Alpha is 01 (1), meaning 50% opaque
-  movi      a2,0xE9A59450     // a2 <-- color lookup table (11101001101001011001010001010000)
-  ssai      2                 // sar <-- setup to shift by 2 bits
-  LOOKUP_MIXED_COLOR \r1,\r0  // mix the red color component
-  LOOKUP_MIXED_COLOR \g1,\g0  // mix the green color component
-  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
-  srli      a3,a3,2           // include 2 bits for VS & HS
-  j         mix_done\@
-
-  // Alpha is 00 (0), meaning 33% or 0% opaque
-lg\@:
-  movi      a2,0xE5A49490     // a2 <-- color lookup table (11100101101001001001010010010000)
-  ssai      2                 // sar <-- setup to shift by 2 bits
-  LOOKUP_MIXED_COLOR \r1,\r0  // mix the red color component
-  LOOKUP_MIXED_COLOR \g1,\g0  // mix the green color component
-  LOOKUP_MIXED_COLOR \b1,\b0  // mix the blue color component
-  srli      a3,a3,2           // include 2 bits for VS & HS
-
-mix_done\@:
-
-  .endm
-
   .align    4
 DiTransparentBitmap_paint:
   entry     sp,16
@@ -229,7 +165,7 @@ left_ok:
   mov       a8,a7         // a8 (right_hand_x) <-- m_screen_width
 right_ok:
 
-  l32i      a7,a2,44      // a7 <-- m_visible_start
+  l32i      a7,a2,44      // a14 <-- m_visible_start
 //  bgez      a3,dont_move  // don't move start if left_hand_x >= 0
 //  bbsi      a3,0,move_start // go move start if left_hand_x is not a multiple of 4
 //  bbci      a3,1,dont_move // do not move start if left_hand_x is a multiple of 4
@@ -520,12 +456,16 @@ so_3_dst_offset_3:
   retw
 
 //.......................................
+// a2 <-- points to C++ DiTransparentBitmap object
 // a3 <-- number of bytes left to copy, then scratch
 // a4 <-- m_line8 (or m_line32)
 // a14 <-- pointer to bitmap data line
-// a2, a3, a5, a6, a7, a8, a9, a10, a11, a12, a13 <-- scratch
+// a3, a5, a6, a7, a8, a9, a10, a11, a12, a13 <-- scratch
 
 do_middle_pixels:
+  l32i      a2,a2,52      // a2 <-- m_transparent_color
+  movi      a5,0x33333333 // a5 <-- mask to isolate blue & red, removing green
+  movi      a6,0x0C0C0C0C // a6 <-- mask to isolate green, removing red & blue
   movi      a7,0xC0C0C0C0 // a7 <-- mask to isolate transparency bits
   movi      a8,0x80808080 // a8 <-- mask to isolate upper transparency bit
   movi      a12,0x40404040 // a12 <-- mask to isolate lower transparency bit
@@ -533,90 +473,29 @@ do_middle_pixels:
   srli      a3,a3,2       // a3 <-- number of full words left to copy
   loopnez   a3,end_loop   // loop to copy pixel data
 
-  l32i      a10,a14,0     // a10 <-- read 4 src pixels
- movi a3,0x01040506
- j write_pix
+  l32i      a10,a14,0       // a10 <-- read 4 src pixels
+  beq       a10,a2,pct_0    // go if using all 0% opaquness (100% transparency)
   and       a11,a10,a7      // a11 <-- src transparency bits only (no color)
-  beq       a11,a7,pct_100  // go if using all 100% opaquness
-  beqz      a11,pct_33      // go if using all 33% or 0% opaquness
-  beq       a11,a12,pct_50  // go if using all 50% opaquness
+  beq       a11,a7,pct_100  // go if using all 100% opaquness (0% transparency)
+  beq       a11,a8,pct_50   // go if using all 50% opaquness (50% transparency)
+  beqz      a11,pct_25      // go if using all 25% opaquness (75% transparency)
+  beq       a11,a12,pct_75  // go if using all 75% opaquness (25% transparency)
 
-// The transparency bits are dissimilar among the source pixels,
-// or all pixels are either 33% or 66% opaque.
-// We must handle the 4 pixels separately.
-pct_oddball:
- movi a3,0x01040506
- j write_pix
+// The transparency bits are dissimilar among the source pixels.
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
-  movi      a3,0          // a3 <-- output begins as 4 black pixels
-  ssai      8             // sar <-- will shift in 8 bits via 'src', below
-  movi      a3,0x20          // a3 <-- output begins as 4 black pixels
+  movi      a3,0 //TEMPORARY
   j         write_pix     // go write the resulting dst pixels
 
-  //MIX_COLOR_BYTE 7,6,5,4,3,2,1,0          // mix byte # of the pixel word
-  //MIX_COLOR_BYTE 15,14,13,12,11,10,9,8    // mix byte #1 of the pixel word
-  //MIX_COLOR_BYTE 23,22,21,20,19,18,17,16  // mix byte #2 of the pixel word
-  //MIX_COLOR_BYTE 31,30,29,28,27,26,25,24  // mix byte #3 of the pixel word
-
-  // xxxx xxxx xxxx xxxx xxxx xxxx TTBB GGRR
-  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
-  movi      a5,0x0000003F // a5 <-- mask to separate dst pixel bits
-  and       a6,a11,a5     // a6 <-- keep only dst pixel bits
-  l32i      a9,a14,4      // a9 <-- points to mixed color table
-  add       a9,a9,a6      // a9 <-- compute address of table element
-  l8ui      a9,a9,0       // a9 <-- load mixed color value
-  src       a3,a9,a3      // a3 <-- shifts in 1st new pixel (8 bits)
-
-  // xxxx xxxx xxxx xxxx TTBB GGRR xxxx xxxx
-  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
-  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
-  and       a6,a11,a5     // a6 <-- keep only dst pixel bits
-  l32i      a9,a14,8      // a9 <-- points to mixed color table
-  add       a9,a9,a6      // a9 <-- compute address of table element
-  l8ui      a9,a9,0       // a9 <-- load mixed color value
-  src       a3,a9,a3      // a3 <-- shifts in 2nd new pixel (8 bits)
-
-  // xxxx xxxx TTBB GGRR xxxx xxxx xxxx xxxx
-  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
-  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
-  and       a6,a11,a5     // a6 <-- keep only dst pixel bits
-  l32i      a9,a14,12     // a9 <-- points to mixed color table
-  add       a9,a9,a6      // a9 <-- compute address of table element
-  l8ui      a9,a9,0       // a9 <-- load mixed color value
-  src       a3,a9,a3      // a3 <-- shifts in 3rd new pixel (8 bits)
-
-  // TTBB GGRR xxxx xxxx xxxx xxxx xxxx xxxx
-  // xxxx xxxx xxxx xxxx xxTT BBGG RR00 0000
-  srli      a11,a11,8     // a11 <-- move next dst pixels to lower bits
-  and       a6,a11,a5     // a6 <-- keep only dst pixel bits
-  l32i      a9,a14,16     // a9 <-- points to mixed color table
-  add       a9,a9,a6      // a9 <-- compute address of table element
-  l8ui      a9,a9,0       // a9 <-- load mixed color value
-  src       a3,a9,a3      // a3 <-- shifts in 4th new pixel (8 bits)
-
-  j         write_pix     // go write the resulting dst pixels
-
-// All 4 src pixels are 100% opaque.
-pct_100:
- movi a3,0x01040506
- j write_pix
-  xor       a3,a10,a7     // a3 <-- get rid of the transparency bits, leaving color
-  j         write_pix     // go write the resulting dst pixels
-
-// All 4 src pixels are 50% opaque.
+// All 4 src pixels are 50% opaque (50% transparent).
 pct_50:
- movi a3,0x01040506
- j write_pix
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
 
-  movi      a5,0x33333333 // a5 <-- mask to isolate blue & red, removing green
   and       a9,a10,a5     // a9 <-- src blue & red (no green)
   and       a13,a11,a5    // a13 <-- dst blue & red (no green)
   add       a13,a13,a9    // a13 <-- sum of blue & sum of red
   srli      a13,a13,1     // a13 <-- averages of mixed blue & mixed red, in 3 bits each
   and       a13,a13,a5    // a13 <-- averages in 2 bits each
 
-  movi      a6,0x0C0C0C0C // a6 <-- mask to isolate green, removing red & blue
   and       a10,a10,a6    // a10 <-- src green (no red or blue)
   and       a11,a11,a6    // a11 <-- dst green (no red or blue)
   add       a11,a11,a10   // a11 <-- sum of green
@@ -626,18 +505,60 @@ pct_50:
   or        a3,a13,a11    // a3 <-- 4 mixed pixels
   j         write_pix     // go write the resulting dst pixels
 
-// All 4 src pixels are 0% or 33% opaque.
-pct_33:
- movi a3,0x01040506
- j write_pix
+// All 4 src pixels are 25% opaque (75% transparent).
+pct_25:
   l32i      a11,a4,0      // a11 <-- read 4 dst pixels
-  movi a3,0x22 // TEMP
+
+  and       a9,a10,a5     // a9 <-- src blue & red (no green)
+  and       a13,a11,a5    // a13 <-- dst blue & red (no green)
+  slli      a3,a13,1      // a3 <-- double the dst color values
+  add       a13,a13,a3    // a13 <-- add dst color values again (total of 3X)
+  add       a13,a13,a9    // a13 <-- sum of blue & sum of red
+  srli      a13,a13,2     // a13 <-- averages of mixed blue & mixed red, in 4 bits each
+  and       a13,a13,a5    // a13 <-- averages in 2 bits each
+
+  and       a10,a10,a6    // a10 <-- src green (no red or blue)
+  and       a11,a11,a6    // a11 <-- dst green (no red or blue)
+  slli      a3,a11,1      // a3 <-- double the dst color values
+  add       a11,a11,a3    // a11 <-- add dst color values again (total of 3X)
+  add       a11,a11,a10   // a11 <-- sum of green
+  srli      a11,a11,2     // a11 <-- averages of mixed blue & mixed red, in 4 bits each
+  and       a11,a11,a6    // a11 <-- averages in 2 bits each
+
+  or        a3,a13,a11    // a3 <-- 4 mixed pixels
   j         write_pix     // go write the resulting dst pixels
+
+// All 4 src pixels are 75% opaque (25% transparent).
+pct_75:
+  l32i      a11,a4,0      // a11 <-- read 4 dst pixels
+
+  and       a9,a10,a5     // a9 <-- src blue & red (no green)
+  slli      a3,a9,1       // a3 <-- double the src color values
+  add       a9,a9,a3      // a9 <-- add src color values again (total of 3X)
+  and       a13,a11,a5    // a13 <-- dst blue & red (no green)
+  add       a13,a13,a9    // a13 <-- sum of blue & sum of red
+  srli      a13,a13,2     // a13 <-- averages of mixed blue & mixed red, in 4 bits each
+  and       a13,a13,a5    // a13 <-- averages in 2 bits each
+
+  and       a10,a10,a6    // a10 <-- src green (no red or blue)
+  slli      a3,a10,1      // a3 <-- double the src color values
+  add       a10,a10,a3    // a10 <-- add src color values again (total of 3X)
+  and       a11,a11,a6    // a11 <-- dst green (no red or blue)
+  add       a11,a11,a10   // a11 <-- sum of green
+  srli      a11,a11,2     // a11 <-- averages of mixed blue & mixed red, in 4 bits each
+  and       a11,a11,a6    // a11 <-- averages in 2 bits each
+
+  or        a3,a13,a11    // a3 <-- 4 mixed pixels
+  j         write_pix     // go write the resulting dst pixels
+
+// All 4 src pixels are 100% opaque (0% transparent).
+pct_100:
+  xor       a3,a10,a7     // a3 <-- get rid of the transparency bits, leaving color
 
 write_pix:
   s32i      a3,a4,0       // write 4 dst pixels
 pct_0:
   addi      a4,a4,4       // a4 <-- points to next 4 dst pixels
-  addi      a14,a14,20    // a14 <-- points to next 4 src pixels
+  addi      a14,a14,4     // a14 <-- points to next 4 src pixels
 end_loop:
   ret
