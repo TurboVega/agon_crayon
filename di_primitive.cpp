@@ -33,7 +33,7 @@ DiPrimitiveX::DiPrimitiveX(int32_t x): m_x(x) {}
 
 DiPrimitiveXC::DiPrimitiveXC(): m_color(0) {}
 
-DiPrimitiveXC::DiPrimitiveXC(int32_t x, int8_t color):
+DiPrimitiveXC::DiPrimitiveXC(int32_t x, uint8_t color):
   DiPrimitiveX(x), m_color(color) {}
 
 DiPrimitiveY::DiPrimitiveY(): m_y(0) {}
@@ -42,7 +42,7 @@ DiPrimitiveY::DiPrimitiveY(int32_t y): m_y(y) {}
 
 DiPrimitiveYC::DiPrimitiveYC(): m_color(0) {}
 
-DiPrimitiveYC::DiPrimitiveYC(int32_t y, int8_t color):
+DiPrimitiveYC::DiPrimitiveYC(int32_t y, uint8_t color):
   DiPrimitiveY(y), m_color(color) {}
 
 DiPrimitiveXY::DiPrimitiveXY(): m_y(0) {}
@@ -52,7 +52,7 @@ DiPrimitiveXY::DiPrimitiveXY(int32_t x, int32_t y):
 
 DiPrimitiveXYC::DiPrimitiveXYC(): m_color(0) {}
 
-DiPrimitiveXYC::DiPrimitiveXYC(int32_t x, int32_t y, int8_t color):
+DiPrimitiveXYC::DiPrimitiveXYC(int32_t x, int32_t y, uint8_t color):
   DiPrimitiveXY(x, y), m_color(color) {}
 
 DiPrimitiveXYW::DiPrimitiveXYW(): m_width(0), m_x_extent(0) {}
@@ -62,7 +62,7 @@ DiPrimitiveXYW::DiPrimitiveXYW(int32_t x, int32_t y, int32_t width):
 
 DiPrimitiveXYWC::DiPrimitiveXYWC(): m_color(0) {}
 
-DiPrimitiveXYWC::DiPrimitiveXYWC(int32_t x, int32_t y, int32_t width, int8_t color):
+DiPrimitiveXYWC::DiPrimitiveXYWC(int32_t x, int32_t y, int32_t width, uint8_t color):
   DiPrimitiveXYW(x, y, width), m_color(color) {}
 
 DiPrimitiveXYH::DiPrimitiveXYH(): m_height(0), m_y_extent(0) {}
@@ -72,7 +72,7 @@ DiPrimitiveXYH::DiPrimitiveXYH(int32_t x, int32_t y, int32_t height):
 
 DiPrimitiveXYHC::DiPrimitiveXYHC(): m_color(0) {}
 
-DiPrimitiveXYHC::DiPrimitiveXYHC(int32_t x, int32_t y, int32_t height, int8_t color):
+DiPrimitiveXYHC::DiPrimitiveXYHC(int32_t x, int32_t y, int32_t height, uint8_t color):
   DiPrimitiveXYH(x, y, height), m_color(color) {}
 
 DiPrimitiveXYWH::DiPrimitiveXYWH(): m_height(0), m_y_extent(0) {}
@@ -82,5 +82,5 @@ DiPrimitiveXYWH::DiPrimitiveXYWH(int32_t x, int32_t y, int32_t width, int32_t he
 
 DiPrimitiveXYWHC::DiPrimitiveXYWHC(): m_color(0) {}
 
-DiPrimitiveXYWHC::DiPrimitiveXYWHC(int32_t x, int32_t y, int32_t width, int32_t height, int8_t color):
+DiPrimitiveXYWHC::DiPrimitiveXYWHC(int32_t x, int32_t y, int32_t width, int32_t height, uint8_t color):
   DiPrimitiveXYWH(x, y, width, height), m_color(color) {}

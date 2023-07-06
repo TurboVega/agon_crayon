@@ -26,21 +26,16 @@
 //     [a2+20] m_height
 //     [a2+24] m_y_extent
 //     [a2+28] m_color
-//     [a2+32] m_current_x
-//              [a2+32] m_current_x.value64
-//              [a2+32] m_current_x.value32
-//                        [a2+32] m_current_x.value32.low
-//                        [a2+36] m_current_x.value32.high
-//     [a2+40] m_current_y
-//              [a2+40] m_current_y.value64
-//              [a2+40] m_current_y.value32
-//                        [a2+40] m_current_y.value32.low
-//                        [a2+44] m_current_y.value32.high
-//     [a2+48] m_delta_x
-//     [a2+56] m_delta_y
-//     [a2+60] m_min_x
-//     [a2+64] m_min_y
-//     [a2+70] m_start_x
+//     [a2+32] m_line_pieces.m_pieces
+//               [0] m_x
+//               [2] m_y
+//               [4] m_width
+//               [6] m_unused
+//     [a2+36] m_line_pieces.m_min_x
+//     [a2+38] m_line_pieces.m_min_y
+//     [a2+40] m_line_pieces.m_max_x
+//     [a2+42] m_line_pieces.m_max_y
+//     [a2+44] m_line_pieces.m_num_pieces
 //
 // a3: const DiPaintParams *params
 //     [a3] m_line32
@@ -80,7 +75,9 @@ DiGeneralLine_paint:
   entry     sp,16
   l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
+  
   bne       a4,a5,skip    // skip if this is not line for pixel
+
   l32i      a4,a3,4       // a4 <-- m_line8
   l32i      a5,a2,4       // a5 <-- m_x
   l32i      a6,a3,16      // a6 <-- m_horiz_scroll

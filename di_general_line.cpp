@@ -27,9 +27,6 @@
 
 #include "di_general_line.h"
 
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-
 extern "C" {
 IRAM_ATTR void DiGeneralLine_paint(void* this_ptr, const DiPaintParams *params);
 }
@@ -41,32 +38,8 @@ DiGeneralLine::DiGeneralLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, uin
     (((uint32_t)color) << 16) |
     (((uint32_t)color) << 8) |
     ((uint32_t)color) | SYNCS_OFF;
-  m_min_x = MIN(x1,x2);
-  int32_t max_x = MAX(x1,x2);
-  m_min_y = MIN(y1,y2);
-  int32_t max_y = MAX(y1,y2);
-  int32_t dx = max_x - min_x;
-  int32_t dy = max_y - min_y;
-  int32_t delta = MAX(dx, dy);
-
-  if (y1 < y2) {
-    m_delta_x = (((uint64_t)(x2 - x1)) << 32) / delta;
-    m_start_x = x1;
-  } else {
-    m_delta_x = (((uint64_t)(x1 - x2)) << 32) / delta;
-    m_start_x = x2;
-  }
-
-  m_delta_y = (((uint64_t)(max_y - m_min_y)) << 32) / delta;
 }
 
 void IRAM_ATTR DiGeneralLine::paint(const DiPaintParams *params) {
-  if (m_scrolled_y == m_min_y) {
-    m_current_x.value64 += 
-  }
-  m_x = m_current_x.value32.high;
-  m_y = m_current_y.value32.high;
   DiGeneralLine_paint((void*)this, params);
-  m_current_x.value64 += m_delta_x;
-  m_current_y.value64 += m_delta_y;
 }

@@ -31,13 +31,7 @@
 
 class DiGeneralLine: public DiPrimitiveXYWHC {
   public:
-  Overlay m_current_x;
-  Overlay m_current_y;
-  int64_t m_delta_x;
-  int64_t m_delta_y;
-  int32_t m_min_x;
-  int32_t m_min_y;
-  int32_t m_start_x;
+  DiLinePieces m_line_pieces;
 
   DiGeneralLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint8_t color);
 

@@ -21,70 +21,95 @@
 // SOFTWARE.
 // 
 
-#include "di_line_points.h"
-
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-#define ABS(X) (((X) >= 0) ? (X) : (-(X)))
+#include "di_line_pieces.h"
 
 typedef union {
-  uint32_t value32;
+  int64_t value64;
   struct {
-    uint16_t low;
-    uint16_t high;
-  } value16;
+    uint32_t low;
+    int32_t high;
+  } value32;
 } Overlay;
 
-LinePieces* generate_line_pieces(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
-  LinePieces* lp = new LinePieces;
+void generate_line_pieces(DiLinePieces* lp, int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
   lp->m_min_x = MIN(x1, x2);
   lp->m_max_x = MAX(x1, x2);
   lp->m_min_y = MIN(y1, y2);
   lp->m_max_y = MAX(y1, y2);
 
-  int16_t dx = max_x - min_x;
-  int16_t dy = max_y - min_y;
+  int16_t dx = lp->m_max_x - lp->m_min_x;
+  int16_t dy = lp->m_max_y - lp->m_min_y;
   int16_t delta = MAX(dx, dy);
 
   Overlay x;
-  int16_t x_end;
-  int32_t delta_x;
-  int32_t delta_y;
+  x.value32.low = 0;
+  x.value32.high = lp->m_min_x;
+  int64_t delta_x = (((int64_t)(lp->m_max_x - lp->m_min_x)) << 32) / delta;
 
-  if (y1 < y2) {
-    delta_x = (((uint32_t)(x2 - x1)) << 16) / delta;
-    x = x1;
-    x_end = x2;
-  } else {
-    delta_x = (((uint32_t)(x1 - x2)) << 16) / delta;
-    x = x2;
-    x_end = x1;
-  }
+  Overlay y;
+  y.value32.low = 0;
+  y.value32.high = lp->m_min_y;
+  int64_t delta_y = (((int64_t)(lp->m_max_y - lp->m_min_y)) << 32) / delta;
 
-  delta_y = (((uint32_t)(max_y - m_min_y)) << 16) / delta;
-  int16_t y = lp->m_min_y;
-
-  lp->m_pieces = new LinePiece[delta];
-  uint16_t first_x = x;
-  uint16_t first_y = y;
-  uint16_t last_x = x;
+  lp->m_pieces = new DiLinePiece[delta+1];
+  int32_t first_x = x.value32.high;
+  int32_t first_y = y.value32.high;
   uint16_t i = 0;
 
-  while (true) {
-    int16_t x += delta_x;
-    int16_t y += delta_y;
-    if (y != first_y) {
-      lp->m_pieces[i].m_x = MIN(first_x, last_x);
-      lp->m_pieces[i].m_y = first_y;
-      lp->m_pieces[i++].m_width = ABS(last_x - first_x) + 1;
-      if (x == x_end && y == lp->m_max_y) {
-        break;
+  bool x_at_end = false;
+  bool y_at_end = false;
+
+  while (i < delta) {
+    Overlay nx;
+    Overlay ny;
+    if (!x_at_end) {
+      nx.value64 = x.value64 + delta_x + 0x80000000;
+      if (nx.value32.high == lp->m_max_x) {
+        x_at_end = true;
       }
-      first_x = x;
-      first_y = y;
     }
-    last_x = x;
-    last_y = y;
+    
+    if (!y_at_end) {
+      ny.value64 = y.value64 + delta_y + 0x80000000;
+      if (ny.value32.high == lp->m_max_y) {
+        y_at_end = true;
+      }
+    }
+
+    if (ny.value32.high != first_y) {
+      lp->m_pieces[i].m_x = (int16_t)first_x;
+      lp->m_pieces[i].m_y = (int16_t)first_y;
+      uint16_t width = (uint16_t)(ABS(nx.value32.high - first_x));
+      if (width == 0) {
+          width = 1;
+      }
+      lp->m_pieces[i++].m_width = width;
+      
+      first_x = nx.value32.high;
+      first_y = ny.value32.high;
+    }
+
+    if (x_at_end && y_at_end) {
+      break;
+    }
+
+    x.value64 += delta_x;
+    y.value64 += delta_y;
   }
+  
+  uint16_t width = (int16_t)(ABS(lp->m_max_x - first_x));
+  lp->m_pieces[i].m_x = (int16_t)first_x;
+  lp->m_pieces[i].m_y = (int16_t)first_y;
+  if (width == 0) {
+      width = 1;
+  }
+  lp->m_pieces[i++].m_width = width;
   lp->m_num_pieces = i;
+  
+  if (x1<x2 && y1>y2 || x1>x2 && y1<y2) {
+    // Flip the line horizontally
+    for (uint16_t j = 0; j < i; j++) {
+        lp->m_pieces[j].m_x = lp->m_max_x - lp->m_pieces[j].m_x + lp->m_min_x;
+    }
+  }
 }

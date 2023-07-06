@@ -57,54 +57,6 @@ class DiPrimitive {
   inline uint8_t* pixels(uint32_t* line) {
     return (uint8_t*)line;
   }
-
-  inline void limit_x(int32_t &x, int32_t hscroll) {
-    x += hscroll;
-    if ((x < 0) || (x >= ACT_PIXELS)) {
-      x = -1;
-    }
-  }
-
-  inline void limit_y(int32_t &y, int32_t vscroll) {
-    y += vscroll;
-    if ((y < 0) || (y >= ACT_LINES)) {
-      y = -1;
-    }
-  }
-
-  inline void clamp_left(int32_t &x, int32_t &offset, int32_t hscroll) {
-    x += hscroll;
-    if (x >= 0) {
-      offset = 0;
-    } else {
-      offset = -x;
-      x = 0;
-    }
-  }
-
-  inline void clamp_right(int32_t &x, int32_t hscroll) {
-    x += hscroll;
-    if (x >= ACT_PIXELS) {
-      x = ACT_PIXELS - 1;
-    }
-  }
-
-  inline void clamp_top(int32_t &y, int32_t &offset, int32_t vscroll) {
-    y += vscroll;
-    if (y >= 0) {
-      offset = 0;
-    } else {
-      offset = -y;
-      y = 0;
-    }
-  }
-
-  inline void clamp_bottom(int32_t &y, int32_t vscroll) {
-    y += vscroll;
-    if (y >= ACT_LINES) {
-      y = ACT_LINES - 1;
-    }
-  }
 };
 
 class DiPrimitiveX: public DiPrimitive {
@@ -117,10 +69,10 @@ class DiPrimitiveX: public DiPrimitive {
 
 class DiPrimitiveXC: public DiPrimitiveX {
   public:
-  int32_t m_color;
+  uint32_t m_color;
 
   DiPrimitiveXC();
-  DiPrimitiveXC(int32_t x, int8_t color);
+  DiPrimitiveXC(int32_t x, uint8_t color);
 };
 
 class DiPrimitiveY: public DiPrimitive {
@@ -133,10 +85,10 @@ class DiPrimitiveY: public DiPrimitive {
 
 class DiPrimitiveYC: public DiPrimitiveY {
   public:
-  int32_t m_color;
+  uint32_t m_color;
 
   DiPrimitiveYC();
-  DiPrimitiveYC(int32_t y, int8_t color);
+  DiPrimitiveYC(int32_t y, uint8_t color);
 };
 
 class DiPrimitiveXY: public DiPrimitiveX {
@@ -149,10 +101,10 @@ class DiPrimitiveXY: public DiPrimitiveX {
 
 class DiPrimitiveXYC: public DiPrimitiveXY {
   public:
-  int32_t m_color;
+  uint32_t m_color;
 
   DiPrimitiveXYC();
-  DiPrimitiveXYC(int32_t x, int32_t y, int8_t color);
+  DiPrimitiveXYC(int32_t x, int32_t y, uint8_t color);
 };
 
 class DiPrimitiveXYW: public DiPrimitiveXY {
@@ -166,10 +118,10 @@ class DiPrimitiveXYW: public DiPrimitiveXY {
 
 class DiPrimitiveXYWC: public DiPrimitiveXYW {
   public:
-  int32_t m_color;
+  uint32_t m_color;
 
   DiPrimitiveXYWC();
-  DiPrimitiveXYWC(int32_t x, int32_t y, int32_t width, int8_t color);
+  DiPrimitiveXYWC(int32_t x, int32_t y, int32_t width, uint8_t color);
 };
 
 class DiPrimitiveXYH: public DiPrimitiveXY {
@@ -183,10 +135,10 @@ class DiPrimitiveXYH: public DiPrimitiveXY {
 
 class DiPrimitiveXYHC: public DiPrimitiveXYH {
   public:
-  int32_t m_color;
+  uint32_t m_color;
 
   DiPrimitiveXYHC();
-  DiPrimitiveXYHC(int32_t x, int32_t y, int32_t height, int8_t color);
+  DiPrimitiveXYHC(int32_t x, int32_t y, int32_t height, uint8_t color);
 };
 
 class DiPrimitiveXYWH: public DiPrimitiveXYW {
@@ -200,8 +152,8 @@ class DiPrimitiveXYWH: public DiPrimitiveXYW {
 
 class DiPrimitiveXYWHC: public DiPrimitiveXYWH {
   public:
-  int32_t m_color;
+  uint32_t m_color;
 
   DiPrimitiveXYWHC();
-  DiPrimitiveXYWHC(int32_t x, int32_t y, int32_t width, int32_t height, int8_t color);
+  DiPrimitiveXYWHC(int32_t x, int32_t y, int32_t width, int32_t height, uint8_t color);
 };

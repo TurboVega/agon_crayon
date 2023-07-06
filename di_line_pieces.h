@@ -22,11 +22,17 @@
 // 
 
 #pragma once
+#include <stdint.h>
+
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define ABS(X) (((X) >= 0) ? (X) : (-(X)))
 
 typedef struct {
   int16_t m_x;
   int16_t m_y;
-  int16_t m_width;
+  uint16_t m_width;
+  uint16_t m_unused;
 } DiLinePiece;
 
 typedef struct {
@@ -40,4 +46,4 @@ typedef struct {
   uint16_t      m_num_pieces;
 } DiLinePieces;
 
-DiLinePieces* generate_line_pieces(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+void generate_line_pieces(DiLinePieces* lp, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
