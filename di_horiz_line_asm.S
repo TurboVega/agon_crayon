@@ -61,7 +61,7 @@ DiHorizontalLine_paint:
   entry     sp,16
   l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
-  bne       a4,a5,skip    // skip if this is not line for pixel
+  bne       a4,a5,skip    // skip if this is not scan line for this line
   l32i      a4,a3,4       // a4 <-- m_line8
   l32i      a5,a2,4       // a5 <-- m_x
   l32i      a6,a3,16      // a6 <-- m_horiz_scroll

@@ -75,20 +75,27 @@ DiGeneralLine_paint:
   entry     sp,16
   l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
-  
-  bne       a4,a5,skip    // skip if this is not line for pixel
+  l32i      a6,a2,24      // a6 <-- m_y_extent
+  l32i      a12,a2,32     // a12 <-- m_line_pieces.m_pieces
+
+  blt       a4,a5,skip    // skip if scan line is above this line
+  bge       a4,a6,skip    // skip if scan line is below this line
+  sub       a4,a4,a5      // a4 <-- y offset from top of this line
+  slli      a4,a4,3       // a4 <-- array offset to proper DiLinePiece
+  add       a12,a12,a4    // a12 <-- pointer to proper DiLinePiece
 
   l32i      a4,a3,4       // a4 <-- m_line8
-  l32i      a5,a2,4       // a5 <-- m_x
+  l16ui     a5,a12,0      // a5 <-- x
+  l16ui     a8,a12,4      // a8 <-- width
+  add       a8,a8,a5      // a8 <-- x + width (current x extent)
   l32i      a6,a3,16      // a6 <-- m_horiz_scroll
-  add       a5,a5,a6      // a5 (left_hand_x) <-- m_x + m_horiz_scroll
+  add       a5,a5,a6      // a5 (left_hand_x) <-- x + m_horiz_scroll
   l32i      a7,a3,24      // a7 <-- m_screen_width
   bge       a5,a7,skip    // skip if left_hand_x >= m_screen_width
   bgez      a5,left_ok    // don't shorten line if left_hand_x >= 0
   xor       a5,a5,a5      // a5 (left_hand_x) <-- 0
 left_ok:
-  l32i      a8,a2,16      // a8 <-- m_x_extent  
-  add       a8,a8,a6      // a8 (right_hand_x) <-- m_x_extent + m_horiz_scroll
+  add       a8,a8,a6      // a8 (right_hand_x) <-- x extent + m_horiz_scroll
   beqz      a8,skip       // skip if right_hand_x == 0
   bltz      a8,skip       // skip if right_hand_x < 0
   blt       a8,a7,right_ok  // don't shorten line if right_hand_x < m_screen_width
