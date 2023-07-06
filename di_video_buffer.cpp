@@ -25,6 +25,7 @@
 // 
 
 #include <string.h>
+#include <math.h>
 #include "di_video_buffer.h"
 #include "di_set_pixel.h"
 #include "di_vert_line.h"
@@ -248,7 +249,7 @@ DiTileMap* tile_map;
   digits[0] = gp_digit_bitmap[d0];
 }*/
 
-DiGeneralLine* gp_general_line;
+DiGeneralLine* gp_general_line[64];
 
 void init_stars() {
 /*  srand(42);
@@ -448,8 +449,13 @@ void init_stars() {
   }
 #endif
 
-  gp_general_line = new DiGeneralLine(6, 9, 657, 432, 0x30);
+  for (uint16_t i = 0; i < 64; i++) {
+    float angle = M_PI * 2.0 / 64 * (float)i;
+    float x = (int16_t)(cos(angle) * 200.0);
+    float y = (int16_t)(sin(angle) * 200.0);
+    gp_general_line[i] = new DiGeneralLine(400, 300, 400+x, 300+y, (uint8_t)i);
 
+  }
 }
 
 void DiVideoScanLine::init_to_black() {
@@ -558,7 +564,9 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
     }
   }*/
 
-  gp_general_line->paint(params);
+  for (uint16_t i = 0; i < 64; i++) {
+    gp_general_line[i]->paint(params);
+  }
 
 #if DRAW_PIXELS
   g_x_pixel[0].paint(&p2);
