@@ -38,6 +38,8 @@ DiGeneralLine::DiGeneralLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, uin
     (((uint32_t)color) << 16) |
     (((uint32_t)color) << 8) |
     ((uint32_t)color) | SYNCS_OFF;
+  
+  generate_line_pieces(&m_line_pieces, x1, y1, x2, y2);
 }
 
 void IRAM_ATTR DiGeneralLine::paint(const DiPaintParams *params) {

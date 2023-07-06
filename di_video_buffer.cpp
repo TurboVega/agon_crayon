@@ -35,6 +35,7 @@
 #include "di_masked_bitmap.h"
 #include "di_transparent_bitmap.h"
 #include "di_tile_map.h"
+#include "di_general_line.h"
 #include "esp_heap_caps.h"
 
 #define DRAW_OPAQUE_BITMAP 0
@@ -247,6 +248,8 @@ DiTileMap* tile_map;
   digits[0] = gp_digit_bitmap[d0];
 }*/
 
+DiGeneralLine* gp_general_line;
+
 void init_stars() {
 /*  srand(42);
   for (int i = 0; i < NUM_STARS; i++) {
@@ -444,6 +447,9 @@ void init_stars() {
     }
   }
 #endif
+
+  gp_general_line = new DiGeneralLine(6, 9, 657, 432, 0x30);
+
 }
 
 void DiVideoScanLine::init_to_black() {
@@ -551,6 +557,8 @@ void IRAM_ATTR DiVideoScanLine::paint(DiPaintParams *params) {
       params->m_line8[FIX_INDEX(sdx[d]+1+sd_offset)] = diamond;
     }
   }*/
+
+  gp_general_line->paint(params);
 
 #if DRAW_PIXELS
   g_x_pixel[0].paint(&p2);
