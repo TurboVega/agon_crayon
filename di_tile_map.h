@@ -63,7 +63,7 @@ class DiTileMap: public DiPrimitiveXYWH {
   DiTileMap(uint32_t screen_width, uint32_t screen_height,
             uint32_t bitmaps, uint32_t columns, uint32_t rows,
             uint32_t width, uint32_t height);
-  //void operator delete(void*);
+  virtual ~DiTileMap();
   void set_position(int32_t x, int32_t y);
   void set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color);
   void set_tile(int32_t column, int32_t row, int32_t bitmap);

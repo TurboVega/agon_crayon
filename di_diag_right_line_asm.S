@@ -64,9 +64,9 @@ DiDiagonalRightLine_paint:
   entry     sp,16
   l32i      a4,a3,12      // a4 <-- m_scrolled_y
   l32i      a5,a2,8       // a5 <-- m_y
-  blt       a4,a5,skip    // skip if scan line is above vertical line
+  blt       a4,a5,skip    // skip if scan line is above diagonal line
   l32i      a6,a2,24      // a6 <-- m_y_extent
-  bge       a4,a6,skip    // skip if scan line is below vertical line
+  bge       a4,a6,skip    // skip if scan line is below diagonal line
   sub       a7,a4,a5      // a7 <-- m_scrolled_y - m_y
   l32i      a4,a3,4       // a4 <-- m_line8
   l32i      a5,a2,4       // a5 <-- m_x

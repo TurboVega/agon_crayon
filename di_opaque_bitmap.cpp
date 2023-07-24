@@ -80,10 +80,6 @@ void* DiOpaqueBitmap::operator new(size_t size, uint32_t width, uint32_t height,
   return p;
 }
 
-//void DiOpaqueBitmap::operator delete(void*) {
-//
-//}
-
 void DiOpaqueBitmap::set_position(int32_t x, int32_t y) {
   m_x = x;
   m_x_extent = m_x + m_width;

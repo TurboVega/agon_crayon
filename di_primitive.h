@@ -36,6 +36,8 @@ typedef enum ScrollMode {
   BOTH        // both horizontal and vertical
 };
 
+#pragma pack(push,4)
+
 typedef struct {
   uint32_t* m_line32;
   uint8_t*  m_line8;
@@ -50,7 +52,10 @@ typedef struct {
 class DiPrimitive {
   public:
 
+  virtual ~DiPrimitive();
+  virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
+  void get_vertical_group_range(int32_t* min_group, int32_t* max_group);
 
   protected:
 
@@ -65,6 +70,7 @@ class DiPrimitiveX: public DiPrimitive {
 
   DiPrimitiveX();
   DiPrimitiveX(int32_t x);
+  virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
 };
 
 class DiPrimitiveXC: public DiPrimitiveX {
@@ -81,6 +87,7 @@ class DiPrimitiveY: public DiPrimitive {
 
   DiPrimitiveY();
   DiPrimitiveY(int32_t y);
+  virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
 };
 
 class DiPrimitiveYC: public DiPrimitiveY {
@@ -97,6 +104,7 @@ class DiPrimitiveXY: public DiPrimitiveX {
 
   DiPrimitiveXY();
   DiPrimitiveXY(int32_t x, int32_t y);
+  virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
 };
 
 class DiPrimitiveXYC: public DiPrimitiveXY {
@@ -131,6 +139,7 @@ class DiPrimitiveXYH: public DiPrimitiveXY {
 
   DiPrimitiveXYH();
   DiPrimitiveXYH(int32_t x, int32_t y, int32_t height);
+  virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
 };
 
 class DiPrimitiveXYHC: public DiPrimitiveXYH {
@@ -148,6 +157,7 @@ class DiPrimitiveXYWH: public DiPrimitiveXYW {
 
   DiPrimitiveXYWH();
   DiPrimitiveXYWH(int32_t x, int32_t y, int32_t width, int32_t height);
+  virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
 };
 
 class DiPrimitiveXYWHC: public DiPrimitiveXYWH {
@@ -157,3 +167,5 @@ class DiPrimitiveXYWHC: public DiPrimitiveXYWH {
   DiPrimitiveXYWHC();
   DiPrimitiveXYWHC(int32_t x, int32_t y, int32_t width, int32_t height, uint8_t color);
 };
+
+#pragma pack(pop)

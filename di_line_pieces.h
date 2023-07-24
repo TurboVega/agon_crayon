@@ -23,27 +23,30 @@
 
 #pragma once
 #include <stdint.h>
+#include "di_constants.h"
 
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-#define ABS(X) (((X) >= 0) ? (X) : (-(X)))
+#pragma pack(push,2)
 
 typedef struct {
   int16_t m_x;
   int16_t m_y;
   uint16_t m_width;
-  uint16_t m_unused;
+  uint16_t m_flags;
 } DiLinePiece;
 
-typedef struct {
-  // destructor?
+#pragma pack(pop)
 
+class DiLinePieces {
+  public:
   DiLinePiece*  m_pieces;
   int16_t       m_min_x;
   int16_t       m_min_y;
   int16_t       m_max_x;
   int16_t       m_max_y;
   uint16_t      m_num_pieces;
-} DiLinePieces;
 
-void generate_line_pieces(DiLinePieces* lp, int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+  DiLinePieces();
+  ~DiLinePieces();
+  void generate_line_pieces(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
+  void generate_line_pieces(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3);
+};

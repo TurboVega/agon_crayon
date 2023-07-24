@@ -85,9 +85,17 @@ DiTileMap::DiTileMap(uint32_t screen_width, uint32_t screen_height,
   }
 }
 
-//void DiTileMap::operator delete(void*) {
-//
-//}
+DiTileMap::~DiTileMap() {
+  if (m_tiles) {
+    delete [] m_tiles;
+  }
+  if (m_pixels) {
+    delete [] m_pixels;
+  }
+  if (m_offsets) {
+    delete [] m_offsets;
+  }
+}
 
 void DiTileMap::set_position(int32_t x, int32_t y) {
   m_x = x;

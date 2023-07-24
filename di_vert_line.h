@@ -29,6 +29,5 @@
 class DiVerticalLine: public DiPrimitiveXYHC {
   public:
   DiVerticalLine(int32_t x, int32_t y, uint32_t height, uint8_t color);
-
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

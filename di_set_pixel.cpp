@@ -30,7 +30,7 @@ IRAM_ATTR void DiSetPixel_paint(void* this_ptr, const DiPaintParams *params);
 }
 
 DiSetPixel::DiSetPixel() {
-  m_color |= SYNCS_OFF;
+  m_color = SYNCS_OFF;
 }
 
 DiSetPixel::DiSetPixel(int32_t x, int32_t y, uint8_t color)

@@ -37,7 +37,6 @@ class DiOpaqueBitmap: public DiPrimitiveXYWH {
 
   DiOpaqueBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
   void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
-  //void operator delete(void*);
   void set_position(int32_t x, int32_t y);
   void set_position(int32_t x, int32_t y, uint32_t start_line, uint32_t height);
   void set_opaque_pixel(int32_t x, int32_t y, uint8_t color);

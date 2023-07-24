@@ -34,6 +34,6 @@ class DiGeneralLine: public DiPrimitiveXYWHC {
   DiLinePieces m_line_pieces;
 
   DiGeneralLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint8_t color);
-
+  DiGeneralLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, uint8_t color);
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

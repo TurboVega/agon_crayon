@@ -30,6 +30,5 @@
 class DiDiagonalRightLine: public DiPrimitiveXYWHC {
   public:
   DiDiagonalRightLine(int32_t x, int32_t y, int32_t length, uint8_t color);
-
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

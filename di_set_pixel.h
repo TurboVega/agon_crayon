@@ -30,6 +30,5 @@ class DiSetPixel: public DiPrimitiveXYC {
   public:
   DiSetPixel();
   DiSetPixel(int32_t x, int32_t y, uint8_t color);
-
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

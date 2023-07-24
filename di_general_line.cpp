@@ -31,6 +31,16 @@ extern "C" {
 IRAM_ATTR void DiGeneralLine_paint(void* this_ptr, const DiPaintParams *params);
 }
 
+static int32_t min3(int32_t a, int32_t b, int32_t c) {
+  int32_t m = MIN(a, b);
+  return MIN(m, c);
+}
+
+static int32_t max3(int32_t a, int32_t b, int32_t c) {
+  int32_t m = MAX(a, b);
+  return MAX(m, c);
+}
+
 DiGeneralLine::DiGeneralLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint8_t color)
   : DiPrimitiveXYWHC(MIN(x1,x2), MIN(y1,y2), MAX(x1,x2)-MIN(x1,x2), MAX(y1,y2)-MIN(y1,y2), color) {
   m_color =
@@ -39,7 +49,18 @@ DiGeneralLine::DiGeneralLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, uin
     (((uint32_t)color) << 8) |
     ((uint32_t)color) | SYNCS_OFF;
   
-  generate_line_pieces(&m_line_pieces, x1, y1, x2, y2);
+  m_line_pieces.generate_line_pieces(x1, y1, x2, y2);
+}
+
+DiGeneralLine::DiGeneralLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, uint8_t color)
+  : DiPrimitiveXYWHC(min3(x1,x2,x3), min3(y1,y2,y3), max3(x1,x2,x3)-min3(x1,x2,x3), max3(y1,y2,y3)-min3(y1,y2,y3), color) {
+  m_color =
+    (((uint32_t)color) << 24) |
+    (((uint32_t)color) << 16) |
+    (((uint32_t)color) << 8) |
+    ((uint32_t)color) | SYNCS_OFF;
+  
+  m_line_pieces.generate_line_pieces(x1, y1, x2, y2, x3, y3);
 }
 
 void IRAM_ATTR DiGeneralLine::paint(const DiPaintParams *params) {

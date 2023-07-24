@@ -25,11 +25,25 @@
 
 #include "di_primitive.h"
 
+DiPrimitive::~DiPrimitive() {}
+
+void DiPrimitive::get_vertical_group_range(int32_t* min_group, int32_t* max_group) {
+  int32_t min_y, max_y;
+  get_vertical_line_range(&min_y, &max_y);
+  *min_group = min_y >> VERTICAL_GROUP_INDEX_SHIFT;
+  *max_group = max_y >> VERTICAL_GROUP_INDEX_SHIFT;
+}
+
 void IRAM_ATTR DiPrimitive::paint(const DiPaintParams *params) {}
 
 DiPrimitiveX::DiPrimitiveX(): m_x(0) {}
 
 DiPrimitiveX::DiPrimitiveX(int32_t x): m_x(x) {}
+
+void DiPrimitiveX::get_vertical_line_range(int32_t* min_y, int32_t* max_y) {
+  *min_y = 0;
+  *max_y = 0;
+}
 
 DiPrimitiveXC::DiPrimitiveXC(): m_color(0) {}
 
@@ -40,6 +54,11 @@ DiPrimitiveY::DiPrimitiveY(): m_y(0) {}
 
 DiPrimitiveY::DiPrimitiveY(int32_t y): m_y(y) {}
 
+void DiPrimitiveY::get_vertical_line_range(int32_t* min_y, int32_t* max_y) {
+  *min_y = m_y;
+  *max_y = m_y;
+}
+
 DiPrimitiveYC::DiPrimitiveYC(): m_color(0) {}
 
 DiPrimitiveYC::DiPrimitiveYC(int32_t y, uint8_t color):
@@ -49,6 +68,11 @@ DiPrimitiveXY::DiPrimitiveXY(): m_y(0) {}
 
 DiPrimitiveXY::DiPrimitiveXY(int32_t x, int32_t y):
   DiPrimitiveX(x), m_y(y) {}
+
+void DiPrimitiveXY::get_vertical_line_range(int32_t* min_y, int32_t* max_y) {
+  *min_y = m_y;
+  *max_y = m_y;
+}
 
 DiPrimitiveXYC::DiPrimitiveXYC(): m_color(0) {}
 
@@ -70,6 +94,11 @@ DiPrimitiveXYH::DiPrimitiveXYH(): m_height(0), m_y_extent(0) {}
 DiPrimitiveXYH::DiPrimitiveXYH(int32_t x, int32_t y, int32_t height):
   DiPrimitiveXY(x, y), m_height(height), m_y_extent(y+height) {}
 
+void DiPrimitiveXYH::get_vertical_line_range(int32_t* min_y, int32_t* max_y) {
+  *min_y = m_y;
+  *max_y = m_y_extent - 1;
+}
+
 DiPrimitiveXYHC::DiPrimitiveXYHC(): m_color(0) {}
 
 DiPrimitiveXYHC::DiPrimitiveXYHC(int32_t x, int32_t y, int32_t height, uint8_t color):
@@ -79,6 +108,11 @@ DiPrimitiveXYWH::DiPrimitiveXYWH(): m_height(0), m_y_extent(0) {}
 
 DiPrimitiveXYWH::DiPrimitiveXYWH(int32_t x, int32_t y, int32_t width, int32_t height):
   DiPrimitiveXYW(x, y, width), m_height(height), m_y_extent(y+height) {}
+
+void DiPrimitiveXYWH::get_vertical_line_range(int32_t* min_y, int32_t* max_y) {
+  *min_y = m_y;
+  *max_y = m_y_extent - 1;
+}
 
 DiPrimitiveXYWHC::DiPrimitiveXYWHC(): m_color(0) {}
 
