@@ -272,32 +272,6 @@ void IRAM_ATTR DiManager::run() {
 }
 
 void IRAM_ATTR DiManager::loop() {
-  //DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x00);
-  DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x15);
-
-  //DiPrimitive* prim2 = create_line(0, 19, 799, 19, 0x33); // horiz
-
-  //DiPrimitive* prim3a = create_line(1, 1, 1, 598, 0x3F); // vert
-  //DiPrimitive* prim3b = create_line(2, 2, 2, 597, 0x3F); // vert
-  //DiPrimitive* prim3c = create_line(3, 3, 3, 596, 0x3F); // vert
-  //DiPrimitive* prim3d = create_line(4, 4, 4, 595, 0x3F); // vert
-
-  //DiPrimitive* prim4 = create_line(0, 599, 799, 599, 0x03);
-  //DiPrimitive* prim5 = create_line(799, 1, 799, 598, 0x0A);
-
-  //DiPrimitive* prim6 = create_line(50, 13, 75, 17, 0x1E);
-  //DiPrimitive* prim7 = create_line(750, 431, 786, 411, 0x1E);
-  //DiPrimitive* prim8 = create_solid_rectangle(150, 300, 227, 227, 0x20);
-
-  //DiPrimitive* prim10 = create_triangle(450, 330, 520, 402, 417, 375, 0x15);
-  //DiPrimitive* prim10a = create_point(450, 330, 0x30);
-  //DiPrimitive* prim10b = create_point(520, 402, 0x0C);
-  //DiPrimitive* prim10c = create_point(417, 375, 0x03);
-
-  DiPrimitive* prim10d = create_line(450, 330, 520, 402, 0x30);
-  DiPrimitive* prim10e = create_line(520, 402, 417, 375, 0x0C);
-  DiPrimitive* prim10f = create_line(417, 375, 450, 330, 0x03);
-
   DiPaintParams paint_params;
   paint_params.m_horiz_scroll = 0;
   paint_params.m_vert_scroll = 0;
@@ -322,21 +296,13 @@ void IRAM_ATTR DiManager::loop() {
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_0();
         paint_params.m_line32 = vbuf->get_buffer_ptr_0();
-        //draw_primitives(&paint_params);
-        prim1->paint(&paint_params);
-        if (paint_params.m_scrolled_y >= 330 && paint_params.m_scrolled_y <= 402) prim10d->paint(&paint_params);
-        if (paint_params.m_scrolled_y >= 375 && paint_params.m_scrolled_y <= 402) prim10e->paint(&paint_params);
-        if (paint_params.m_scrolled_y >= 330 && paint_params.m_scrolled_y <= 375) prim10f->paint(&paint_params);
+        draw_primitives(&paint_params);
 
         paint_params.m_line_index = ++current_line_index;
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_1();
         paint_params.m_line32 = vbuf->get_buffer_ptr_1();
-        //draw_primitives(&paint_params);
-        prim1->paint(&paint_params);
-        if (paint_params.m_scrolled_y >= 330 && paint_params.m_scrolled_y <= 402) prim10d->paint(&paint_params);
-        if (paint_params.m_scrolled_y >= 375 && paint_params.m_scrolled_y <= 402) prim10e->paint(&paint_params);
-        if (paint_params.m_scrolled_y >= 330 && paint_params.m_scrolled_y <= 375) prim10f->paint(&paint_params);
+        draw_primitives(&paint_params);
 
         ++current_line_index;
         if (++current_buffer_index >= NUM_ACTIVE_BUFFERS) {
@@ -357,13 +323,13 @@ void IRAM_ATTR DiManager::loop() {
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_0();
         paint_params.m_line32 = vbuf->get_buffer_ptr_0();
-        //draw_primitives(&paint_params);
+        draw_primitives(&paint_params);
 
         paint_params.m_line_index = ++current_line_index;
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_1();
         paint_params.m_line32 = vbuf->get_buffer_ptr_1();
-        //draw_primitives(&paint_params);
+        draw_primitives(&paint_params);
       }
 
       end_of_frame = true;
@@ -386,34 +352,6 @@ void IRAM_ATTR DiManager::on_vertical_blank() {
         created = true;
         create_samples();
     }
-}
-
-void DiManager::create_samples() {
-  DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x00);
-  //DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x05);
-
-  //DiPrimitive* prim2 = create_line(0, 19, 799, 19, 0x33); // horiz
-
-  //DiPrimitive* prim3a = create_line(1, 1, 1, 598, 0x3F); // vert
-  //DiPrimitive* prim3b = create_line(2, 2, 2, 597, 0x3F); // vert
-  //DiPrimitive* prim3c = create_line(3, 3, 3, 596, 0x3F); // vert
-  //DiPrimitive* prim3d = create_line(4, 4, 4, 595, 0x3F); // vert
-
-  //DiPrimitive* prim4 = create_line(0, 599, 799, 599, 0x03);
-  //DiPrimitive* prim5 = create_line(799, 1, 799, 598, 0x0A);
-
-  //DiPrimitive* prim6 = create_line(50, 13, 75, 17, 0x1E);
-  //DiPrimitive* prim7 = create_line(750, 431, 786, 411, 0x1E);
-  //DiPrimitive* prim8 = create_solid_rectangle(150, 300, 227, 227, 0x20);
-
-  //DiPrimitive* prim10 = create_triangle(450, 330, 520, 402, 417, 375, 0x15);
-  //DiPrimitive* prim10a = create_point(450, 330, 0x30);
-  //DiPrimitive* prim10b = create_point(520, 402, 0x0C);
-  //DiPrimitive* prim10c = create_point(417, 375, 0x03);
-
-  DiPrimitive* prim10d = create_line(450, 330, 520, 402, 0x30);
-  DiPrimitive* prim10e = create_line(520, 402, 417, 375, 0x0C);
-  DiPrimitive* prim10f = create_line(417, 375, 450, 330, 0x03);
 }
 
 void DiManager::init_dma_descriptor(volatile DiVideoScanLine* vbuf, uint32_t descr_index) {
@@ -446,4 +384,32 @@ void DiManager::init_dma_descriptor(volatile DiVideoBuffer* vbuf, uint32_t descr
   dd->size = vbuf->get_buffer_size();
   dd->length = vbuf->get_buffer_size();
   dd->buf = (uint8_t volatile *)vbuf->get_buffer_ptr_0();
+}
+
+void DiManager::create_samples() {
+  DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x00);
+  //DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x05);
+
+  //DiPrimitive* prim2 = create_line(0, 19, 799, 19, 0x33); // horiz
+
+  //DiPrimitive* prim3a = create_line(1, 1, 1, 598, 0x3F); // vert
+  //DiPrimitive* prim3b = create_line(2, 2, 2, 597, 0x3F); // vert
+  //DiPrimitive* prim3c = create_line(3, 3, 3, 596, 0x3F); // vert
+  //DiPrimitive* prim3d = create_line(4, 4, 4, 595, 0x3F); // vert
+
+  //DiPrimitive* prim4 = create_line(0, 599, 799, 599, 0x03);
+  //DiPrimitive* prim5 = create_line(799, 1, 799, 598, 0x0A);
+
+  DiPrimitive* prim6 = create_line(50, 13, 75, 17, 0x1E);
+  DiPrimitive* prim7 = create_line(750, 431, 786, 411, 0x1E);
+  DiPrimitive* prim8 = create_solid_rectangle(150, 300, 227, 227, 0x20);
+
+  DiPrimitive* prim10 = create_triangle(450, 330, 520, 402, 417, 375, 0x15);
+  //DiPrimitive* prim10a = create_point(450, 330, 0x30);
+  //DiPrimitive* prim10b = create_point(520, 402, 0x0C);
+  //DiPrimitive* prim10c = create_point(417, 375, 0x03);
+
+  DiPrimitive* prim10d = create_line(450, 330, 520, 402, 0x30);
+  DiPrimitive* prim10e = create_line(520, 402, 417, 375, 0x0C);
+  DiPrimitive* prim10f = create_line(417, 375, 450, 330, 0x03);
 }
