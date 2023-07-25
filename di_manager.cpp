@@ -22,6 +22,16 @@
 // 
 
 #include "di_manager.h"
+
+#include <stddef.h>
+#include "soc/i2s_struct.h"
+#include "soc/i2s_reg.h"
+#include "driver/periph_ctrl.h"
+#include "soc/rtc.h"
+#include "driver/gpio.h"
+#include "soc/io_mux_reg.h"
+#include "fabgl_pieces.h"
+
 #include "di_diag_left_line.h"
 #include "di_diag_right_line.h"
 #include "di_general_line.h"
@@ -36,32 +46,136 @@
 #include "soc/i2s_reg.h"
 #include "ESP32Time.h"
 
-TaskHandle_t g_otfTaskHandle;
-
-/*
-The on_the_fly task is responsible for managing the few scan line buffers used to
-output data (via DMA) to the VGA port. Once started, this task runs continuously
-until it is stopped by a video mode change (if one ever happens).
-*/
-void on_the_fly(void* param)
-{
-    ((DiManager*)param)->task_body();
-}
-
 DiManager::DiManager() {
 }
 
 DiManager::~DiManager() {
-    for (int g = 0; g < NUM_VERTICAL_GROUPS; g++) {
-        std::vector<DiPrimitive*> * vp = &m_groups[g];
-        for (auto prim = vp->begin(); prim != vp->end(); ++prim) {
-            delete *prim;
-        }
-    }
+    clear();
+}
+
+void DiManager::initialize() {
+  size_t new_size = (size_t)(sizeof(lldesc_t) * DMA_TOTAL_DESCR);
+  void* p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_DMA);
+  m_dma_descriptor = (volatile lldesc_t *)p;
+
+  new_size = (size_t)(sizeof(DiVideoBuffer) * NUM_ACTIVE_BUFFERS);
+  p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_DMA);
+  m_video_buffer = (volatile DiVideoBuffer *)p;
+
+  new_size = (size_t)(sizeof(DiVideoScanLine));
+  p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_DMA);
+  m_front_porch = (volatile DiVideoScanLine *)p;
+
+  new_size = (size_t)(sizeof(DiVideoBuffer));
+  p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_DMA);
+  m_vertical_sync = (volatile DiVideoBuffer *)p;
+
+  new_size = (size_t)(sizeof(DiVideoScanLine));
+  p = heap_caps_malloc(new_size, MALLOC_CAP_32BIT|MALLOC_CAP_8BIT|MALLOC_CAP_DMA);
+  m_back_porch = (volatile DiVideoScanLine *)p;
+
+  // DMA buffer chain: ACT
+  uint32_t descr_index = 0;
+  for (uint32_t i = 0; i < NUM_ACTIVE_BUFFERS; i++) {
+    m_video_buffer[i].init_to_black();
+  }
+  for (uint32_t i = 0; i < ACT_LINES/NUM_LINES_PER_BUFFER; i++) {
+    init_dma_descriptor(&m_video_buffer[i & (NUM_ACTIVE_BUFFERS - 1)], descr_index);
+    m_dma_descriptor[descr_index++].eof = 1;
+  }
+
+  // DMA buffer chain: VFP
+  m_front_porch->init_to_black();
+  for (uint i = 0; i < VFP_LINES; i++) {
+    init_dma_descriptor(m_front_porch, descr_index++);
+  }
+
+  // DMA buffer chain: VS
+  m_vertical_sync->init_for_vsync();
+  for (uint i = 0; i < VS_LINES/NUM_LINES_PER_BUFFER; i++) {
+    init_dma_descriptor(m_vertical_sync, descr_index++);
+  }
+  
+  // DMA buffer chain: VBP
+  m_back_porch->init_to_black();
+  for (uint i = 0; i < VBP_LINES; i++) {
+    init_dma_descriptor(m_back_porch, descr_index++);
+  }
+
+  // GPIO configuration for color bits
+  setupGPIO(GPIO_RED_0,   VGA_RED_BIT,   GPIO_MODE_OUTPUT);
+  setupGPIO(GPIO_RED_1,   VGA_RED_BIT + 1,   GPIO_MODE_OUTPUT);
+  setupGPIO(GPIO_GREEN_0, VGA_GREEN_BIT, GPIO_MODE_OUTPUT);
+  setupGPIO(GPIO_GREEN_1, VGA_GREEN_BIT + 1, GPIO_MODE_OUTPUT);
+  setupGPIO(GPIO_BLUE_0,  VGA_BLUE_BIT,  GPIO_MODE_OUTPUT);
+  setupGPIO(GPIO_BLUE_1,  VGA_BLUE_BIT + 1,  GPIO_MODE_OUTPUT);
+
+  // GPIO configuration for VSync and HSync
+  setupGPIO(GPIO_HSYNC, VGA_HSYNC_BIT, GPIO_MODE_OUTPUT);
+  setupGPIO(GPIO_VSYNC, VGA_VSYNC_BIT, GPIO_MODE_OUTPUT);
+
+  // Start the DMA
+
+  // Power on device
+  periph_module_enable(PERIPH_I2S1_MODULE);
+
+  // Initialize I2S device
+  I2S1.conf.tx_reset = 1;
+  I2S1.conf.tx_reset = 0;
+
+  // Reset DMA
+  I2S1.lc_conf.out_rst = 1;
+  I2S1.lc_conf.out_rst = 0;
+
+  // Reset FIFO
+  I2S1.conf.tx_fifo_reset = 1;
+  I2S1.conf.tx_fifo_reset = 0;
+
+  // LCD mode
+  I2S1.conf2.val            = 0;
+  I2S1.conf2.lcd_en         = 1;
+  I2S1.conf2.lcd_tx_wrx2_en = 0; // NOT 1!
+  I2S1.conf2.lcd_tx_sdx2_en = 0;
+
+  I2S1.sample_rate_conf.val         = 0;
+  I2S1.sample_rate_conf.tx_bits_mod = 8;
+
+  setup_dma_clock(DMA_CLOCK_FREQ);
+
+  I2S1.fifo_conf.val                  = 0;
+  I2S1.fifo_conf.tx_fifo_mod_force_en = 1;
+  I2S1.fifo_conf.tx_fifo_mod          = 1;
+  I2S1.fifo_conf.tx_fifo_mod          = 1;
+  I2S1.fifo_conf.tx_data_num          = 32;
+  I2S1.fifo_conf.dscr_en              = 1;
+
+  I2S1.conf1.val           = 0;
+  I2S1.conf1.tx_stop_en    = 0;
+  I2S1.conf1.tx_pcm_bypass = 1;
+
+  I2S1.conf_chan.val         = 0;
+  I2S1.conf_chan.tx_chan_mod = 1;
+
+  I2S1.conf.tx_right_first = 0;
+
+  I2S1.timing.val = 0;
+
+  // Reset AHB interface of DMA
+  I2S1.lc_conf.ahbm_rst      = 1;
+  I2S1.lc_conf.ahbm_fifo_rst = 1;
+  I2S1.lc_conf.ahbm_rst      = 0;
+  I2S1.lc_conf.ahbm_fifo_rst = 0;
+
+  // Start DMA
+  I2S1.lc_conf.val = I2S_OUT_DATA_BURST_EN | I2S_OUTDSCR_BURST_EN;
+  I2S1.out_link.addr = (uint32_t)m_dma_descriptor;
+  I2S1.int_clr.val = 0xFFFFFFFF;
+  I2S1.out_link.start = 1;
+  I2S1.conf.tx_start  = 1;
 }
 
 void DiManager::clear() {
-    // NOTE: need to delete each prim only once!!
+    // NOTE: add code to delete each prim only once!!
     for (int g = 0; g < NUM_VERTICAL_GROUPS; g++) {
         std::vector<DiPrimitive*> * vp = &m_groups[g];
         for (auto prim = vp->begin(); prim != vp->end(); ++prim) {
@@ -69,6 +183,12 @@ void DiManager::clear() {
         }
         vp->clear();
     }
+
+    /*DMA_ATTR lldesc_t volatile *        m_dma_descriptor[DMA_TOTAL_DESCR];
+    DMA_ATTR DiVideoBuffer volatile *   m_video_buffer[NUM_ACTIVE_BUFFERS];
+    DMA_ATTR DiVideoScanLine volatile * m_front_porch;
+    DMA_ATTR DiVideoBuffer volatile *   m_vertical_sync;
+    DMA_ATTR DiVideoScanLine volatile * m_back_porch;*/
 }
 
 void DiManager::add_primitive(DiPrimitive* prim) {
@@ -145,28 +265,77 @@ DiPrimitive* DiManager::create_triangle(int32_t x1, int32_t y1, int32_t x2, int3
     return prim;
 }
 
-void IRAM_ATTR DiManager::run(uint32_t dma_descr_array, uint32_t size_of_descr, uint8_t** dma_buffers) {
-  m_dma_descr_array = dma_descr_array;
-  m_size_of_descr = size_of_descr;
-  m_dma_buffers = dma_buffers;
-
-  xTaskCreatePinnedToCore(on_the_fly, // Task function
-    "OnTheFly", // Task name
-    2048,		// Stack size
-    this,		// Parameter
-    (configMAX_PRIORITIES - 1),	// Priority, the highest
-    &g_otfTaskHandle, // Save task handle
-    0           // Pin this task to ESP32 Core 0
-	);
+void IRAM_ATTR DiManager::run() {
+    initialize();
+    loop();
+    clear();
 }
 
-void DiManager::stop() {
-    if (g_otfTaskHandle)
-    {
-      vTaskDelete(g_otfTaskHandle);
-      g_otfTaskHandle = NULL;
+void IRAM_ATTR DiManager::loop() {
+  DiPaintParams paint_params;
+  paint_params.m_horiz_scroll = 0;
+  paint_params.m_vert_scroll = 0;
+  paint_params.m_screen_width = ACT_PIXELS;
+  paint_params.m_screen_height = ACT_LINES;
+
+  uint32_t current_line_index = ACT_LINES;
+  uint32_t current_buffer_index = 0;
+  bool end_of_frame = false;
+
+  while (true) {
+    uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;
+    uint32_t descr_index = (descr_addr - (uint32_t)m_dma_descriptor) / sizeof(lldesc_t);
+    if (descr_index < (ACT_LINES/NUM_LINES_PER_BUFFER)) {
+      uint32_t dma_line_index = descr_index * NUM_LINES_PER_BUFFER;
+
+      uint32_t dma_buffer_index = dma_line_index & (NUM_ACTIVE_BUFFERS-1);
+
+      // Draw enough lines to stay ahead of DMA.
+      while (current_line_index < ACT_LINES && current_buffer_index != dma_buffer_index) {
+        volatile DiVideoBuffer* vbuf = &m_video_buffer[current_buffer_index];
+        paint_params.m_line_index = current_line_index;
+        paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
+        paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_0();
+        paint_params.m_line32 = vbuf->get_buffer_ptr_0();
+        draw_primitives(&paint_params);
+
+        paint_params.m_line_index = ++current_line_index;
+        paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
+        paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_1();
+        paint_params.m_line32 = vbuf->get_buffer_ptr_1();
+        draw_primitives(&paint_params);
+
+        if (++current_buffer_index >= NUM_ACTIVE_BUFFERS) {
+          current_buffer_index = 0;
+        }
+      }
+      end_of_frame = false;
+    } else if (!end_of_frame) {
+      // Handle modifying primitives before the next frame starts.
+      on_vertical_blank();
+
+      // Prepare the start of the next frame.
+      for (current_line_index = 0, current_buffer_index = 0;
+            current_buffer_index < NUM_ACTIVE_BUFFERS;
+            current_line_index += NUM_LINES_PER_BUFFER, current_buffer_index++) {
+        volatile DiVideoBuffer* vbuf = &m_video_buffer[current_buffer_index];
+        paint_params.m_line_index = current_line_index;
+        paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
+        paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_0();
+        paint_params.m_line32 = vbuf->get_buffer_ptr_0();
+        draw_primitives(&paint_params);
+
+        paint_params.m_line_index = ++current_line_index;
+        paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
+        paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_1();
+        paint_params.m_line32 = vbuf->get_buffer_ptr_1();
+        draw_primitives(&paint_params);
+      }
+
+      end_of_frame = true;
+      current_buffer_index = 0;
     }
-    clear();
+  }
 }
 
 void IRAM_ATTR DiManager::draw_primitives(DiPaintParams* params) {
@@ -178,163 +347,69 @@ void IRAM_ATTR DiManager::draw_primitives(DiPaintParams* params) {
 }
 
 void IRAM_ATTR DiManager::on_vertical_blank() {
+    static bool created = false;
+    if (!created) {
+        created = true;
+        create_samples();
+    }
 }
 
-extern "C" {
-extern uint32_t int_ena_bits0;
-extern uint32_t int_ena_bits1;
-}
-
-void IRAM_ATTR DiManager::task_body() {
-  int_ena_bits0 = I2S1.int_ena.val;
-  disableCore0WDT(); delay(200);
-  disableCore1WDT(); delay(200);
-  //portDISABLE_INTERRUPTS(); // disabling them prevents display from showing
-
+void DiManager::create_samples() {
   //DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x00);
-  DiPrimitive* prim1 = create_solid_rectangle(20, 0, 760, 600, 0x05);
+  DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x05);
 
-  DiPrimitive* prim2 = create_line(0, 19, 799, 19, 0x33); // horiz
+  //DiPrimitive* prim2 = create_line(0, 19, 799, 19, 0x33); // horiz
 
-  DiPrimitive* prim3a = create_line(1, 1, 1, 598, 0x3F); // vert
-  DiPrimitive* prim3b = create_line(2, 2, 2, 597, 0x3F); // vert
-  DiPrimitive* prim3c = create_line(3, 3, 3, 596, 0x3F); // vert
-  DiPrimitive* prim3d = create_line(4, 4, 4, 595, 0x3F); // vert
+  //DiPrimitive* prim3a = create_line(1, 1, 1, 598, 0x3F); // vert
+  //DiPrimitive* prim3b = create_line(2, 2, 2, 597, 0x3F); // vert
+  //DiPrimitive* prim3c = create_line(3, 3, 3, 596, 0x3F); // vert
+  //DiPrimitive* prim3d = create_line(4, 4, 4, 595, 0x3F); // vert
 
-  DiPrimitive* prim4 = create_line(0, 599, 799, 599, 0x03);
-  DiPrimitive* prim5 = create_line(799, 1, 799, 598, 0x0A);
+  //DiPrimitive* prim4 = create_line(0, 599, 799, 599, 0x03);
+  //DiPrimitive* prim5 = create_line(799, 1, 799, 598, 0x0A);
 
-  DiPrimitive* prim6 = create_line(50, 13, 75, 17, 0x1E);
-  DiPrimitive* prim7 = create_line(750, 431, 786, 411, 0x1E);
-  DiPrimitive* prim8 = create_solid_rectangle(150, 300, 227, 227, 0x20);
+  //DiPrimitive* prim6 = create_line(50, 13, 75, 17, 0x1E);
+  //DiPrimitive* prim7 = create_line(750, 431, 786, 411, 0x1E);
+  //DiPrimitive* prim8 = create_solid_rectangle(150, 300, 227, 227, 0x20);
 
-  DiPrimitive* prim10 = create_triangle(450, 330, 520, 402, 417, 375, 0x15);
+  //DiPrimitive* prim10 = create_triangle(450, 330, 520, 402, 417, 375, 0x15);
   //DiPrimitive* prim10a = create_point(450, 330, 0x30);
   //DiPrimitive* prim10b = create_point(520, 402, 0x0C);
   //DiPrimitive* prim10c = create_point(417, 375, 0x03);
 
-  DiPrimitive* prim10d = create_line(450, 330, 520, 402, 0x30);
-  DiPrimitive* prim10e = create_line(520, 402, 417, 375, 0x0C);
-  DiPrimitive* prim10f = create_line(417, 375, 450, 330, 0x03);
+  //DiPrimitive* prim10d = create_line(450, 330, 520, 402, 0x30);
+  //DiPrimitive* prim10e = create_line(520, 402, 417, 375, 0x0C);
+  //DiPrimitive* prim10f = create_line(417, 375, 450, 330, 0x03);
+}
 
-  /*for (int i = 0; i < 32; i++) {
-    create_line(i*20, 2, i*20+14, 2, 0x33);
-    if (int_ena_bits & (1<<(31-i)) {
-      create_line(i*20, 5, i*20+14, 5, 0x18);
-    }
-  }*/
+void DiManager::init_dma_descriptor(volatile DiVideoScanLine* vbuf, uint32_t descr_index) {
+  volatile lldesc_t * dd = &m_dma_descriptor[descr_index];
 
-  DiPaintParams paint_params;
-  paint_params.m_horiz_scroll = 0;
-  paint_params.m_vert_scroll = 0;
-  paint_params.m_screen_width = ACT_PIXELS;
-  paint_params.m_screen_height = ACT_LINES;
-
-  uint32_t current_line_index = ACT_LINES;
-  uint32_t current_buffer_index = 0;
-  bool end_of_frame = false;
-  uint8_t inc = 0;
-  uint32_t prior_index = 0xFFFFFFFF;
-
-  while (true) {
-    uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;
-    uint32_t descr_index = (descr_addr - m_dma_descr_array) / m_size_of_descr;
-    if (descr_index < (ACT_LINES*2)) {
-      uint32_t dma_line_index = ((descr_index + 1) >> 1);
-      if (dma_line_index == prior_index) continue;
-      prior_index = dma_line_index;
-
-      uint32_t dma_buffer_index = dma_line_index & (NUM_ACTIVE_BUFFERS-1);
-
-      // Draw enough lines to stay ahead of DMA.
-      while (current_line_index < ACT_LINES && current_buffer_index != dma_buffer_index) {
-        paint_params.m_line8 = m_dma_buffers[current_buffer_index];
-        paint_params.m_line32 = (uint32_t*)paint_params.m_line8;
-        paint_params.m_line_index = current_line_index;
-        paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
-        //draw_primitives(&paint_params);
-        //memset(paint_params.m_line8,(current_line_index+inc)&0x3F,800);
-        //memset(paint_params.m_line8,0x00,780);
-
-        prim1->paint(&paint_params);
-        if (current_line_index==19) prim2->paint(&paint_params);
-
-        prim3a->paint(&paint_params);
-        prim3b->paint(&paint_params);
-        prim3c->paint(&paint_params);
-        prim3d->paint(&paint_params);
-
-        //prim4->paint(&paint_params);
-        //prim5->paint(&paint_params);
-        prim6->paint(&paint_params);
-        prim7->paint(&paint_params);
-        if (current_line_index >= 300 && current_line_index < 527) prim8->paint(&paint_params);
-
-        prim10->paint(&paint_params);
-        //prim10a->paint(&paint_params);
-        //prim10b->paint(&paint_params);
-        //prim10c->paint(&paint_params);
-        prim10d->paint(&paint_params);
-        prim10e->paint(&paint_params);
-        prim10f->paint(&paint_params);
-
-        ++current_line_index;
-        if (++current_buffer_index >= NUM_ACTIVE_BUFFERS) {
-          current_buffer_index = 0;
-        }
-      }
-      end_of_frame = false;
-    } else if (!end_of_frame) {
-      ++inc;
-      // Handle modifying primitives before the next frame starts.
-      on_vertical_blank();
-
-      // Prepare the start of the next frame.
-      for (current_line_index = 0;
-            current_line_index < NUM_ACTIVE_BUFFERS;
-            current_line_index++) {
-        paint_params.m_line8 = m_dma_buffers[current_line_index];
-        paint_params.m_line32 = (uint32_t*)paint_params.m_line8;
-        paint_params.m_line_index = current_line_index;
-        paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
-        //draw_primitives(&paint_params);
-        //memset(paint_params.m_line8,(current_line_index+inc)&0x3F,800);
-        memset(paint_params.m_line8,0x00,800);
-        //prim1->paint(&paint_params);
-
-        prim3a->paint(&paint_params);
-        prim3b->paint(&paint_params);
-        prim3c->paint(&paint_params);
-        prim3d->paint(&paint_params);
-
-        //prim4->paint(&paint_params);
-        //prim5->paint(&paint_params);
-        prim6->paint(&paint_params);
-
-        /*if (current_line_index == 2) {
-              for (int i = 0; i < 32; i++) {
-                memset(paint_params.m_line8+i*20, 0x33, 12);
-            }
-        }
-        if (current_line_index == 5) {
-              for (int i = 0; i < 32; i++) {
-                if (int_ena_bits0 & (1<<(31-i))) {
-                    memset(paint_params.m_line8+i*20, 0x18, 12);
-                }
-            }
-        }
-        if (current_line_index == 7) {
-              for (int i = 0; i < 32; i++) {
-                if (int_ena_bits1 & (1<<(31-i))) {
-                    memset(paint_params.m_line8+i*20, 0x18, 12);
-                }
-            }
-        }*/
-      }
-      end_of_frame = true;
-      current_line_index = NUM_ACTIVE_BUFFERS;
-      current_buffer_index = 0;
-      prior_index = 0xFFFFFFFF;
-    }
+  if (descr_index == 0) {
+    m_dma_descriptor[DMA_TOTAL_DESCR - 1].qe.stqe_next = (lldesc_t*)dd;
+  } else {
+    m_dma_descriptor[descr_index - 1].qe.stqe_next = (lldesc_t*)dd;
   }
+
+  dd->sosf = dd->offset = dd->eof = 0;
+  dd->owner = 1;
+  dd->size = vbuf->get_buffer_size();
+  dd->length = vbuf->get_buffer_size();
+  dd->buf = (uint8_t volatile *)vbuf->get_buffer_ptr();
+}
+
+void DiManager::init_dma_descriptor(volatile DiVideoBuffer* vbuf, uint32_t descr_index) {
+  volatile lldesc_t * dd = &m_dma_descriptor[descr_index];
+
+  if (descr_index == 0) {
+    m_dma_descriptor[DMA_TOTAL_DESCR - 1].qe.stqe_next = (lldesc_t*)dd;
+  } else {
+    m_dma_descriptor[descr_index - 1].qe.stqe_next = (lldesc_t*)dd;
+  }
+
+  dd->sosf = dd->offset = dd->eof = 0;
+  dd->owner = 1;
+  dd->size = vbuf->get_buffer_size();
+  dd->length = vbuf->get_buffer_size();
+  dd->buf = (uint8_t volatile *)vbuf->get_buffer_ptr_0();
 }

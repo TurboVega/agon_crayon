@@ -39,8 +39,8 @@ typedef enum ScrollMode {
 #pragma pack(push,4)
 
 typedef struct {
-  uint32_t* m_line32;
-  uint8_t*  m_line8;
+  volatile uint32_t* m_line32;
+  volatile uint8_t*  m_line8;
   int32_t   m_line_index;
   int32_t   m_scrolled_y;
   int32_t   m_horiz_scroll;

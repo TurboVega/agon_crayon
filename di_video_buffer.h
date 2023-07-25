@@ -1,7 +1,8 @@
 // di_video_buffer.h - Function declarations for painting video scan lines
 //
 // A a video buffer is a set of 1-pixel-high video scan lines that are equal
-// in length (number of pixels) to the width of the video screen.
+// in length (number of pixels) to the total width of the video screen and
+// horizontal synchronization pixels.
 //
 // Copyright (c) 2023 Curtis Whitley
 // 
@@ -25,51 +26,51 @@
 // 
 
 #pragma once
-#include "di_primitive.h"
+#include "di_constants.h"
 
 class DiVideoScanLine {
   protected:
 
-  uint32_t m_act[ACT_PIXELS/4];
-  uint32_t m_hfp[HFP_PIXELS/4];
-  uint32_t m_hs[HS_PIXELS/4];
-  uint32_t m_hbp[HBP_PIXELS/4];
+  volatile uint32_t m_act[ACT_PIXELS/4];
+  volatile uint32_t m_hfp[HFP_PIXELS/4];
+  volatile uint32_t m_hs[HS_PIXELS/4];
+  volatile uint32_t m_hbp[HBP_PIXELS/4];
 
   public:
 
-  inline uint32_t get_buffer_size() {
+  inline uint32_t get_buffer_size() volatile {
     return sizeof(m_act) + sizeof(m_hfp) + sizeof(m_hs) + sizeof(m_hbp);
   }
 
-  inline uint32_t volatile * get_buffer_ptr() {
-    return (uint32_t volatile *) m_act;
+  inline volatile uint32_t * get_buffer_ptr() volatile {
+    return (volatile uint32_t *) m_act;
   }
 
-  void init_to_black();
+  void init_to_black() volatile;
 
-  void init_for_vsync();
-
-  void IRAM_ATTR paint(DiPaintParams *params);
+  void init_for_vsync() volatile;
 };
 
 class DiVideoBuffer {
   protected:
 
-  DiVideoScanLine m_line[NUM_LINES_PER_BUFFER];
+  volatile DiVideoScanLine m_line[NUM_LINES_PER_BUFFER];
 
   public:
 
-  inline int32_t get_buffer_size() {
+  inline int32_t get_buffer_size() volatile {
     return sizeof(m_line);
   }
 
-  inline uint32_t volatile * get_buffer_ptr() {
-    return (uint32_t volatile *) m_line;
+  inline volatile uint32_t * get_buffer_ptr_0() volatile {
+    return m_line[0].get_buffer_ptr();
   }
 
-  void init_to_black();
+  inline volatile uint32_t * get_buffer_ptr_1() volatile {
+    return m_line[1].get_buffer_ptr();
+  }
 
-  void init_for_vsync();
+  void init_to_black() volatile;
 
-  void IRAM_ATTR paint(DiPaintParams *params);
+  void init_for_vsync() volatile;
 };

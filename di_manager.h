@@ -24,6 +24,8 @@
 #pragma once
 
 #include <vector>
+#include "rom/lldesc.h"
+#include "di_video_buffer.h"
 #include "di_primitive.h"
 
 class DiManager {
@@ -36,18 +38,24 @@ class DiManager {
     DiPrimitive* create_solid_rectangle(int32_t x, int32_t y, uint32_t width, uint32_t height, uint8_t color);
     DiPrimitive* create_triangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, uint8_t color);
 
-    void IRAM_ATTR run(uint32_t dma_descr_array, uint32_t size_of_descr, uint8_t** dma_buffers);
-    void IRAM_ATTR task_body();
-    void stop();
-    void clear();
-    void IRAM_ATTR draw_primitives(DiPaintParams* params);
+    void IRAM_ATTR run();
 
     protected:
-    uint32_t  m_dma_descr_array;
-    uint32_t  m_size_of_descr;
-    uint8_t** m_dma_buffers;
+    volatile lldesc_t *        m_dma_descriptor; // [DMA_TOTAL_DESCR]
+    volatile DiVideoBuffer *   m_video_buffer; // [NUM_ACTIVE_BUFFERS]
+    volatile DiVideoScanLine * m_front_porch;
+    volatile DiVideoBuffer *   m_vertical_sync;
+    volatile DiVideoScanLine * m_back_porch;
+
     std::vector<DiPrimitive*> m_groups[NUM_VERTICAL_GROUPS];
 
+    void initialize();
+    void IRAM_ATTR loop();
+    void clear();
     void add_primitive(DiPrimitive* prim);
+    void IRAM_ATTR draw_primitives(DiPaintParams* params);
     void IRAM_ATTR on_vertical_blank();
+    void create_samples();
+    void init_dma_descriptor(volatile DiVideoScanLine* vbuf, uint32_t descr_index);
+    void init_dma_descriptor(volatile DiVideoBuffer* vbuf, uint32_t descr_index);
 };
