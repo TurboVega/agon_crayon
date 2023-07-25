@@ -104,5 +104,5 @@
 #define NUM_LINES_PER_BUFFER  2
 #define NUM_ACTIVE_BUFFERS    4 // must be a power of 2 and multiple of NUM_LINES_PER_BUFFER
 
-#define VERTICAL_GROUP_INDEX_SHIFT 4 // used to divide by a power of 2
+#define VERTICAL_GROUP_INDEX_SHIFT 8 // used to divide by a power of 2
 #define NUM_VERTICAL_GROUPS ((ACT_LINES >> VERTICAL_GROUP_INDEX_SHIFT) + 1)
