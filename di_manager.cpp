@@ -166,7 +166,7 @@ void DiManager::initialize() {
   I2S1.lc_conf.ahbm_fifo_rst = 0;
 
   // Start DMA
-  I2S1.lc_conf.val = I2S_OUT_DATA_BURST_EN | I2S_OUTDSCR_BURST_EN;
+  I2S1.lc_conf.val = I2S_OUT_DATA_BURST_EN;// | I2S_OUTDSCR_BURST_EN;
   I2S1.out_link.addr = (uint32_t)m_dma_descriptor;
   I2S1.int_clr.val = 0xFFFFFFFF;
   I2S1.out_link.start = 1;
@@ -277,7 +277,7 @@ void IRAM_ATTR DiManager::loop() {
   paint_params.m_screen_width = ACT_PIXELS;
   paint_params.m_screen_height = ACT_LINES;
 
-  uint32_t current_line_index = NUM_ACTIVE_BUFFERS * NUM_LINES_PER_BUFFER;
+  uint32_t current_line_index = 0;//NUM_ACTIVE_BUFFERS * NUM_LINES_PER_BUFFER;
   uint32_t current_buffer_index = 0;
   bool end_of_frame = false;
 
@@ -285,7 +285,7 @@ void IRAM_ATTR DiManager::loop() {
     uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;
     uint32_t descr_index = (descr_addr - (uint32_t)m_dma_descriptor) / sizeof(lldesc_t);
     if (descr_index <= ACT_BUFFERS_WRITTEN-NUM_ACTIVE_BUFFERS) {
-      uint32_t dma_line_index = descr_index * NUM_LINES_PER_BUFFER;
+      //uint32_t dma_line_index = descr_index * NUM_LINES_PER_BUFFER;
       uint32_t dma_buffer_index = descr_index & (NUM_ACTIVE_BUFFERS-1);
 
       // Draw enough lines to stay ahead of DMA.
@@ -296,13 +296,18 @@ void IRAM_ATTR DiManager::loop() {
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_0();
         paint_params.m_line32 = vbuf->get_buffer_ptr_0();
         draw_primitives(&paint_params);
-        //*paint_params.m_line8 = 0x0C;
+        //memset((void*)paint_params.m_line8, 0x00, 800);
+        paint_params.m_line8[current_line_index^2] = 0x01;
+        paint_params.m_line8[(current_line_index&15)^2] = 0x30;
 
         paint_params.m_line_index = ++current_line_index;
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_1();
         paint_params.m_line32 = vbuf->get_buffer_ptr_1();
         draw_primitives(&paint_params);
+        //memset((void*)paint_params.m_line8, 0x00, 800);
+        paint_params.m_line8[current_line_index^2] = 0x01;
+        paint_params.m_line8[(current_line_index&15)^2] = 0x030;
 
         ++current_line_index;
         if (++current_buffer_index >= NUM_ACTIVE_BUFFERS) {
@@ -325,17 +330,21 @@ void IRAM_ATTR DiManager::loop() {
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_0();
         paint_params.m_line32 = vbuf->get_buffer_ptr_0();
-        draw_primitives(&paint_params);
-        *paint_params.m_line8 = 0x0C;
+        //draw_primitives(&paint_params);
+        memset((void*)paint_params.m_line8, 0x00, 800);
+        paint_params.m_line8[201] = 0x03F;
 
         paint_params.m_line_index = ++current_line_index;
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_1();
         paint_params.m_line32 = vbuf->get_buffer_ptr_1();
-        draw_primitives(&paint_params);
+        //draw_primitives(&paint_params);
+        memset((void*)paint_params.m_line8, 0x00, 800);
+        paint_params.m_line8[205] = 0x03F;
       }
 
       end_of_frame = true;
+      current_line_index = 0;
       current_buffer_index = 0;
     }
   }
@@ -357,7 +366,7 @@ void IRAM_ATTR DiManager::on_vertical_blank() {
     }
 }
 
-void DiManager::init_dma_descriptor(volatile DiVideoScanLine* vbuf, uint32_t descr_index) {
+void DiManager::init_dma_descriptor(volatile DiVideoScanLine* vline, uint32_t descr_index) {
   volatile lldesc_t * dd = &m_dma_descriptor[descr_index];
 
   if (descr_index == 0) {
@@ -368,9 +377,9 @@ void DiManager::init_dma_descriptor(volatile DiVideoScanLine* vbuf, uint32_t des
 
   dd->sosf = dd->offset = dd->eof = 0;
   dd->owner = 1;
-  dd->size = vbuf->get_buffer_size();
-  dd->length = vbuf->get_buffer_size();
-  dd->buf = (uint8_t volatile *)vbuf->get_buffer_ptr();
+  dd->size = vline->get_buffer_size();
+  dd->length = vline->get_buffer_size();
+  dd->buf = (uint8_t volatile *)vline->get_buffer_ptr();
 }
 
 void DiManager::init_dma_descriptor(volatile DiVideoBuffer* vbuf, uint32_t descr_index) {
@@ -395,6 +404,8 @@ void DiManager::create_samples() {
   DiPrimitive* prim2b = create_line(0, 599, 799, 599, 0x13); // horiz
   DiPrimitive* prim3a = create_line(0, 0, 0, 599, 0x35); // vert
   DiPrimitive* prim3b = create_line(799, 0, 799, 599, 0x27); // vert
+
+  DiPrimitive* prim3c = create_line(0, 0, 799, 599, 0x15); // diag
 
   DiPrimitive* prim10a = create_point(400, 0, 0x3F);
   DiPrimitive* prim10b = create_point(400, 599, 0x3F);
