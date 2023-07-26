@@ -284,7 +284,7 @@ void IRAM_ATTR DiManager::loop() {
   while (true) {
     uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;
     uint32_t descr_index = (descr_addr - (uint32_t)m_dma_descriptor) / sizeof(lldesc_t);
-    if (descr_index <= ACT_BUFFERS_WRITTEN-NUM_ACTIVE_BUFFERS) {
+    if (descr_index <= ACT_BUFFERS_WRITTEN) {
       //uint32_t dma_line_index = descr_index * NUM_LINES_PER_BUFFER;
       uint32_t dma_buffer_index = descr_index & (NUM_ACTIVE_BUFFERS-1);
 
@@ -315,8 +315,6 @@ void IRAM_ATTR DiManager::loop() {
         }
       }
       end_of_frame = false;
-    } else if (descr_index <= ACT_BUFFERS_WRITTEN) {
-      // Wait for visible buffers to be written
     } else if (!end_of_frame) {
       // Handle modifying primitives before the next frame starts.
       on_vertical_blank();
@@ -330,16 +328,16 @@ void IRAM_ATTR DiManager::loop() {
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_0();
         paint_params.m_line32 = vbuf->get_buffer_ptr_0();
-        //draw_primitives(&paint_params);
-        memset((void*)paint_params.m_line8, 0x00, 800);
+        draw_primitives(&paint_params);
+        //memset((void*)paint_params.m_line8, 0x00, 800);
         paint_params.m_line8[201] = 0x03F;
 
         paint_params.m_line_index = ++current_line_index;
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_1();
         paint_params.m_line32 = vbuf->get_buffer_ptr_1();
-        //draw_primitives(&paint_params);
-        memset((void*)paint_params.m_line8, 0x00, 800);
+        draw_primitives(&paint_params);
+        //memset((void*)paint_params.m_line8, 0x00, 800);
         paint_params.m_line8[205] = 0x03F;
       }
 
