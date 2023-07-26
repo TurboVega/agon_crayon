@@ -55,7 +55,7 @@ class DiManager {
     void add_primitive(DiPrimitive* prim);
     void IRAM_ATTR draw_primitives(DiPaintParams* params);
     void IRAM_ATTR on_vertical_blank();
-    void create_samples();
     void init_dma_descriptor(volatile DiVideoScanLine* vbuf, uint32_t descr_index);
     void init_dma_descriptor(volatile DiVideoBuffer* vbuf, uint32_t descr_index);
+    void create_samples();
 };

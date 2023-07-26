@@ -79,9 +79,8 @@ void DiManager::initialize() {
   for (uint32_t i = 0; i < NUM_ACTIVE_BUFFERS; i++) {
     m_video_buffer[i].init_to_black();
   }
-  for (uint32_t i = 0; i < ACT_LINES/NUM_LINES_PER_BUFFER; i++) {
-    init_dma_descriptor(&m_video_buffer[i & (NUM_ACTIVE_BUFFERS - 1)], descr_index);
-    m_dma_descriptor[descr_index++].eof = 1;
+  for (uint32_t i = 0; i < ACT_BUFFERS_WRITTEN; i++) {
+    init_dma_descriptor(&m_video_buffer[i & (NUM_ACTIVE_BUFFERS - 1)], descr_index++);
   }
 
   // DMA buffer chain: VFP
@@ -184,11 +183,11 @@ void DiManager::clear() {
         vp->clear();
     }
 
-    /*DMA_ATTR lldesc_t volatile *        m_dma_descriptor[DMA_TOTAL_DESCR];
-    DMA_ATTR DiVideoBuffer volatile *   m_video_buffer[NUM_ACTIVE_BUFFERS];
-    DMA_ATTR DiVideoScanLine volatile * m_front_porch;
-    DMA_ATTR DiVideoBuffer volatile *   m_vertical_sync;
-    DMA_ATTR DiVideoScanLine volatile * m_back_porch;*/
+    heap_caps_free((void*)m_dma_descriptor);
+    heap_caps_free((void*)m_video_buffer);
+    heap_caps_free((void*)m_front_porch);
+    heap_caps_free((void*)m_vertical_sync);
+    heap_caps_free((void*)m_back_porch);
 }
 
 void DiManager::add_primitive(DiPrimitive* prim) {
@@ -285,7 +284,7 @@ void IRAM_ATTR DiManager::loop() {
   while (true) {
     uint32_t descr_addr = (uint32_t) I2S1.out_link_dscr;
     uint32_t descr_index = (descr_addr - (uint32_t)m_dma_descriptor) / sizeof(lldesc_t);
-    if (descr_index < (ACT_LINES/NUM_LINES_PER_BUFFER)) {
+    if (descr_index <= ACT_BUFFERS_WRITTEN-NUM_ACTIVE_BUFFERS) {
       uint32_t dma_line_index = descr_index * NUM_LINES_PER_BUFFER;
       uint32_t dma_buffer_index = descr_index & (NUM_ACTIVE_BUFFERS-1);
 
@@ -297,6 +296,7 @@ void IRAM_ATTR DiManager::loop() {
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_0();
         paint_params.m_line32 = vbuf->get_buffer_ptr_0();
         draw_primitives(&paint_params);
+        //*paint_params.m_line8 = 0x0C;
 
         paint_params.m_line_index = ++current_line_index;
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
@@ -310,6 +310,8 @@ void IRAM_ATTR DiManager::loop() {
         }
       }
       end_of_frame = false;
+    } else if (descr_index <= ACT_BUFFERS_WRITTEN) {
+      // Wait for visible buffers to be written
     } else if (!end_of_frame) {
       // Handle modifying primitives before the next frame starts.
       on_vertical_blank();
@@ -324,6 +326,7 @@ void IRAM_ATTR DiManager::loop() {
         paint_params.m_line8 = (volatile uint8_t*) vbuf->get_buffer_ptr_0();
         paint_params.m_line32 = vbuf->get_buffer_ptr_0();
         draw_primitives(&paint_params);
+        *paint_params.m_line8 = 0x0C;
 
         paint_params.m_line_index = ++current_line_index;
         paint_params.m_scrolled_y = current_line_index + paint_params.m_vert_scroll;
@@ -388,28 +391,58 @@ void DiManager::init_dma_descriptor(volatile DiVideoBuffer* vbuf, uint32_t descr
 
 void DiManager::create_samples() {
   DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x00);
-  //DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x05);
+  DiPrimitive* prim2a = create_line(2, 0, 797, 0, 0x33); // horiz
+  DiPrimitive* prim2b = create_line(0, 599, 799, 599, 0x13); // horiz
+  DiPrimitive* prim3a = create_line(0, 0, 0, 599, 0x35); // vert
+  DiPrimitive* prim3b = create_line(799, 0, 799, 599, 0x27); // vert
 
-  //DiPrimitive* prim2 = create_line(0, 19, 799, 19, 0x33); // horiz
+  DiPrimitive* prim10a = create_point(400, 0, 0x3F);
+  DiPrimitive* prim10b = create_point(400, 599, 0x3F);
 
-  //DiPrimitive* prim3a = create_line(1, 1, 1, 598, 0x3F); // vert
-  //DiPrimitive* prim3b = create_line(2, 2, 2, 597, 0x3F); // vert
-  //DiPrimitive* prim3c = create_line(3, 3, 3, 596, 0x3F); // vert
-  //DiPrimitive* prim3d = create_line(4, 4, 4, 595, 0x3F); // vert
+  /*
+  //DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x01);
 
-  //DiPrimitive* prim4 = create_line(0, 599, 799, 599, 0x03);
-  //DiPrimitive* prim5 = create_line(799, 1, 799, 598, 0x0A);
+  /*DiPrimitive* prim2 = create_line(0, 19, 799, 19, 0x33); // horiz
+
+  DiPrimitive* prim3a = create_line(1, 1, 1, 598, 0x3F); // vert
+  DiPrimitive* prim3b = create_line(2, 2, 2, 597, 0x3F); // vert
+  DiPrimitive* prim3c = create_line(3, 3, 3, 596, 0x3F); // vert
+  DiPrimitive* prim3d = create_line(4, 4, 4, 595, 0x3F); // vert
+
+  DiPrimitive* prim4 = create_line(0, 599, 799, 599, 0x03);
+  DiPrimitive* prim5 = create_line(799, 1, 799, 598, 0x0A);
 
   DiPrimitive* prim6 = create_line(50, 13, 75, 17, 0x1E);
   DiPrimitive* prim7 = create_line(750, 431, 786, 411, 0x1E);
   DiPrimitive* prim8 = create_solid_rectangle(150, 300, 227, 227, 0x20);
 
   DiPrimitive* prim10 = create_triangle(450, 330, 520, 402, 417, 375, 0x15);
-  //DiPrimitive* prim10a = create_point(450, 330, 0x30);
-  //DiPrimitive* prim10b = create_point(520, 402, 0x0C);
-  //DiPrimitive* prim10c = create_point(417, 375, 0x03);
-
   DiPrimitive* prim10d = create_line(450, 330, 520, 402, 0x30);
   DiPrimitive* prim10e = create_line(520, 402, 417, 375, 0x0C);
   DiPrimitive* prim10f = create_line(417, 375, 450, 330, 0x03);
+
+  int32_t x = 0, y = 0;
+  DiPrimitive* prim11a = create_line(x, y, x+15, y, 0x33);
+  DiPrimitive* prim11b = create_line(x+15, y, x+15, y+15, 0x0F);
+  DiPrimitive* prim11c = create_line(x+15, y+15, x, y+15, 0x3C);
+  DiPrimitive* prim11d = create_line(x, y+15, x, y, 0x03);
+
+  x = 800-15, y = 0;
+  prim11a = create_line(x, y, x+15, y, 0x33);
+  prim11b = create_line(x+15, y, x+15, y+15, 0x0F);
+  prim11c = create_line(x+15, y+15, x, y+15, 0x3C);
+  prim11d = create_line(x, y+15, x, y, 0x03);
+
+  x = 800-15, y = 600-15;
+  prim11a = create_line(x, y, x+15, y, 0x33);
+  prim11b = create_line(x+15, y, x+15, y+15, 0x0F);
+  prim11c = create_line(x+15, y+15, x, y+15, 0x3C);
+  prim11d = create_line(x, y+15, x, y, 0x03);
+
+  x = 0, y = 600-15;
+  prim11a = create_line(x, y, x+15, y, 0x33);
+  prim11b = create_line(x+15, y, x+15, y+15, 0x0F);
+  prim11c = create_line(x+15, y+15, x, y+15, 0x3C);
+  prim11d = create_line(x, y+15, x, y, 0x03);
+  */
 }
