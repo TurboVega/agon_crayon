@@ -174,13 +174,13 @@ void DiManager::initialize() {
 }
 
 void DiManager::clear() {
-    // NOTE: add code to delete each prim only once!!
     for (int g = 0; g < NUM_VERTICAL_GROUPS; g++) {
         std::vector<DiPrimitive*> * vp = &m_groups[g];
-        for (auto prim = vp->begin(); prim != vp->end(); ++prim) {
-            delete *prim;
-        }
         vp->clear();
+    }
+
+    for (auto prim = m_primitives.begin(); prim != m_primitives.end(); ++prim) {
+      delete prim->first;
     }
 
     heap_caps_free((void*)m_dma_descriptor);
@@ -196,6 +196,15 @@ void DiManager::add_primitive(DiPrimitive* prim) {
     for (int32_t g = min_group; g <= max_group; g++) {
         m_groups[g].push_back(prim);
     }
+    m_primitives[prim] = true;
+}
+
+void DiManager::remove_primitive(DiPrimitive* prim) {
+  auto position = m_primitives.find(prim);
+  if (position != m_primitives.end()) {
+    m_primitives.erase(position);
+    delete prim;
+  }
 }
 
 DiPrimitive* DiManager::create_point(int32_t x, int32_t y, uint8_t color) {

@@ -51,14 +51,13 @@ typedef struct {
 
 class DiPrimitive {
   public:
-
+  DiPrimitive();
   virtual ~DiPrimitive();
   virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
   void get_vertical_group_range(int32_t* min_group, int32_t* max_group);
 
   protected:
-
   inline uint8_t* pixels(uint32_t* line) {
     return (uint8_t*)line;
   }

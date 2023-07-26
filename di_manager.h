@@ -24,6 +24,7 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include "rom/lldesc.h"
 #include "di_video_buffer.h"
 #include "di_primitive.h"
@@ -47,12 +48,14 @@ class DiManager {
     volatile DiVideoBuffer *   m_vertical_sync;
     volatile DiVideoScanLine * m_back_porch;
 
+    std::map<DiPrimitive*, bool> m_primitives;
     std::vector<DiPrimitive*> m_groups[NUM_VERTICAL_GROUPS];
 
     void initialize();
     void IRAM_ATTR loop();
     void clear();
     void add_primitive(DiPrimitive* prim);
+    void remove_primitive(DiPrimitive* prim);
     void IRAM_ATTR draw_primitives(DiPaintParams* params);
     void IRAM_ATTR on_vertical_blank();
     void init_dma_descriptor(volatile DiVideoScanLine* vbuf, uint32_t descr_index);

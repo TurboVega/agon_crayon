@@ -25,6 +25,8 @@
 
 #include "di_primitive.h"
 
+DiPrimitive::DiPrimitive() {}
+
 DiPrimitive::~DiPrimitive() {}
 
 void DiPrimitive::get_vertical_group_range(int32_t* min_group, int32_t* max_group) {
