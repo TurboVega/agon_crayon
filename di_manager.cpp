@@ -219,29 +219,29 @@ DiPrimitive* DiManager::create_line(int32_t x1, int32_t y1, int32_t x2, int32_t 
             prim = new DiHorizontalLine(x1, y1, x2 - x1 + 1, color);
         } else if (y1 < y2) {
             if (y2 - y1 == x2 - x1) {
-                prim = new DiDiagonalRightLine(x1, y1, x2 - x1, color);
+                prim = new DiDiagonalRightLine(x1, y1, x2 - x1 + 1, color);
             } else {
                 prim = new DiGeneralLine(x1, y1, x2, y2, color);
             }
         } else {
             if (y2 - y1 == x2 - x1) {
-                prim = new DiDiagonalLeftLine(x2, y1, x2 - x1, color);
+                prim = new DiDiagonalLeftLine(x2, y1, x2 - x1 + 1, color);
             } else {
                 prim = new DiGeneralLine(x1, y1, x2, y2, color);
             }
         }
     } else {
         if (y1 == y2) {
-            prim = new DiHorizontalLine(x1, y1, x1 - x2 + 1, color);
+            prim = new DiHorizontalLine(x2, y1, x1 - x2 + 1, color);
         } else if (y1 < y2) {
             if (y2 - y1 == x1 - x2) {
-                prim = new DiDiagonalRightLine(x2, y1, x1 - x2, color);
+                prim = new DiDiagonalLeftLine(x1, y1, x1 - x2 + 1, color);
             } else {
                 prim = new DiGeneralLine(x1, y1, x2, y2, color);
             }
         } else {
             if (y2 - y1 == x1 - x2) {
-                prim = new DiDiagonalLeftLine(x1, y1, x1 - x2, color);
+                prim = new DiDiagonalRightLine(x2, y1, x1 - x2 + 1, color);
             } else {
                 prim = new DiGeneralLine(x1, y1, x2, y2, color);
             }
@@ -398,28 +398,19 @@ void DiManager::init_dma_descriptor(volatile DiVideoBuffer* vbuf, uint32_t descr
 
 void DiManager::create_samples() {
   DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x00);
-  DiPrimitive* prim2a = create_line(2, 0, 797, 0, 0x33); // horiz
-  DiPrimitive* prim2b = create_line(0, 599, 799, 599, 0x13); // horiz
-  DiPrimitive* prim3a = create_line(0, 0, 0, 599, 0x35); // vert
-  DiPrimitive* prim3b = create_line(799, 0, 799, 599, 0x27); // vert
+  //DiPrimitive* prim2a = create_line(2, 0, 797, 0, 0x33); // horiz
+  //DiPrimitive* prim2b = create_line(0, 599, 799, 599, 0x13); // horiz
+  //DiPrimitive* prim3a = create_line(0, 0, 0, 599, 0x35); // vert
+  //DiPrimitive* prim3b = create_line(799, 0, 799, 599, 0x27); // vert
 
   DiPrimitive* prim3c = create_line(0, 0, 799, 599, 0x15); // diag
 
   DiPrimitive* prim10a = create_point(400, 0, 0x3F);
   DiPrimitive* prim10b = create_point(400, 599, 0x3F);
 
-  /*
   //DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x01);
 
-  /*DiPrimitive* prim2 = create_line(0, 19, 799, 19, 0x33); // horiz
-
-  DiPrimitive* prim3a = create_line(1, 1, 1, 598, 0x3F); // vert
-  DiPrimitive* prim3b = create_line(2, 2, 2, 597, 0x3F); // vert
-  DiPrimitive* prim3c = create_line(3, 3, 3, 596, 0x3F); // vert
-  DiPrimitive* prim3d = create_line(4, 4, 4, 595, 0x3F); // vert
-
-  DiPrimitive* prim4 = create_line(0, 599, 799, 599, 0x03);
-  DiPrimitive* prim5 = create_line(799, 1, 799, 598, 0x0A);
+  DiPrimitive* prim2 = create_line(0, 19, 799, 19, 0x33); // horiz
 
   DiPrimitive* prim6 = create_line(50, 13, 75, 17, 0x1E);
   DiPrimitive* prim7 = create_line(750, 431, 786, 411, 0x1E);
@@ -436,22 +427,27 @@ void DiManager::create_samples() {
   DiPrimitive* prim11c = create_line(x+15, y+15, x, y+15, 0x3C);
   DiPrimitive* prim11d = create_line(x, y+15, x, y, 0x03);
 
-  x = 800-15, y = 0;
+  x = 799-15, y = 0;
   prim11a = create_line(x, y, x+15, y, 0x33);
   prim11b = create_line(x+15, y, x+15, y+15, 0x0F);
   prim11c = create_line(x+15, y+15, x, y+15, 0x3C);
   prim11d = create_line(x, y+15, x, y, 0x03);
 
-  x = 800-15, y = 600-15;
+  x = 799-15, y = 599-15;
   prim11a = create_line(x, y, x+15, y, 0x33);
   prim11b = create_line(x+15, y, x+15, y+15, 0x0F);
   prim11c = create_line(x+15, y+15, x, y+15, 0x3C);
   prim11d = create_line(x, y+15, x, y, 0x03);
 
-  x = 0, y = 600-15;
+  x = 0, y = 599-15;
   prim11a = create_line(x, y, x+15, y, 0x33);
   prim11b = create_line(x+15, y, x+15, y+15, 0x0F);
   prim11c = create_line(x+15, y+15, x, y+15, 0x3C);
   prim11d = create_line(x, y+15, x, y, 0x03);
-  */
+
+  x = 600, y = 150;
+  prim11a = create_line(x, y-75, x+75, y, 0x33);
+  prim11b = create_line(x+75, y, x, y+75, 0x0F);
+  prim11c = create_line(x, y+75, x-75, y, 0x3C);
+  prim11d = create_line(x-75, y, x, y-75, 0x03);
 }
