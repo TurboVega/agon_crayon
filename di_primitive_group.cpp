@@ -55,16 +55,21 @@ void DiPrimitiveGroup::get_vertical_line_range(int32_t* min_y, int32_t* max_y) {
       }
     }
   }
-  *min_y = tmin_y;
-  *max_y = tmax_y;
+  *min_y = tmin_y - m_delta_y;
+  *max_y = tmax_y - m_delta_y;
 }
 
 void IRAM_ATTR DiPrimitiveGroup::paint(const DiPaintParams *params) {
   if (m_delta_x || m_delta_y) {
-    DiPaintParams adjusted_params = *params;
-    adjusted_params.m_horiz_scroll += m_delta_x;
-    adjusted_params.m_vert_scroll += m_delta_y;
-    adjusted_params.m_scrolled_y += m_delta_y;
+    DiPaintParams adjusted_params;
+    adjusted_params.m_line32 = params->m_line32;
+    adjusted_params.m_line8 = params->m_line8;
+    adjusted_params.m_line_index = params->m_line_index;
+    adjusted_params.m_screen_width = params->m_screen_width;
+    adjusted_params.m_screen_height = params->m_screen_height;
+    adjusted_params.m_horiz_scroll = params->m_horiz_scroll + m_delta_x;
+    adjusted_params.m_vert_scroll = params->m_vert_scroll + m_delta_y;
+    adjusted_params.m_scrolled_y = params->m_scrolled_y + m_delta_y;
     for (auto prim = m_children.begin(); prim != m_children.end(); ++prim) {
       (*prim)->paint(&adjusted_params);
     }
@@ -90,6 +95,6 @@ void DiPrimitiveGroup::remove_primitive(DiPrimitive* prim) {
 }
 
 void DiPrimitiveGroup::set_offsets(int32_t delta_x, int32_t delta_y) {
-  m_delta_x = delta_x;
-  m_delta_y = delta_y;
+  m_delta_x = delta_x; // the assembler code assumes positive X means across-from-left-to-right
+  m_delta_y = -delta_y; // the assembler code assumes positive Y means down-from-top-to-bottom
 }

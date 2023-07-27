@@ -30,7 +30,7 @@
 //               [0] m_x
 //               [2] m_y
 //               [4] m_width
-//               [6] m_unused
+//               [6] m_flags
 //     [a2+36] m_line_pieces.m_min_x
 //     [a2+38] m_line_pieces.m_min_y
 //     [a2+40] m_line_pieces.m_max_x

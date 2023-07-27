@@ -382,12 +382,51 @@ void IRAM_ATTR DiManager::draw_primitives(DiPaintParams* params) {
     }
 }
 
+DiPrimitiveGroup* grp1;
+int32_t dx, dy;
+int32_t dir = -1;
+
 void IRAM_ATTR DiManager::on_vertical_blank() {
     static bool created = false;
     if (!created) {
         created = true;
         create_samples();
     }
+
+  int32_t min_group1, max_group1;
+  grp1->get_vertical_group_range(&min_group1, &max_group1);
+
+  grp1->set_offsets(dx, dy);
+
+  int32_t min_group2, max_group2;
+  grp1->get_vertical_group_range(&min_group2, &max_group2);
+
+  for (int32_t g = min_group1; g <= max_group1; g++) {
+    if (g < min_group2 || g > max_group2) {
+      // Remove the primitive from this group
+      std::vector<DiPrimitive*> * vp = &m_groups[g];
+      auto position2 = std::find(vp->begin(), vp->end(), grp1);
+      if (position2 != vp->end()) {
+        vp->erase(position2);
+      }
+    }
+  }
+
+  for (int32_t g = min_group2; g <= max_group2; g++) {
+    if (g < min_group1 || g > max_group1) {
+      // Add the primitive to this group
+      std::vector<DiPrimitive*> * vp = &m_groups[g];
+      vp->push_back(grp1);
+    }
+  }
+
+  if (dx < -50) {
+    dir = 1;
+  } else if (dx > 50) {
+    dir = -1;
+  }
+  dx += dir;
+  dy -= dir;
 }
 
 void DiManager::init_dma_descriptor(volatile DiVideoScanLine* vline, uint32_t descr_index) {
@@ -440,12 +479,7 @@ void DiManager::create_samples() {
 
   DiPrimitive* prim6 = create_line(50, 13, 75, 17, 0x1E);
   DiPrimitive* prim7 = create_line(750, 431, 786, 411, 0x1E);
-  DiPrimitive* prim8 = create_solid_rectangle(150, 300, 227, 227, 0x20);
-
-  DiPrimitive* prim10 = create_triangle(450, 330, 520, 402, 417, 375, 0x15);
-  DiPrimitive* prim10d = create_line(450, 330, 520, 402, 0x30);
-  DiPrimitive* prim10e = create_line(520, 402, 417, 375, 0x0C);
-  DiPrimitive* prim10f = create_line(417, 375, 450, 330, 0x03);
+  DiPrimitive* prim8 = create_solid_rectangle(150, 300, 27, 27, 0x20);
 
   int32_t x = 0, y = 0;
   DiPrimitive* prim11a = create_line(x, y, x+15, y, 0x33);
@@ -477,10 +511,33 @@ void DiManager::create_samples() {
   prim11c = create_line(x, y+75, x-75, y, 0x3C);
   prim11d = create_line(x-75, y, x, y-75, 0x03);
 
+  create_line(300, 300, 600, 300, 0x15);
+  create_line(300, 310, 600, 310, 0x15);
+  create_line(300, 320, 600, 320, 0x15);
+  create_line(300, 330, 600, 330, 0x15);
+  create_line(300, 340, 600, 340, 0x15);
+  create_line(300, 350, 600, 350, 0x15);
+
   //DiPrimitiveGroup* grp1 = create_group();
-  DiPrimitiveGroup* grp1 = new DiPrimitiveGroup();
-  grp1->add_primitive(new DiSetPixel(500, 500, 0x11));
-  grp1->add_primitive(new DiSetPixel(503, 503, 0x22));
-  grp1->add_primitive(new DiSetPixel(507, 507, 0x33));
+  grp1 = new DiPrimitiveGroup();
+  grp1->add_primitive(new DiSetPixel(501, 500, 0x11));
+  grp1->add_primitive(new DiSetPixel(498, 503, 0x22));
+  grp1->add_primitive(new DiSetPixel(505, 507, 0x33));
+
+  int32_t ran = 57;
+  for (int32_t j = 0; j < 2; j++) {
+    for (int32_t i = 0; i < 5; i++) {
+      int32_t xo = i * 50 - 100 + ran - 50; ran += 11;
+      int32_t yo = j * 40 + i * 35 - 100 - ran; ran += 13;
+      grp1->add_primitive(new DiGeneralLine(450+xo, 330+yo, 520+xo, 402+yo, 417+xo, 375+yo, (i+j+0x15)&0x3F));
+      grp1->add_primitive(new DiGeneralLine(450+xo, 330+yo, 520+xo, 402+yo, (i+0x30)&0x3F));
+      grp1->add_primitive(new DiGeneralLine(520+xo, 402+yo, 417+xo, 375+yo, (i+0x0C)&0x3F));
+      grp1->add_primitive(new DiGeneralLine(417+xo, 375+yo, 450+xo, 330+yo, (i+0x03)&0x3F));
+    }
+  }
+  grp1->add_primitive(new DiSolidRectangle(151, 323, 7, 7, 0x0C));
+
+  int32_t min_group1, max_group1;
+  grp1->get_vertical_group_range(&min_group1, &max_group1);
   add_primitive(grp1);
 }
