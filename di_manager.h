@@ -27,7 +27,7 @@
 #include <map>
 #include "rom/lldesc.h"
 #include "di_video_buffer.h"
-#include "di_primitive.h"
+#include "di_primitive_group.h"
 
 class DiManager {
     public:
@@ -38,6 +38,7 @@ class DiManager {
     DiPrimitive* create_line(int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint8_t color);
     DiPrimitive* create_solid_rectangle(int32_t x, int32_t y, uint32_t width, uint32_t height, uint8_t color);
     DiPrimitive* create_triangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, uint8_t color);
+    //DiPrimitiveGroup* create_group();
 
     void IRAM_ATTR run();
 

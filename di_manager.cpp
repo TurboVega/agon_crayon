@@ -203,6 +203,17 @@ void DiManager::remove_primitive(DiPrimitive* prim) {
   auto position = m_primitives.find(prim);
   if (position != m_primitives.end()) {
     m_primitives.erase(position);
+
+    int32_t min_group, max_group;
+    prim->get_vertical_group_range(&min_group, &max_group);
+    for (int32_t g = min_group; g <= max_group; g++) {
+      std::vector<DiPrimitive*> * vp = &m_groups[g];
+      auto position2 = std::find(vp->begin(), vp->end(), prim);
+      if (position2 != vp->end()) {
+        vp->erase(position2);
+      }
+    }
+
     delete prim;
   }
 }
@@ -272,6 +283,12 @@ DiPrimitive* DiManager::create_triangle(int32_t x1, int32_t y1, int32_t x2, int3
     add_primitive(prim);
     return prim;
 }
+
+//DiPrimitiveGroup* DiManager::create_group() {
+//  DiPrimitiveGroup* grp = new DiPrimitiveGroup();
+//  add_primitive(grp);
+//  return grp;
+//}
 
 void IRAM_ATTR DiManager::run() {
     initialize();
@@ -414,8 +431,8 @@ void DiManager::create_samples() {
 
   DiPrimitive* prim3c = create_line(0, 0, 799, 599, 0x15); // diag
 
-  DiPrimitive* prim10a = create_point(400, 0, 0x3F);
-  DiPrimitive* prim10b = create_point(400, 599, 0x3F);
+  //DiPrimitive* prim10a = create_point(400, 0, 0x3F);
+  //DiPrimitive* prim10b = create_point(400, 599, 0x3F);
 
   //DiPrimitive* prim1 = create_solid_rectangle(0, 0, 800, 600, 0x01);
 
@@ -459,4 +476,11 @@ void DiManager::create_samples() {
   prim11b = create_line(x+75, y, x, y+75, 0x0F);
   prim11c = create_line(x, y+75, x-75, y, 0x3C);
   prim11d = create_line(x-75, y, x, y-75, 0x03);
+
+  //DiPrimitiveGroup* grp1 = create_group();
+  DiPrimitiveGroup* grp1 = new DiPrimitiveGroup();
+  grp1->add_primitive(new DiSetPixel(500, 500, 0x11));
+  grp1->add_primitive(new DiSetPixel(503, 503, 0x22));
+  grp1->add_primitive(new DiSetPixel(507, 507, 0x33));
+  add_primitive(grp1);
 }

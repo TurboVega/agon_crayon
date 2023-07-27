@@ -29,6 +29,11 @@ DiPrimitive::DiPrimitive() {}
 
 DiPrimitive::~DiPrimitive() {}
 
+void DiPrimitive::get_vertical_line_range(int32_t* min_y, int32_t* max_y) {
+  *min_y = 0;
+  *max_y = 0;
+}
+
 void DiPrimitive::get_vertical_group_range(int32_t* min_group, int32_t* max_group) {
   int32_t min_y, max_y;
   get_vertical_line_range(&min_y, &max_y);
@@ -41,11 +46,6 @@ void IRAM_ATTR DiPrimitive::paint(const DiPaintParams *params) {}
 DiPrimitiveX::DiPrimitiveX(): m_x(0) {}
 
 DiPrimitiveX::DiPrimitiveX(int32_t x): m_x(x) {}
-
-void DiPrimitiveX::get_vertical_line_range(int32_t* min_y, int32_t* max_y) {
-  *min_y = 0;
-  *max_y = 0;
-}
 
 DiPrimitiveXC::DiPrimitiveXC(): m_color(0) {}
 

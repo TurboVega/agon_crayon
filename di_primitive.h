@@ -69,7 +69,6 @@ class DiPrimitiveX: public DiPrimitive {
 
   DiPrimitiveX();
   DiPrimitiveX(int32_t x);
-  virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
 };
 
 class DiPrimitiveXC: public DiPrimitiveX {
