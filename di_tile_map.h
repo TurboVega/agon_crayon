@@ -60,12 +60,28 @@ class DiTileMap: public DiPrimitiveXYWH {
   uint32_t* m_pixels;
   uint32_t* m_offsets;
 
+  // Construct a tile map. This will allocate RAM to contain the bitmap data for each tile
+  // (e.g., font glyph pixels), plus the tile indexes themselves (e.g., font character codes).
+  //
+  // Example:
+  // DiManager manager;
+  // DiTileMap* tile_map = manager.create_tile_map(0, 0, 256, 100, 77, 8, 8);
+  //
   DiTileMap(uint32_t screen_width, uint32_t screen_height,
             uint32_t bitmaps, uint32_t columns, uint32_t rows,
             uint32_t width, uint32_t height);
+
+  // Destroy a tile map, including its allocated data.
   virtual ~DiTileMap();
+
+  // Set the screen position of the tile map (i.e., scroll it).
   void set_position(int32_t x, int32_t y);
+
+  // Save the pixel value of a particular pixel in a specific tile bitmap. A tile bitmap
+  // may appear many times on the screen, based on the use of the bitmap index.
   void set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color);
+
+  // Set the bitmap index to use to draw a tile at a specific row and column.
   void set_tile(int32_t column, int32_t row, int32_t bitmap);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
