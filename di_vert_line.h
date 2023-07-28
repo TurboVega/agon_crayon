@@ -28,6 +28,9 @@
 
 class DiVerticalLine: public DiPrimitiveXYHC {
   public:
+  // The line is vertical, covering the given number of pixels. The
+  // upper 2 bits of the color must be zeros.
   DiVerticalLine(int32_t x, int32_t y, uint32_t height, uint8_t color);
+
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

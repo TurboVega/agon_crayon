@@ -29,6 +29,7 @@
 #include "driver/gpio.h"
 #include "di_constants.h"
 
+// Used as a hint, to potentially save RAM, when allocating bitmaps.
 typedef enum ScrollMode {
   NONE,       // do not allow scrolling
   HORIZONTAL, // allow horizontal, but not vertical
@@ -39,25 +40,35 @@ typedef enum ScrollMode {
 #pragma pack(push,4)
 
 typedef struct {
-  volatile uint32_t* m_line32;
-  volatile uint8_t*  m_line8;
-  int32_t   m_line_index;
-  int32_t   m_scrolled_y;
-  int32_t   m_horiz_scroll;
-  int32_t   m_vert_scroll;
-  int32_t   m_screen_width;
-  int32_t   m_screen_height;
+  volatile uint32_t* m_line32;  // address of the DMA visible data
+  volatile uint8_t*  m_line8;   // address of the DMA visible data
+  int32_t   m_line_index;       // scan line index on the screen (0=top, 599=bottom)
+  int32_t   m_scrolled_y;       // sum of m_line_index + m_vert_scroll
+  int32_t   m_horiz_scroll;     // used to move all top-level primitives in the X direction
+  int32_t   m_vert_scroll;      // used to move all top-level primitives in the Y direction
+  int32_t   m_screen_width;     // fixed at 800
+  int32_t   m_screen_height;    // fixed at 600
 } DiPaintParams;
 
 class DiPrimitive {
   public:
+  // An object to be drawn on the screen.
   DiPrimitive();
+
+  // Destroys an allocated RAM required by the primitive.
   virtual ~DiPrimitive();
+
+  // Gets the range of Y scan lines used by the primitive.
   virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
+
+  // Draws the primitive to the DMA scan line buffer.
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
+
+  // Groups scan lines for optimizing paint calls.
   void get_vertical_group_range(int32_t* min_group, int32_t* max_group);
 
   protected:
+  // Used to type-case some pointers. (Might be removed in future.)
   inline uint8_t* pixels(uint32_t* line) {
     return (uint8_t*)line;
   }

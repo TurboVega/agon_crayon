@@ -35,14 +35,26 @@ class DiOpaqueBitmap: public DiPrimitiveXYWH {
   uint32_t* m_visible_start;
   uint32_t m_pixels[1];
 
+  // Construct a dynamically-sized opaque bitmap. The m_pixels array gets sized during 'new'.
   DiOpaqueBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
+
+  // Allocate an opaque bitmap. This takes 4x as much memory as the bitmap itself.
   void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
+
+  // Set the position of the bitmap on the screen, and assume using pixels starting at line 0 in the bitmap.
   void set_position(int32_t x, int32_t y);
+
+  // Set the position of the bitmap on the screen, and assume using pixels starting at the given line in the bitmap.
+  // This makes it possible to use a single (tall) bitmap to support animated sprites.
   void set_position(int32_t x, int32_t y, uint32_t start_line, uint32_t height);
+
+  // Set a single pixel within the allocated bitmap. The upper 2 bits of the color
+  // are ignored. The lower 6 bits are the raw color.
   void set_opaque_pixel(int32_t x, int32_t y, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 
   protected:
+  // Set a single pixel with an adjusted color value.
   void set_pixel(int32_t x, int32_t y, uint8_t color);
 };

@@ -30,6 +30,7 @@ void setup() {
 }
 
 IRAM_ATTR void loop() {
+  // The loop processing for this demo software is handled by the DiManager class.
   DiManager manager;
   manager.run();
 }

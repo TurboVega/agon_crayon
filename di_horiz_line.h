@@ -28,6 +28,9 @@
 
 class DiHorizontalLine: public DiPrimitiveXYWC {
   public:
+  // The line is horizontal, covering the given number of pixels. The upper
+  // 2 bits of the color must be zeros.
   DiHorizontalLine(int32_t x, int32_t y, uint32_t width, uint8_t color);
+
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };

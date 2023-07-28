@@ -82,6 +82,7 @@
 
 #define DMA_CLOCK_FREQ ((uint32_t)40000000) // 40 MHz
 
+// Used by certain test code to show diamonds.
 #define CENTER_X            (ACT_PIXELS/2)
 #define CENTER_Y            (ACT_LINES/2)
 #define DIAMOND_SIZE        400
@@ -95,9 +96,11 @@
 #define TINY_DIAMOND_SIZE  50
 #define HALF_TINY_DIAMOND_SIZE (TINY_DIAMOND_SIZE/2)
 
+// This formula handles arranging the pixel bytes in the correct DMA order.
 // 0x12345678, normally stored as 78, 56, 34, 12, is sent as 34 12 78 56.
 #define FIX_INDEX(idx)      ((idx)^2)
 
+// Used to control the few DMA scan line buffers.
 #define NUM_LINES_PER_BUFFER  2
 #define NUM_ACTIVE_BUFFERS    4 // must be a power of 2 and multiple of NUM_LINES_PER_BUFFER
 #define ACT_BUFFERS_WRITTEN   (ACT_LINES/NUM_LINES_PER_BUFFER)
@@ -106,5 +109,7 @@
 #define DMA_TOTAL_LINES       (ACT_LINES+VFP_LINES+VS_LINES+VBP_LINES)
 #define DMA_TOTAL_DESCR       (ACT_BUFFERS_WRITTEN+VFP_LINES+VS_BUFFERS_WRITTEN+VBP_LINES)
 
+// Used to somewhat optimize which top-level primitives are called
+// to paint, relative to the current scan line.
 #define VERTICAL_GROUP_INDEX_SHIFT 4 // used to divide by a power of 2
 #define NUM_VERTICAL_GROUPS ((ACT_LINES >> VERTICAL_GROUP_INDEX_SHIFT) + 1)

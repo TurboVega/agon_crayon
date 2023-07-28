@@ -36,14 +36,27 @@ class DiMaskedBitmap: public DiPrimitiveXYWH {
   uint32_t* m_visible_start;
   uint32_t m_pixels[1];
 
+  // Construct a dynamically-sized masked bitmap. The m_pixels array gets sized during 'new'.
   DiMaskedBitmap(uint32_t width, uint32_t height, ScrollMode scroll_mode);
+
+  // Allocate a masked bitmap. This takes 4x as much memory as the bitmap itself.
   void* operator new(size_t size, uint32_t width, uint32_t height, ScrollMode scroll_mode);
+
+  // Set the position of the bitmap on the screen, and assume using pixels starting at line 0 in the bitmap.
   void set_position(int32_t x, int32_t y);
+
+  // Set the position of the bitmap on the screen, and assume using pixels starting at the given line in the bitmap.
+  // This makes it possible to use a single (tall) bitmap to support animated sprites.
   void set_position(int32_t x, int32_t y, uint32_t start_line, uint32_t height);
+
+  // Set a single pixel within the allocated bitmap. If either of the upper 2 bits is nonzero,
+  // then the lower 6 bits are the color of the pixel. If both of the upper 2 bits are zeros,
+  // then the pixel is fully transparent.
   void set_masked_pixel(int32_t x, int32_t y, uint8_t color);
 
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 
   protected:
+  // Set a single pixel with an adjusted color value.
   void set_pixel(int32_t x, int32_t y, uint8_t color);
 };

@@ -28,6 +28,7 @@
 #pragma once
 #include "di_constants.h"
 
+// Holds the DMA scan line buffer for a single visible line.
 class DiVideoScanLine {
   protected:
 
@@ -51,6 +52,7 @@ class DiVideoScanLine {
   void init_for_vsync() volatile;
 };
 
+// Holds the DMA scan line buffers for two visible lines.
 class DiVideoBuffer {
   protected:
 

@@ -30,13 +30,26 @@
 
 class DiPrimitiveGroup: public DiPrimitive {
   public:
+  // Constructs a group ready to add new primitives.
   DiPrimitiveGroup();
+
+  // Destroys a group and its child primitives.
   virtual ~DiPrimitiveGroup();
+
+  // Computes the vertical Y coordinate range of the entire group.
   virtual void get_vertical_line_range(int32_t* min_y, int32_t* max_y);
+
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 
+  // Adds a primitive to the group. This can be a child group.
   void add_primitive(DiPrimitive* prim);
+
+  // Removes a primitive from the group. This can be a child group.
   void remove_primitive(DiPrimitive* prim);
+
+  // Relocates the entire group, relative to (0, 0), which is the top-left of the screen.
+  // Note that the (X,Y) positions of child primitives are relative to the group, not to
+  // the screen, so moving the group will move them all, on the screen.
   void set_offsets(int32_t delta_x, int32_t delta_y);
 
   protected:

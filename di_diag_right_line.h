@@ -29,6 +29,9 @@
 
 class DiDiagonalRightLine: public DiPrimitiveXYWHC {
   public:
+  // The line starts at its upper-left and goes diagonally down and to the right,
+  // covering the given number of pixels. The upper 2 bits of the color must be zeros.
   DiDiagonalRightLine(int32_t x, int32_t y, int32_t length, uint8_t color);
+
   virtual void IRAM_ATTR paint(const DiPaintParams *params);
 };
