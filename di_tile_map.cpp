@@ -42,7 +42,7 @@ IRAM_ATTR void DiTileMap_paint(void* this_ptr, const DiPaintParams *params);
 DiTileMap::DiTileMap(uint32_t screen_width, uint32_t screen_height,
                       uint32_t bitmaps, uint32_t columns, uint32_t rows,
                       uint32_t width, uint32_t height):
-  DiPrimitiveXYWH(0, 0, width, height),
+  DiPrimitiveXYWH(0, 0, MAX(width * columns, screen_width), MAX(height * rows, screen_height)),
   m_bitmaps(bitmaps),
   m_columns(columns),
   m_rows(rows) {
@@ -82,6 +82,10 @@ DiTileMap::DiTileMap(uint32_t screen_width, uint32_t screen_height,
       m_offsets[(row * height + y) * 2] = (uint32_t)(m_tiles + row * m_words_per_row); // points to tile map row
       m_offsets[(row * height + y) * 2 + 1] = y * m_bytes_per_line; // offset to bitmap line
     }
+
+    for (uint32_t col = 0; col < columns; col++) {
+      set_tile(col, row, 0);
+    }
   }
 }
 
@@ -98,21 +102,18 @@ DiTileMap::~DiTileMap() {
 }
 
 void DiTileMap::set_position(int32_t x, int32_t y) {
+  int32_t dx = x - m_x;
   m_x = x;
-  m_x_extent = m_x + m_width;
+  m_x_extent += dx;
+  int32_t dy = y - m_y;
   m_y = y;
-  m_y_extent = m_y + m_height;
+  m_y_extent += dy;
 }
 
 void DiTileMap::set_pixel(int32_t bitmap, int32_t x, int32_t y, uint8_t color) { 
-  //uint8_t colors[4] = { 0x01, 0x04, 0x08, 0x3F };
   for (uint32_t pos = 0; pos < 4; pos++) {
     pixels(m_pixels)[bitmap * m_bytes_per_bitmap + pos * m_bytes_per_position + y * m_bytes_per_line + FIX_INDEX(pos + x)] =
       (color & 0x3F) | SYNCS_OFF;
-    //colors[pos]; // 01 04 08 10
-    //if (x == 0 || y==0) {
-    //  pixels(m_pixels)[bitmap * m_bytes_per_bitmap + pos * m_bytes_per_position + y * m_bytes_per_line + FIX_INDEX(x)] = 0x15;
-    //}
   }
 }
 
